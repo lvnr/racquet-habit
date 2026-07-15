@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 2400">
+  <rect width="2400" height="2400" fill="#101A16"/>
+  <g transform="rotate(-18 1200 1200)" stroke="#F2EEE4" stroke-width="5" opacity=".55">
+    <path d="M-500 0v2900M-350 0v2900M-200 0v2900M-50 0v2900M100 0v2900M250 0v2900M400 0v2900M550 0v2900M700 0v2900M850 0v2900M1000 0v2900M1150 0v2900M1300 0v2900M1450 0v2900M1600 0v2900M1750 0v2900M1900 0v2900M2050 0v2900M2200 0v2900M2350 0v2900M2500 0v2900M2650 0v2900M2800 0v2900"/>
+    <path d="M-500 0h3300M-500 150h3300M-500 300h3300M-500 450h3300M-500 600h3300M-500 750h3300M-500 900h3300M-500 1050h3300M-500 1200h3300M-500 1350h3300M-500 1500h3300M-500 1650h3300M-500 1800h3300M-500 1950h3300M-500 2100h3300M-500 2250h3300M-500 2400h3300M-500 2550h3300"/>
+  </g>
+  <rect x="350" y="760" width="1700" height="880" fill="#101A16" stroke="#D9F23B" stroke-width="10"/>
+  <text x="1200" y="1080" fill="#F2EEE4" text-anchor="middle" font-family="Georgia,serif" font-size="210" letter-spacing="14">RACQUET</text><text x="1200" y="1320" fill="#F2EEE4" text-anchor="middle" font-family="Georgia,serif" font-size="210" letter-spacing="14">HABIT</text><text x="1200" y="1480" fill="#D9F23B" text-anchor="middle" font-family="Arial,sans-serif" font-size="55" letter-spacing="18">PLAY RESPONSIBLY / ISSUE 001</text>
+</svg>

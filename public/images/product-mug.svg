@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1440">
+  <rect width="1200" height="1440" fill="#712A35"/>
+  <g stroke="#F2EEE4" opacity=".12"><path d="M0 200h1200M0 400h1200M0 600h1200M0 800h1200M0 1000h1200M200 0v1440M400 0v1440M600 0v1440M800 0v1440M1000 0v1440"/></g>
+  <ellipse cx="570" cy="1150" rx="390" ry="75" fill="#2c1519" opacity=".35"/>
+  <path d="M275 314h605v686c0 119-93 179-302 179s-303-60-303-179z" fill="#f2eee4"/>
+  <path d="M880 475h61c163 0 184 118 184 207s-34 212-219 212h-26V770h23c85 0 99-51 99-91s-16-81-87-81h-35z" fill="#f2eee4"/>
+  <path d="M275 314c0 43 135 78 302 78s303-35 303-78-136-78-303-78-302 35-302 78Z" fill="#ded5c6"/><ellipse cx="577" cy="310" rx="255" ry="50" fill="#3a2017"/>
+  <text x="577" y="650" text-anchor="middle" fill="#101A16" font-family="Georgia,serif" font-size="63">ONE MORE SET.</text><text x="577" y="706" text-anchor="middle" fill="#101A16" font-family="Arial,sans-serif" font-size="17" letter-spacing="5">RACQUET HABIT / 2026</text>
+</svg>

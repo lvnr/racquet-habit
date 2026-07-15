@@ -1,0 +1,21 @@
+---
+import type { CatalogProduct } from "../data/catalog";
+type Props = { product: CatalogProduct; index?: number; featured?: boolean };
+const { product, index = 0, featured = false } = Astro.props;
+---
+
+<article class:list={["product-card", { "product-card--featured": featured }]} data-product-card data-category={product.category}>
+  <a class="product-card__image" href={`/products/${product.slug}`} aria-label={`View ${product.name}`}>
+    <img src={product.image} alt={product.name} loading={index < 4 ? "eager" : "lazy"} decoding="async" />
+    <span class="product-card__index">{String(index + 1).padStart(2, "0")}</span>
+    <span class:list={["product-card__status", { soon: product.comingSoon }]}>{product.comingSoon ? "In development" : product.edition}</span>
+    <span class="product-card__view">View piece <b>↗</b></span>
+  </a>
+  <div class="product-card__meta">
+    <div>
+      <span>{product.category}</span>
+      <h3><a href={`/products/${product.slug}`}>{product.name}</a></h3>
+    </div>
+    <strong class="money" data-price-usd={product.price}>${product.price.toFixed(2)}</strong>
+  </div>
+</article>

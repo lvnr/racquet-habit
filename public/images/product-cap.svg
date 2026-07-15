@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1440">
+  <rect width="1200" height="1440" fill="#101A16"/>
+  <g opacity=".12" stroke="#F2EEE4"><path d="M-100 300L1300 900M-100 390L1300 990M-100 480L1300 1080M200 -100L900 1540M290 -100L990 1540M380 -100L1080 1540"/></g>
+  <path d="M264 700c18-283 165-430 385-430 178 0 302 89 338 297-60 45-130 78-204 99-170 49-349 55-519 34Z" fill="#ece7dd"/>
+  <path d="M654 270c-15 105-17 235 9 388M646 272c175 12 310 121 341 295" fill="none" stroke="#c5bcae" stroke-width="7"/>
+  <path d="M264 700c-77 58-120 113-88 153 53 66 297 24 526-150 29-22 52-39 81-37-169 49-349 55-519 34Z" fill="#ded6c8"/>
+  <g transform="translate(555 405) scale(.7)" fill="none" stroke="#101A16" stroke-linecap="round" stroke-linejoin="round"><path d="M45 126V35h30.5c19.6 0 30.8 10.4 30.8 26.2S95.1 87.5 75.5 87.5H45m30.5 0L109 126M106.3 35v91M106.3 79h24M130.3 35v91" stroke-width="8"/><path d="M123.5 22.5C99 8.8 60.8 10.4 36.9 26.1 12.4 42.2 6.7 75.8 22.4 99.8" stroke="#712A35" stroke-width="5"/></g>
+  <text x="90" y="1310" fill="#F2EEE4" font-family="Arial,sans-serif" font-size="24" letter-spacing="7">MEMBER ISSUE 001</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1440">
+  <rect width="1200" height="1440" fill="#ece6da"/>
+  <circle cx="955" cy="235" r="155" fill="#D9F23B"/>
+  <path d="M0 1120h1200v320H0z" fill="#712A35"/>
+  <g stroke="#101A16" fill="none" opacity=".18"><ellipse cx="600" cy="720" rx="480" ry="620"/><ellipse cx="600" cy="720" rx="420" ry="560"/><ellipse cx="600" cy="720" rx="360" ry="500"/></g>
+  <path d="M418 250h364l-35 836c-4 95-70 142-147 142s-143-47-147-142z" fill="#101A16"/>
+  <path d="M432 250h336v76H432z" fill="#b7a88c"/><path d="M445 890h310" stroke="#F2EEE4" stroke-width="2"/>
+  <g transform="translate(505 518) scale(1.2)" fill="none" stroke="#F2EEE4" stroke-linecap="round" stroke-linejoin="round"><path d="M45 126V35h30.5c19.6 0 30.8 10.4 30.8 26.2S95.1 87.5 75.5 87.5H45m30.5 0L109 126M106.3 35v91M106.3 79h24M130.3 35v91" stroke-width="5"/><path d="M123.5 22.5C99 8.8 60.8 10.4 36.9 26.1 12.4 42.2 6.7 75.8 22.4 99.8" stroke="#D9F23B" stroke-width="3"/></g>
+  <text x="600" y="806" text-anchor="middle" fill="#F2EEE4" font-family="Arial,sans-serif" font-size="19" letter-spacing="5">PLAY RESPONSIBLY</text>
+</svg>

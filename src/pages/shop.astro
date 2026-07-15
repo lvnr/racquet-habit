@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ProductCard from "../components/ProductCard.astro";
+import { getCatalog } from "../lib/catalog";
+
+const catalog = await getCatalog();
+const categories = ["All", "Wear", "Carry", "Court", "Drink", "Coffee"];
+---
+
+<BaseLayout title="Issue 001 — Racquet Habit" description="The founding Racquet Habit collection: apparel, court goods, drinkware and clubhouse collaborations for repeat players.">
+  <section class="page-hero">
+    <div class="page-hero__top eyebrow"><span>Current issue / 001</span><span>Habit-forming since 2026</span></div>
+    <h1>The founding <em>issue.</em></h1>
+    <div class="page-hero__bottom">
+      <p>Objects for court, commute and clubhouse. Each piece starts formally, then admits the problem in the small print.</p>
+      <span class="eyebrow">{catalog.length} pieces / made for repeat use</span>
+    </div>
+  </section>
+  <div class="shop-controls">
+    <div class="filter-list" role="group" aria-label="Filter products">
+      {categories.map((category) => <button type="button" class={category === "All" ? "active" : ""} data-filter={category}>{category}</button>)}
+    </div>
+    <span><b data-visible-count>{catalog.length}</b> pieces on record</span>
+  </div>
+  <section class="shop-grid">
+    <div class="product-grid" data-shop-grid>
+      {catalog.map((product, index) => <ProductCard product={product} index={index} />)}
+    </div>
+  </section>
+  <script>
+    const filters = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
+    const cards = document.querySelectorAll<HTMLElement>("[data-product-card]");
+    const count = document.querySelector<HTMLElement>("[data-visible-count]");
+    const params = new URLSearchParams(location.search);
+    const initial = params.get("category") || "All";
+    const applyFilter = (category: string) => {
+      let visible = 0;
+      filters.forEach((button) => button.classList.toggle("active", button.dataset.filter === category));
+      cards.forEach((card) => {
+        const show = category === "All" || card.dataset.category === category;
+        card.hidden = !show;
+        if (show) visible += 1;
+      });
+      if (count) count.textContent = String(visible);
+      const url = new URL(location.href);
+      if (category === "All") url.searchParams.delete("category"); else url.searchParams.set("category", category);
+      history.replaceState({}, "", url);
+    };
+    filters.forEach((button) => button.addEventListener("click", () => applyFilter(button.dataset.filter || "All")));
+    applyFilter(initial);
+  </script>
+</BaseLayout>

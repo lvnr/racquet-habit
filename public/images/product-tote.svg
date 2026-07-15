@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1440">
+  <rect width="1200" height="1440" fill="#b7a88c"/>
+  <path d="M0 0h1200v290L0 730z" fill="#101A16"/>
+  <path d="M256 432h688l-42 801H298z" fill="#eee8dc"/>
+  <path d="M437 474V351c0-122 63-191 163-191s163 69 163 191v123" fill="none" stroke="#eee8dc" stroke-width="45"/>
+  <g transform="translate(420 585) scale(2.2)" fill="none" stroke="#101A16" stroke-linecap="round" stroke-linejoin="round"><path d="M45 126V35h30.5c19.6 0 30.8 10.4 30.8 26.2S95.1 87.5 75.5 87.5H45m30.5 0L109 126M106.3 35v91M106.3 79h24M130.3 35v91" stroke-width="3"/><path d="M123.5 22.5C99 8.8 60.8 10.4 36.9 26.1 12.4 42.2 6.7 75.8 22.4 99.8" stroke="#712A35" stroke-width="1.5"/></g>
+  <text x="600" y="980" text-anchor="middle" fill="#101A16" font-family="Arial,sans-serif" font-size="20" letter-spacing="7">MEMBERSHIP IS INVOLUNTARY</text>
+</svg>

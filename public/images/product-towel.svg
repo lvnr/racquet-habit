@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1440">
+  <rect width="1200" height="1440" fill="#d9f23b"/>
+  <g transform="rotate(-23 600 720)" stroke="#101A16" stroke-width="2" opacity=".8"><path d="M-300 0v1600M-220 0v1600M-140 0v1600M-60 0v1600M20 0v1600M100 0v1600M180 0v1600M260 0v1600M340 0v1600M420 0v1600M500 0v1600M580 0v1600M660 0v1600M740 0v1600M820 0v1600M900 0v1600M980 0v1600M1060 0v1600M1140 0v1600M1220 0v1600M1300 0v1600M1380 0v1600"/><path d="M-300 80h1800M-300 160h1800M-300 240h1800M-300 320h1800M-300 400h1800M-300 480h1800M-300 560h1800M-300 640h1800M-300 720h1800M-300 800h1800M-300 880h1800M-300 960h1800M-300 1040h1800M-300 1120h1800M-300 1200h1800M-300 1280h1800M-300 1360h1800"/></g>
+  <rect x="110" y="400" width="980" height="640" fill="#101A16"/>
+  <text x="600" y="640" text-anchor="middle" fill="#F2EEE4" font-family="Georgia,serif" font-size="145">RACQUET</text><text x="600" y="795" text-anchor="middle" fill="#F2EEE4" font-family="Georgia,serif" font-size="145">HABIT</text><text x="600" y="900" text-anchor="middle" fill="#D9F23B" font-family="Arial,sans-serif" font-size="21" letter-spacing="8">A DIFFICULT HABIT TO BREAK</text>
+</svg>

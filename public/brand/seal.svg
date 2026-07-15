@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 540" role="img" aria-labelledby="title">
+  <title id="title">Racquet Habit Tennis Addicts Society seal</title>
+  <rect x="24" y="24" width="372" height="492" rx="186" fill="none" stroke="currentColor" stroke-width="2"/>
+  <rect x="37" y="37" width="346" height="466" rx="173" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 8"/>
+  <g fill="currentColor" text-anchor="middle">
+    <text x="210" y="90" font-family="Arial, sans-serif" font-size="14" letter-spacing="4">TENNIS ADDICTS SOCIETY</text>
+    <text x="210" y="415" font-family="Arial, sans-serif" font-size="13" letter-spacing="3">ESTABLISHED 2026</text>
+    <text x="210" y="455" font-family="Arial, sans-serif" font-size="10" letter-spacing="2">A DIFFICULT HABIT TO BREAK</text>
+  </g>
+  <path d="M105 112h210M105 393h210" fill="none" stroke="currentColor" stroke-width="1"/>
+  <g transform="translate(115 148) scale(1.2)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M45 126V35h30.5c19.6 0 30.8 10.4 30.8 26.2S95.1 87.5 75.5 87.5H45m30.5 0L109 126M106.3 35v91M106.3 79h24M130.3 35v91" stroke-width="5"/>
+    <path d="M123.5 22.5C99 8.8 60.8 10.4 36.9 26.1 12.4 42.2 6.7 75.8 22.4 99.8" stroke-width="2.5"/>
+  </g>
+</svg>

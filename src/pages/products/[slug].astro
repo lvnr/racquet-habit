@@ -1,0 +1,90 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProductCard from "../../components/ProductCard.astro";
+import { getCatalog } from "../../lib/catalog";
+
+const catalog = await getCatalog();
+const product = catalog.find((item) => item.slug === Astro.params.slug);
+if (!product) return Astro.redirect("/404", 302);
+const purchasable = product.source === "fourthwall" && !product.comingSoon && product.variants.some((variant) => variant.inStock);
+const variants = product.variants.filter((variant) => variant.inStock);
+const defaultVariant = variants[0] || product.variants[0];
+const related = catalog.filter((item) => item.id !== product.id && item.category === product.category).slice(0, 3);
+const productSchema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: product.name,
+  description: product.description,
+  image: product.images.map((image) => new URL(image, Astro.site).toString()),
+  brand: { "@type": "Brand", name: "Racquet Habit" },
+  offers: {
+    "@type": "Offer",
+    priceCurrency: "USD",
+    price: product.price,
+    availability: purchasable ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
+  },
+};
+---
+
+<BaseLayout title={`${product.name} — Racquet Habit`} description={product.description} image={product.image}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(productSchema)} slot="head"></script>
+  <section class="product-page">
+    <div class="product-gallery">
+      {product.images.map((image, index) => <figure><img src={image} alt={index === 0 ? product.name : `${product.name}, view ${index + 1}`} fetchpriority={index === 0 ? "high" : "auto"} /></figure>)}
+    </div>
+    <div class="product-info">
+      <div class="product-breadcrumb"><a href="/shop">Issue 001</a> / {product.category} / {product.edition}</div>
+      <div class="product-info__head">
+        <h1>{product.name}</h1>
+        <strong class="money" data-product-price data-price-usd={product.price}>${product.price.toFixed(2)}</strong>
+      </div>
+      <p class="product-info__description">{product.description}</p>
+      {variants.length > 1 && (
+        <div class="product-option">
+          <label for="variant">Select your issue</label>
+          <select id="variant" data-variant-select>
+            {variants.map((variant) => <option value={variant.id} data-price={variant.price}>{variant.name} — ${variant.price.toFixed(2)}</option>)}
+          </select>
+        </div>
+      )}
+      <button
+        class="button button--acid button--full"
+        type="button"
+        data-add-to-cart
+        data-coming-soon={String(!purchasable)}
+        data-variant-id={defaultVariant?.id}
+        data-name={product.name}
+        data-variant={defaultVariant?.name}
+        data-price={defaultVariant?.price ?? product.price}
+        data-image={product.image}
+      >
+        <span>{purchasable ? "Add to bag" : product.comingSoon ? "In development" : "Preview — opening shortly"}</span><span>↗</span>
+      </button>
+      <p class="product-note">Made to order where applicable. Armenian visitors see an approximate AMD display; secure checkout settles in USD.</p>
+      <div class="product-meta">
+        <details open>
+          <summary>The piece</summary>
+          <p>{product.story}</p>
+        </details>
+        <details>
+          <summary>Material & make</summary>
+          <p>{product.material}. Production details and sizing are confirmed on the secure checkout page for made-to-order goods.</p>
+        </details>
+        <details>
+          <summary>Delivery</summary>
+          <p>Complimentary standard delivery in Armenia is applied automatically. International delivery is calculated by Fourthwall from the order weight and destination. Duties may apply.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+  {related.length > 0 && (
+    <section class="related">
+      <header class="section-heading">
+        <span class="section-heading__number">Also on record</span>
+        <h2>Related <em>symptoms</em></h2>
+        <p>Objects from the same part of the habit.</p>
+      </header>
+      <div class="product-grid">{related.map((item, index) => <ProductCard product={item} index={index} />)}</div>
+    </section>
+  )}
+</BaseLayout>

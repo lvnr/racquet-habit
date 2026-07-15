@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "racquet-habit",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "compatibility_date": "2026-07-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist"
+  },
+  "vars": {
+    "AMD_PER_USD": "367"
+  },
+  "routes": [
+    {
+      "pattern": "racquethabit.com",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.racquethabit.com",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}

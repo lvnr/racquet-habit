@@ -33,8 +33,8 @@ async function api(pathname, options = {}) {
   return response.json();
 }
 
-async function uploadArtwork(filename) {
-  const fileUrl = new URL(`public/brand/${filename}`, root);
+async function uploadArtwork(filename, width, height) {
+  const fileUrl = new URL(`public/brand-v2/exports/${filename}`, root);
   const path = fileURLToPath(fileUrl);
   const bytes = await readFile(path);
   const size = (await stat(path)).size;
@@ -53,7 +53,7 @@ async function uploadArtwork(filename) {
   if (!storageResponse.ok) throw new Error(`Artwork upload failed (${storageResponse.status}): ${await storageResponse.text()}`);
   const image = await api("/media/images", {
     method: "POST",
-    body: JSON.stringify({ fileUrl: upload.fileUrl, width: 2400, height: 2400 }),
+    body: JSON.stringify({ fileUrl: upload.fileUrl, width, height }),
   });
   return image.id;
 }
@@ -61,12 +61,12 @@ async function uploadArtwork(filename) {
 let state = {};
 try { state = JSON.parse(await readFile(new URL(".fourthwall-state.json", root), "utf8")); } catch {}
 
-if (!state.artwork) {
+if (!state.artworkV2) {
   console.log("Registering three Racquet Habit artwork masters…");
-  state.artwork = {
-    seal: await uploadArtwork("print-society-seal.png"),
-    loop: await uploadArtwork("print-habit-loop.png"),
-    lattice: await uploadArtwork("print-lattice.png"),
+  state.artworkV2 = {
+    seal: await uploadArtwork("logo-oval-seal@4x.png", 3360, 1840),
+    monogram: await uploadArtwork("logo-rh-monogram-embroidery@4x.png", 1280, 1280),
+    signature: await uploadArtwork("logo-society-signature@4x.png", 3840, 1280),
   };
   await writeFile(new URL(".fourthwall-state.json", root), JSON.stringify(state, null, 2));
 }
@@ -74,11 +74,11 @@ if (!state.artwork) {
 const products = [
   {
     productTemplateId: "pro_3WAxijeHRa60iWOTsmDCeA",
-    name: "Society Tee — Issue 001",
-    description: "Heavyweight premium cotton with the unresolved RH loop at center chest and the formal Tennis Addicts Society seal across the back. A difficult habit to break.",
+    name: "Society Tee — The Last Set",
+    description: "Heavyweight premium cotton with the RH monogram at left chest and the New Court Classic Society seal across the back. Collection 01 — The Last Set.",
     regions: [
-      { region: "front_large_dtf", imageId: state.artwork.loop, placementStrategy: "PLACEMENT_ID", placementId: "centerChest" },
-      { region: "back_large_dtf", imageId: state.artwork.seal, placementStrategy: "FULL_REGION" },
+      { region: "front_large_dtf", imageId: state.artworkV2.monogram, placementStrategy: "PLACEMENT_ID", placementId: "leftChest" },
+      { region: "back_large_dtf", imageId: state.artworkV2.seal, placementStrategy: "AUTO" },
     ],
     colors: ["Black", "Army", "Navy"],
     sizes: ["S", "M", "L", "XL", "2XL"],
@@ -87,8 +87,8 @@ const products = [
   {
     productTemplateId: "pro_UMfTCe9RRHiTf5hoWdlqZQ",
     name: "Member Cap",
-    description: "A low-profile court cap marked with the unresolved RH habit loop. No intention of quitting.",
-    regions: [{ region: "front_dtf_hat", imageId: state.artwork.loop, placementStrategy: "AUTO" }],
+    description: "A low-profile court cap finished with the New Court Classic Society seal. One more set.",
+    regions: [{ region: "front_dtf_hat", imageId: state.artworkV2.seal, placementStrategy: "AUTO" }],
     colors: ["Black", "Dark Navy", "Dark Green"],
     sizes: ["One size"],
     profitMargin: 19.35,
@@ -96,17 +96,17 @@ const products = [
   {
     productTemplateId: "pro_7eff6f9b20aa4edb83",
     name: "One More Set Mug",
-    description: "Ceramic clubhouse issue with an edge-to-edge string lattice and the reminder responsible for most late dinners.",
-    regions: [{ region: "default", imageId: state.artwork.lattice, placementStrategy: "FULL_REGION" }],
+    description: "A ceramic clubhouse mug with the Society seal printed on both sides and a Centre Court Green interior.",
+    regions: [{ region: "default", imageId: state.artworkV2.seal, placementStrategy: "AUTO" }],
     colors: ["Dark Green", "Red", "Black"],
     sizes: ["11oz", "15oz"],
     profitMargin: 15.05,
   },
   {
     productTemplateId: "pro_sBlASJ6lTXObwpVZiJDHrQ",
-    name: "Night Court Tumbler",
-    description: "Double-wall stainless steel wrapped in the Racquet Habit string lattice. Built for late bookings and long sets.",
-    regions: [{ region: "default", imageId: state.artwork.lattice, placementStrategy: "FULL_REGION" }],
+    name: "Court Tumbler",
+    description: "Double-wall stainless steel finished with the New Court Classic Society seal.",
+    regions: [{ region: "default", imageId: state.artworkV2.seal, placementStrategy: "AUTO" }],
     colors: ["Black", "White"],
     sizes: ["20oz"],
     profitMargin: 15.05,
@@ -114,8 +114,8 @@ const products = [
   {
     productTemplateId: "pro_382",
     name: "Habit Flask",
-    description: "Insulated stainless steel for court time that becomes overtime. Play responsibly.",
-    regions: [{ region: "default", imageId: state.artwork.lattice, placementStrategy: "FULL_REGION" }],
+    description: "Insulated stainless steel with a wraparound Society label for court time that becomes overtime.",
+    regions: [{ region: "default", imageId: state.artworkV2.seal, placementStrategy: "AUTO" }],
     colors: ["Black", "White"],
     sizes: ["17oz"],
     profitMargin: 18.65,
@@ -123,8 +123,8 @@ const products = [
   {
     productTemplateId: "pro_367",
     name: "Society Carryall",
-    description: "Organic cotton canvas for the spare racquet you absolutely did not need to bring. Membership is involuntary.",
-    regions: [{ region: "front", imageId: state.artwork.seal, placementStrategy: "AUTO" }],
+    description: "Eco-conscious canvas carrying the two-colour Society seal at considered scale.",
+    regions: [{ region: "front", imageId: state.artworkV2.seal, placementStrategy: "AUTO" }],
     colors: ["Black"],
     sizes: ["One size"],
     profitMargin: 16.44,

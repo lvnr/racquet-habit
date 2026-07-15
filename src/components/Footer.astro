@@ -4,42 +4,23 @@ import BrandMark from "./BrandMark.astro";
 
 <footer class="site-footer">
   <div class="site-footer__join">
-    <span class="eyebrow">Court notices · new issues · recurring symptoms</span>
-    <div class="site-footer__join-row">
-      <h2>Enter the <em>society.</em></h2>
-      <form action="https://racquet-habit-shop.fourthwall.com" method="get" class="join-form" data-join-form>
-        <label class="sr-only" for="join-email">Email address</label>
-        <input id="join-email" name="email" type="email" placeholder="YOUR EMAIL ADDRESS" autocomplete="email" required />
-        <button type="submit">Request entry <span>↗</span></button>
-      </form>
+    <div>
+      <span class="eyebrow">The Society Register</span>
+      <h2>One more set,<br /><em>in your inbox.</em></h2>
     </div>
+    <form action="https://racquet-habit-shop.fourthwall.com" method="get" class="join-form" data-join-form>
+      <p>New collections, court notes and occasional proof that the last set was never the last set.</p>
+      <label class="sr-only" for="join-email">Email address</label>
+      <div><input id="join-email" name="email" type="email" placeholder="EMAIL ADDRESS" autocomplete="email" required /><button type="submit">Join</button></div>
+    </form>
   </div>
   <div class="site-footer__main">
     <BrandMark light />
     <div class="footer-links">
-      <div>
-        <span>Collection</span>
-        <a href="/shop">Issue 001</a>
-        <a href="/shop?category=Wear">Wear</a>
-        <a href="/shop?category=Drink">Drink</a>
-        <a href="/shop?category=Coffee">Coffee</a>
-      </div>
-      <div>
-        <span>Society</span>
-        <a href="/our-habit">Our habit</a>
-        <a href="/journal/manifesto">Manifesto</a>
-        <a href="/shipping">Delivery & returns</a>
-      </div>
-      <div>
-        <span>Notices</span>
-        <a href="mailto:levonarakelian@live.com">Contact</a>
-        <a href="https://www.instagram.com/" rel="noreferrer">Instagram</a>
-      </div>
+      <div><span>Collection</span><a href="/shop">The Last Set</a><a href="/shop?category=Wear">Wear</a><a href="/shop?category=Court">Court</a><a href="/shop?category=Coffee">Coffee</a></div>
+      <div><span>Society</span><a href="/our-habit">About</a><a href="/journal/manifesto">Journal</a><a href="/shipping">Delivery & returns</a></div>
+      <div><span>Contact</span><a href="mailto:levonarakelian@live.com">Email</a><a href="https://www.instagram.com/" rel="noreferrer">Instagram</a></div>
     </div>
   </div>
-  <div class="site-footer__bottom">
-    <span>© {new Date().getFullYear()} Racquet Habit</span>
-    <span>Yerevan · Armenia / Serving repeat players everywhere</span>
-    <span>Play responsibly</span>
-  </div>
+  <div class="site-footer__bottom"><span>© {new Date().getFullYear()} Racquet Habit</span><span>Yerevan · Armenia</span><span>A difficult habit to break.</span></div>
 </footer>

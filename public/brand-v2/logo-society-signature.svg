@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180" role="img" aria-labelledby="title">
+  <title id="title">Racquet Habit society signature</title>
+  <style>
+    .name{font-family:"Instrument Serif",Georgia,serif;font-size:68px;letter-spacing:4px}
+    .meta{font-family:"Geist",Arial,sans-serif;font-size:14px;font-weight:600;letter-spacing:5px}
+  </style>
+  <text class="name" x="340" y="82" text-anchor="middle" fill="#103C2C">RACQUET HABIT</text>
+  <line x1="60" x2="620" y1="104" y2="104" stroke="#103C2C" stroke-width="1.5"/>
+  <circle cx="340" cy="104" r="5" fill="#B83D34"/>
+  <text class="meta" x="340" y="142" text-anchor="middle" fill="#103C2C">TENNIS ADDICTS SOCIETY · EST. 2026</text>
+</svg>

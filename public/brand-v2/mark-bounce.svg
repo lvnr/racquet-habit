@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" role="img" aria-labelledby="title">
+  <title id="title">Ball impact bounce mark</title>
+  <g stroke="#4E3265" stroke-width="5" stroke-linecap="round">
+    <path d="M40 7v13M40 60v13M7 40h13M60 40h13M16 16l10 10M54 54l10 10M64 16L54 26M26 54L16 64"/>
+  </g>
+  <circle cx="40" cy="40" r="8" fill="#B83D34"/>
+</svg>

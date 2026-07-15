@@ -5,8 +5,8 @@ const isArmenia = Astro.locals.isArmenia as boolean;
 ---
 
 <div class="dispatch-bar">
-  <span class="dispatch-bar__status"><i></i> Issue 001 now forming</span>
-  <span>{isArmenia ? "Complimentary delivery across Armenia" : "Free Armenia delivery · International delivery at cost"}</span>
+  <span>Collection 01 · The Last Set</span>
+  <span>{isArmenia ? "Complimentary delivery across Armenia" : "Worldwide delivery · Free in Armenia"}</span>
   <button class="currency-toggle" type="button" data-currency-toggle aria-label="Toggle display currency">
     <span data-currency-label>{isArmenia ? "AMD ֏" : "USD $"}</span>
   </button>
@@ -15,26 +15,25 @@ const isArmenia = Astro.locals.isArmenia as boolean;
 <header class="site-header" data-site-header>
   <BrandMark />
   <nav class="desktop-nav" aria-label="Primary navigation">
-    <a class:list={{ active: path.startsWith("/shop") || path.startsWith("/products") }} href="/shop">Issue 001</a>
-    <a class:list={{ active: path === "/our-habit" }} href="/our-habit">Our habit</a>
-    <a class:list={{ active: path.startsWith("/journal") }} href="/journal/manifesto">Society notes</a>
+    <a class:list={{ active: path.startsWith("/shop") || path.startsWith("/products") }} href="/shop">Collection</a>
+    <a class:list={{ active: path === "/our-habit" }} href="/our-habit">The Society</a>
+    <a class:list={{ active: path.startsWith("/journal") }} href="/journal/manifesto">Journal</a>
+    <a class:list={{ active: path === "/shipping" }} href="/shipping">Delivery</a>
   </nav>
   <div class="header-actions">
     <button class="cart-trigger" type="button" data-cart-open aria-label="Open shopping bag">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.7 8.5h10.6l.8 12H5.9zM9 9V6.4a3 3 0 0 1 6 0V9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-      <span>Bag</span>
-      <b data-cart-count>0</b>
+      <span>Bag</span><b>(<span data-cart-count>0</span>)</b>
     </button>
     <details class="mobile-nav">
       <summary aria-label="Open navigation"><span></span><span></span></summary>
       <div class="mobile-nav__panel">
         <nav aria-label="Mobile navigation">
-          <a href="/shop">Issue 001 <em>01</em></a>
-          <a href="/our-habit">Our habit <em>02</em></a>
-          <a href="/journal/manifesto">Society notes <em>03</em></a>
-          <a href="/shipping">Delivery <em>04</em></a>
+          <a href="/shop">Collection</a>
+          <a href="/our-habit">The Society</a>
+          <a href="/journal/manifesto">Journal</a>
+          <a href="/shipping">Delivery</a>
         </nav>
-        <p>A contemporary tennis society for people with no intention of quitting.</p>
+        <p>The unofficial society for people who always have time for one more set.</p>
       </div>
     </details>
   </div>

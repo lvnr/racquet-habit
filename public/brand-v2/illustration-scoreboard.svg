@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 360" role="img" aria-labelledby="title">
+  <title id="title">Flip scoreboard illustration</title>
+  <g fill="none" stroke="#103C2C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M54 54h312v220H54zM79 86h262M79 141h262M79 234h262M102 274l-14 50M318 274l14 50M72 324h276"/>
+    <path d="M163 141v93M257 141v93"/>
+  </g>
+  <g fill="#103C2C" font-family="Instrument Serif,Georgia,serif" font-size="70" text-anchor="middle">
+    <text x="116" y="217">3</text><text x="210" y="217">0</text><text x="304" y="217">4</text>
+  </g>
+  <circle cx="341" cy="87" r="7" fill="#B83D34"/>
+</svg>

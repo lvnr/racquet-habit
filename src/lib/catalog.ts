@@ -33,6 +33,18 @@ function categoryFor(name: string): ProductCategory {
   return "Drink";
 }
 
+function plainText(value?: string) {
+  return (value ?? "")
+    .replace(/<br\s*\/?\s*>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function defaultArtwork(category: ProductCategory, name: string) {
   if (category === "Wear" && name.toLowerCase().includes("cap")) return "/images/product-cap.svg";
   if (category === "Wear") return "/images/product-apparel.svg";
@@ -66,15 +78,16 @@ function mapProduct(product: FourthwallProduct): CatalogProduct {
     .filter((image): image is string => Boolean(image))
     .slice(0, 6);
   const fallback = previewCatalog.find((item) => item.name.toLowerCase().split("—")[0].trim() === product.name.toLowerCase().split("—")[0].trim());
+  const description = plainText(product.description);
 
   return {
     id: product.id,
     slug: product.slug,
     name: product.name,
     category,
-    edition: fallback?.edition ?? "Issue 001",
-    description: product.description || fallback?.description || "Habit-forming equipment for repeat players.",
-    story: fallback?.story || product.description || "Designed for the hours on court and the conversations that follow.",
+    edition: fallback?.edition ?? "The Last Set",
+    description: description || fallback?.description || "Considered equipment for repeat players.",
+    story: fallback?.story || description || "Designed for the hours on court and the conversations that follow.",
     material: fallback?.material || "Fourthwall made-to-order product",
     price: variants.find((variant) => variant.inStock)?.price ?? variants[0]?.price ?? fallback?.price ?? 0,
     image: images[0] || defaultArtwork(category, product.name),
@@ -85,7 +98,7 @@ function mapProduct(product: FourthwallProduct): CatalogProduct {
 }
 
 function mergePreviews(live: CatalogProduct[]) {
-  const issueOrder = ["Society Tee — Issue 001", "Member Cap", "One More Set Mug", "Night Court Tumbler", "Habit Flask", "Society Carryall"];
+  const issueOrder = ["Society Tee — The Last Set", "Society Tee — Collection 01", "Member Cap", "One More Set Mug", "Court Tumbler", "Habit Flask", "Society Carryall"];
   live.sort((a, b) => {
     const aIndex = issueOrder.indexOf(a.name);
     const bIndex = issueOrder.indexOf(b.name);
@@ -122,7 +135,7 @@ export async function getCatalog(): Promise<CatalogProduct[]> {
 
   try {
     const response = await fetch(
-      `https://storefront-api.fourthwall.com/v1/collections/all/products?storefront_token=${encodeURIComponent(token)}&size=50`,
+      `https://storefront-api.fourthwall.com/v1/collections/all/products?storefront_token=${encodeURIComponent(token)}&size=50&page=0`,
       {
         headers: { Accept: "application/json" },
         cf: { cacheTtl: 300, cacheEverything: true },

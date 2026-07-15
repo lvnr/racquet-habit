@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 310" role="img" aria-labelledby="title">
+  <title id="title">Racquet Habit editorial wordmark</title>
+  <style>
+    .serif{font-family:"Instrument Serif",Georgia,serif;font-size:180px;letter-spacing:4px}
+    .script{font-family:"Yellowtail","Brush Script MT",cursive;font-size:164px}
+  </style>
+  <text class="serif" x="20" y="172" fill="#103C2C">RACQUET</text>
+  <text class="script" x="280" y="270" fill="#4E3265" transform="rotate(-5 280 270)">Habit</text>
+  <path d="M270 270C390 283 570 283 735 249" fill="none" stroke="#4E3265" stroke-width="5" stroke-linecap="round"/>
+</svg>

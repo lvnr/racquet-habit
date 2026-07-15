@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 440" role="img" aria-labelledby="title">
+  <title id="title">Classic tennis racquet illustration</title>
+  <g transform="rotate(13 180 220)" fill="none" stroke="#103C2C" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="180" cy="135" rx="102" ry="122" stroke-width="7"/>
+    <path d="M137 241l13 54h60l13-54M154 295h52v121h-52zM151 327h58M151 350h58M151 373h58M151 396h58" stroke-width="6"/>
+    <g stroke-width="2.5" opacity=".45"><path d="M100 76h160M84 111h192M80 146h200M88 181h184M105 216h150M118 32v206M146 17v239M174 13v248M202 18v237M230 35v202"/></g>
+  </g>
+  <circle cx="286" cy="90" r="9" fill="#B83D34"/>
+</svg>

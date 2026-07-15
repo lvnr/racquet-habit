@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 230" role="img" aria-labelledby="title">
+  <title id="title">Racquet Habit oval society seal</title>
+  <defs>
+    <clipPath id="patch-clip"><ellipse cx="210" cy="115" rx="196" ry="101"/></clipPath>
+  </defs>
+  <ellipse cx="210" cy="115" rx="202" ry="107" fill="#103C2C"/>
+  <ellipse cx="210" cy="115" rx="188" ry="93" fill="none" stroke="#F3EBD8" stroke-width="2.5"/>
+  <g clip-path="url(#patch-clip)" fill="none" stroke="#F3EBD8" stroke-width="1.6" opacity=".16">
+    <path d="M102 77l216 82M81 92l216 82M123 62l216 82M318 77l-216 82M339 92l-216 82M297 62L81 144"/>
+  </g>
+  <style>
+    .title{font-family:"Instrument Serif",Georgia,serif;font-size:28px;letter-spacing:4.5px}
+    .meta{font-family:"Geist",Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:3.2px}
+  </style>
+  <rect x="92" y="29" width="236" height="38" rx="19" fill="#103C2C"/>
+  <text class="title" x="210" y="55" text-anchor="middle" fill="#F3EBD8">RACQUET HABIT</text>
+  <g transform="translate(171 73) scale(.48)" fill="none" stroke="#F3EBD8" stroke-width="13" stroke-linecap="square" stroke-linejoin="miter">
+    <path d="M22 132V28h35c25 0 38 13 38 32S82 92 57 92H22M59 92l38 40M96 28v104M96 80h25M121 28v104"/>
+  </g>
+  <path d="M194 116c11 4 23 4 34-1" fill="none" stroke="#4E3265" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="210" cy="162" r="4" fill="#B83D34"/>
+  <rect x="72" y="170" width="276" height="28" rx="14" fill="#103C2C"/>
+  <text class="meta" x="210" y="188" text-anchor="middle" fill="#F3EBD8">TENNIS ADDICTS SOCIETY · EST. 2026</text>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" role="img" aria-labelledby="title">
+  <title id="title">Umpire chair illustration</title>
+  <g fill="none" stroke="#103C2C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M104 364L160 82h92l24 282M116 306h148M129 243h122M141 181h98M154 119h85M159 82l-18-22h127l-16 22M160 82v58h92V82M92 364h202M112 364l-12 27M276 364l12 27"/>
+    <path d="M160 143c-21 1-38 8-51 23M252 143c20 1 36 8 49 23"/>
+  </g>
+  <circle cx="299" cy="167" r="7" fill="#B83D34"/>
+</svg>

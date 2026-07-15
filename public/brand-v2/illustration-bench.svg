@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 340" role="img" aria-labelledby="title">
+  <title id="title">Court bench illustration</title>
+  <g fill="none" stroke="#103C2C" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M57 127h366v55H57zM74 182h332v67H74zM104 249l-18 50M376 249l18 50M55 299h370M86 127V85h308v42"/>
+    <path d="M132 85v42M190 85v42M248 85v42M306 85v42M364 85v42M132 182v67M190 182v67M248 182v67M306 182v67M364 182v67" stroke-width="3" opacity=".5"/>
+  </g>
+  <circle cx="395" cy="86" r="8" fill="#B83D34"/>
+</svg>

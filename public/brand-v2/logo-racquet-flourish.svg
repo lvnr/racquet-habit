@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-labelledby="title">
+  <title id="title">The Last Set racquet flourish</title>
+  <path d="M128 210C54 155 75 40 180 26c101-13 166 81 117 159-27 43-78 57-124 35-45-21-64-70-44-111 19-39 69-53 106-29 35 22 44 71 17 103-17 20-43 26-66 16m70-8l81 73c55 49 136 42 187-5 39-35 72-37 121-6" fill="none" stroke="#103C2C" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M347 271H660" stroke="#103C2C" stroke-width="3"/>
+  <circle cx="601" cy="252" r="12" fill="#B83D34"/>
+  <style>
+    .title{font-family:"Instrument Serif",Georgia,serif;font-size:54px;letter-spacing:3px}
+    .meta{font-family:"Geist",Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:4px}
+  </style>
+  <text class="title" x="346" y="136" fill="#103C2C">THE LAST SET</text>
+  <text class="title" x="346" y="193" fill="#103C2C">IS A MYTH</text>
+  <text class="meta" x="348" y="301" fill="#103C2C">RACQUET HABIT · COLLECTION 01</text>
+</svg>

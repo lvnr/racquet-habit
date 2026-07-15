@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 420" role="img" aria-labelledby="title">
+  <title id="title">Tennis ball can illustration</title>
+  <g fill="none" stroke="#103C2C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="150" cy="58" rx="73" ry="24"/>
+    <path d="M77 58v288c0 14 33 25 73 25s73-11 73-25V58M77 126c0 14 33 25 73 25s73-11 73-25M77 294c0 14 33 25 73 25s73-11 73-25"/>
+    <circle cx="150" cy="217" r="52"/>
+    <path d="M104 192c27 7 47-5 58-27M196 242c-27-7-47 5-58 27"/>
+  </g>
+  <circle cx="221" cy="102" r="8" fill="#B83D34"/>
+</svg>

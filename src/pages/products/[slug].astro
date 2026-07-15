@@ -33,7 +33,7 @@ const productSchema = {
       {product.images.map((image, index) => <figure><img src={image} alt={index === 0 ? product.name : `${product.name}, view ${index + 1}`} fetchpriority={index === 0 ? "high" : "auto"} /></figure>)}
     </div>
     <div class="product-info">
-      <div class="product-breadcrumb"><a href="/shop">Issue 001</a> / {product.category} / {product.edition}</div>
+      <div class="product-breadcrumb"><a href="/shop">Collection 01</a> / {product.category} / {product.edition}</div>
       <div class="product-info__head">
         <h1>{product.name}</h1>
         <strong class="money" data-product-price data-price-usd={product.price}>${product.price.toFixed(2)}</strong>
@@ -41,14 +41,14 @@ const productSchema = {
       <p class="product-info__description">{product.description}</p>
       {variants.length > 1 && (
         <div class="product-option">
-          <label for="variant">Select your issue</label>
+          <label for="variant">Choose an option</label>
           <select id="variant" data-variant-select>
             {variants.map((variant) => <option value={variant.id} data-price={variant.price}>{variant.name} — ${variant.price.toFixed(2)}</option>)}
           </select>
         </div>
       )}
       <button
-        class="button button--acid button--full"
+        class="button button--red button--full"
         type="button"
         data-add-to-cart
         data-coming-soon={String(!purchasable)}
@@ -58,7 +58,7 @@ const productSchema = {
         data-price={defaultVariant?.price ?? product.price}
         data-image={product.image}
       >
-        <span>{purchasable ? "Add to bag" : product.comingSoon ? "In development" : "Preview — opening shortly"}</span><span>↗</span>
+        <span>{purchasable ? "Add to bag" : product.comingSoon ? "Coming soon" : "Preview — opening shortly"}</span><span>↗</span>
       </button>
       <p class="product-note">Made to order where applicable. Armenian visitors see an approximate AMD display; secure checkout settles in USD.</p>
       <div class="product-meta">
@@ -80,9 +80,9 @@ const productSchema = {
   {related.length > 0 && (
     <section class="related">
       <header class="section-heading">
-        <span class="section-heading__number">Also on record</span>
-        <h2>Related <em>symptoms</em></h2>
-        <p>Objects from the same part of the habit.</p>
+        <span class="section-heading__number">From the same collection</span>
+        <h2>You may also like</h2>
+        <p>More objects for court and clubhouse.</p>
       </header>
       <div class="product-grid">{related.map((item, index) => <ProductCard product={item} index={index} />)}</div>
     </section>

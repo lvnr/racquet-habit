@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 400" role="img" aria-labelledby="title">
+  <title id="title">Structured court bag illustration</title>
+  <g fill="none" stroke="#103C2C" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M63 136c0-24 20-44 44-44h226c24 0 44 20 44 44v187H63V136zM63 162h314M102 162v161M338 162v161M146 92V65h148v27"/>
+    <path d="M132 208c32-22 80-31 116-14 30 14 48 54 29 80-18 25-61 27-82 5-19-21-14-55 9-72 17-13 43-13 59 1"/>
+    <path d="M92 323v30M348 323v30M48 353h344"/>
+  </g>
+  <circle cx="340" cy="137" r="8" fill="#B83D34"/>
+</svg>

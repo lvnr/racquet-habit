@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 790 150" role="img" aria-labelledby="title">
+  <title id="title">Racquet Habit horizontal signature</title>
+  <style>
+    .serif{font-family:"Instrument Serif",Georgia,serif;font-size:82px;letter-spacing:2px}
+    .script{font-family:"Yellowtail","Brush Script MT",cursive;font-size:76px}
+    .meta{font-family:"Geist",Arial,sans-serif;font-size:13px;font-weight:600;letter-spacing:4px}
+  </style>
+  <text class="serif" x="8" y="88" fill="#103C2C">RACQUET</text>
+  <text class="script" x="390" y="98" fill="#4E3265">Habit</text>
+  <path d="M382 102C478 117 579 114 665 92" fill="none" stroke="#4E3265" stroke-width="3" stroke-linecap="round"/>
+  <text class="meta" x="11" y="132" fill="#103C2C">TENNIS ADDICTS SOCIETY · EST. 2026</text>
+</svg>

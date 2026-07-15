@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 320" role="img" aria-labelledby="title">
+  <title id="title">Tennis net illustration</title>
+  <g fill="none" stroke="#103C2C" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M38 262V56M482 262V56M20 262h56M444 262h56M38 73h444M38 84h444M260 78v184" stroke-width="7"/>
+    <path d="M52 94h416v145H52z" stroke-width="3"/>
+    <g stroke-width="1.5" opacity=".4"><path d="M52 120h416M52 146h416M52 172h416M52 198h416M52 224h416M78 94v145M104 94v145M130 94v145M156 94v145M182 94v145M208 94v145M234 94v145M286 94v145M312 94v145M338 94v145M364 94v145M390 94v145M416 94v145M442 94v145"/></g>
+  </g>
+  <circle cx="260" cy="78" r="8" fill="#B83D34"/>
+</svg>

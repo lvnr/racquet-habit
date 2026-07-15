@@ -6,14 +6,13 @@ const { product, index = 0, featured = false } = Astro.props;
 
 <article class:list={["product-card", { "product-card--featured": featured }]} data-product-card data-category={product.category}>
   <a class="product-card__image" href={`/products/${product.slug}`} aria-label={`View ${product.name}`}>
-    <img src={product.image} alt={product.name} loading={index < 4 ? "eager" : "lazy"} decoding="async" />
-    <span class="product-card__index">{String(index + 1).padStart(2, "0")}</span>
-    <span class:list={["product-card__status", { soon: product.comingSoon }]}>{product.comingSoon ? "In development" : product.edition}</span>
-    <span class="product-card__view">View piece <b>↗</b></span>
+    <img src={product.image} alt={product.name} loading={index < 2 ? "eager" : "lazy"} decoding="async" />
+    <span class:list={["product-card__status", { soon: product.comingSoon }]}>{product.comingSoon ? "Coming soon" : product.edition}</span>
+    <span class="product-card__view">View</span>
   </a>
   <div class="product-card__meta">
     <div>
-      <span>{product.category}</span>
+      <span>{product.category} · {String(index + 1).padStart(2, "0")}</span>
       <h3><a href={`/products/${product.slug}`}>{product.name}</a></h3>
     </div>
     <strong class="money" data-price-usd={product.price}>${product.price.toFixed(2)}</strong>

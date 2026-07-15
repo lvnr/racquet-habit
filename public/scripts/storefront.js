@@ -64,7 +64,7 @@ document.addEventListener("click", (event) => {
   const button = event.target.closest("[data-add-to-cart]");
   if (!button) return;
   if (button.disabled || button.dataset.comingSoon === "true") {
-    toast("This piece is still in development.");
+    toast("This piece is coming soon.");
     return;
   }
   const variantSelect = document.querySelector("[data-variant-select]");
@@ -182,7 +182,7 @@ window.addEventListener("scroll", () => {
 document.querySelector("[data-join-form]")?.addEventListener("submit", (event) => {
   event.preventDefault();
   event.currentTarget.reset();
-  toast("Request received. Court notices will follow.");
+  toast("Welcome to the Society register.");
 });
 
 renderCart();

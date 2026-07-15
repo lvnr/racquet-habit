@@ -50,17 +50,18 @@ Fourthwall calculates shipping rates for print-on-demand products. It does not e
 
 ## Brand assets
 
-Editable SVG source lives in `public/brand/`:
+Editable SVG source lives in `public/brand-v2/`:
 
-- `monogram.svg` — compact RH Habit Loop
-- `seal.svg` — institutional society seal
-- `print-habit-loop.svg` — light-on-dark product print master
-- `print-society-seal.svg` — product seal print master
-- `print-lattice.svg` — ornamental racquet-string pattern
+- `logo-primary-editorial.svg` and `logo-primary-horizontal.svg`
+- `logo-rh-monogram.svg` and its embroidery-safe variant
+- `logo-oval-seal.svg` and `logo-society-signature.svg`
+- four repeatable court-derived patterns
+- eight consistent court-object illustrations
+- raster exports at 1×, 2×, and 4× in `public/brand-v2/exports/`
 
-The current campaign image is in `public/images/hero-night-court.png`, with optimized AVIF/WebP versions generated for the storefront.
+The New Court Classic campaign art is in `public/images/v2/`, with optimized WebP versions generated for the storefront.
 
-For the work that should be commissioned before a full commercial launch, see [EXTERNAL-DESIGN-BRIEF.md](./EXTERNAL-DESIGN-BRIEF.md).
+See [the brand system](./docs/BRAND-SYSTEM.md), [generation prompt pack](./docs/ASSET-PROMPTS.md), and [external production brief](./EXTERNAL-DESIGN-BRIEF.md).
 
 ## Deployment
 

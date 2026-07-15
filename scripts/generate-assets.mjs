@@ -1,29 +1,28 @@
 import sharp from "sharp";
-import { readFile } from "node:fs/promises";
+import { readFile, mkdir } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 
 const publicDir = new URL("../public/", import.meta.url);
-const imageDir = new URL("images/", publicDir);
-const brandDir = new URL("brand/", publicDir);
+const imageDir = new URL("images/v2/", publicDir);
+const brandDir = new URL("brand-v2/", publicDir);
+const exportDir = new URL("exports/", brandDir);
 const path = (url) => fileURLToPath(url);
 
-const hero = new URL("hero-night-court.png", imageDir);
-await Promise.all([
-  sharp(path(hero)).resize({ width: 2200, withoutEnlargement: true }).avif({ quality: 68, effort: 6 }).toFile(path(new URL("hero-night-court.avif", imageDir))),
-  sharp(path(hero)).resize({ width: 2200, withoutEnlargement: true }).webp({ quality: 82, effort: 6 }).toFile(path(new URL("hero-night-court.webp", imageDir))),
-  sharp(path(new URL("../favicon.svg", brandDir))).resize(180, 180).png().toFile(path(new URL("apple-touch-icon.png", publicDir))),
-  sharp(path(new URL("../favicon.svg", brandDir))).resize(32, 32).png().toFile(path(new URL("favicon-32.png", publicDir))),
-]);
+await mkdir(path(exportDir), { recursive: true });
 
+for (const name of ["campaign-hero", "campaign-hero-close", "court-still-life", "tournament-poster"]) {
+  const source = new URL(`${name}.png`, imageDir);
+  await sharp(path(source)).webp({ quality: 84, effort: 6 }).toFile(path(new URL(`${name}.webp`, imageDir)));
+}
+
+const hero = new URL("campaign-hero.png", imageDir);
 const overlay = Buffer.from(`
 <svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
-  <defs><linearGradient id="fade" x1="0" x2="1"><stop stop-color="#101A16" stop-opacity=".93"/><stop offset=".62" stop-color="#101A16" stop-opacity=".15"/></linearGradient></defs>
-  <rect width="1200" height="630" fill="url(#fade)"/>
-  <text x="68" y="235" fill="#F2EEE4" font-family="Georgia,serif" font-size="96" letter-spacing="4">RACQUET</text>
-  <text x="68" y="325" fill="#D9F23B" font-family="Georgia,serif" font-style="italic" font-size="104">HABIT</text>
-  <text x="73" y="385" fill="#F2EEE4" font-family="Arial,sans-serif" font-size="18" letter-spacing="7">TENNIS ADDICTS SOCIETY / ESTABLISHED 2026</text>
-  <line x1="73" y1="427" x2="474" y2="427" stroke="#F2EEE4" stroke-opacity=".55"/>
-  <text x="73" y="470" fill="#F2EEE4" font-family="Arial,sans-serif" font-size="15" letter-spacing="4">A DIFFICULT HABIT TO BREAK</text>
+  <rect width="1200" height="630" fill="#103C2C" opacity=".24"/>
+  <text x="58" y="230" fill="#F3EBD8" font-family="Georgia,serif" font-size="128" letter-spacing="3">RACQUET</text>
+  <text x="285" y="360" fill="#F3EBD8" font-family="cursive" font-style="italic" font-size="128">Habit</text>
+  <line x1="282" y1="380" x2="715" y2="360" stroke="#F3EBD8" stroke-width="4"/>
+  <text x="64" y="530" fill="#F3EBD8" font-family="Arial,sans-serif" font-size="18" letter-spacing="6">TENNIS ADDICTS SOCIETY · EST. 2026</text>
 </svg>`);
 
 await sharp(path(hero))
@@ -32,7 +31,15 @@ await sharp(path(hero))
   .jpeg({ quality: 88, mozjpeg: true })
   .toFile(path(new URL("og-racquet-habit.jpg", imageDir)));
 
-for (const name of ["print-society-seal", "print-habit-loop", "print-lattice"]) {
+const favicon = await readFile(path(new URL("favicon.svg", publicDir)));
+await Promise.all([
+  sharp(favicon, { density: 240 }).resize(180, 180).png().toFile(path(new URL("apple-touch-icon.png", publicDir))),
+  sharp(favicon, { density: 240 }).resize(32, 32).png().toFile(path(new URL("favicon-32.png", publicDir))),
+]);
+
+for (const name of ["logo-primary-editorial", "logo-primary-horizontal", "logo-rh-monogram", "logo-rh-monogram-embroidery", "logo-society-signature", "logo-oval-seal", "logo-racquet-flourish", "mark-bounce"]) {
   const svg = await readFile(path(new URL(`${name}.svg`, brandDir)));
-  await sharp(svg, { density: 240 }).resize(2400, 2400).png().toFile(path(new URL(`${name}.png`, brandDir)));
+  for (const scale of [1, 2, 4]) {
+    await sharp(svg, { density: 144 * scale }).png().toFile(path(new URL(`${name}@${scale}x.png`, exportDir)));
+  }
 }

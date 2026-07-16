@@ -98,10 +98,10 @@ function mapProduct(product: FourthwallProduct): CatalogProduct {
 }
 
 function mergePreviews(live: CatalogProduct[]) {
-  const issueOrder = ["Society Tee — The Last Set", "Society Tee — Collection 01", "Member Cap", "One More Set Mug", "Court Tumbler", "Habit Flask", "Society Carryall"];
+  const issueOrder = ["Society Tee", "Member Cap", "One More Set Mug", "Court Tumbler", "Habit Flask", "Society Carryall"];
   live.sort((a, b) => {
-    const aIndex = issueOrder.indexOf(a.name);
-    const bIndex = issueOrder.indexOf(b.name);
+    const aIndex = issueOrder.findIndex((name) => a.name.startsWith(name));
+    const bIndex = issueOrder.findIndex((name) => b.name.startsWith(name));
     return (aIndex < 0 ? 999 : aIndex) - (bIndex < 0 ? 999 : bIndex);
   });
   const covered = new Set(live.map((product) => {

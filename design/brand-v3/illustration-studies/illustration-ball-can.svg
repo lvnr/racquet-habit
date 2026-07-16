@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Racquet Habit ball can illustration">
+  <title>Racquet Habit ball can illustration</title>
+
+      <ellipse fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" cx="260" cy="147" rx="104" ry="34"/>
+      <path fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M156 147 V387 C156 411 203 431 260 431 C317 431 364 411 364 387 V147"/>
+      <path fill="none" stroke="#103C2C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M156 370 C156 394 203 414 260 414 C317 414 364 394 364 370"/>
+      <path fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M176 205 H344 M176 315 H344"/>
+      <circle fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" cx="220" cy="112" r="45"/><circle fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" cx="292" cy="101" r="45"/>
+      <path fill="none" stroke="#103C2C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M183 121 C202 104 215 103 242 102 M264 111 C283 92 301 90 326 95"/>
+      <path fill="none" stroke="#4E3265" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" d="M157 260 H363"/>
+
+</svg>

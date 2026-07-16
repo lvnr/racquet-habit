@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Racquet Habit bounce mark</title>
+  <circle cx="32" cy="32" r="6" fill="#103C2C"/>
+  <g stroke="#103C2C" stroke-width="4" stroke-linecap="round">
+    <path d="M32 5 V17 M32 47 V59 M5 32 H17 M47 32 H59"/>
+    <path d="M13 13 L20 20 M44 44 L51 51 M51 13 L44 20 M20 44 L13 51"/>
+  </g>
+</svg>

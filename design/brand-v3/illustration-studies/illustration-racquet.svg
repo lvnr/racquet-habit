@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Racquet Habit classic racquet illustration">
+  <title>Racquet Habit classic racquet illustration</title>
+
+      <path fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M261 77 C163 77 111 157 127 241 C138 302 183 330 238 322 C292 315 344 271 363 203 C383 128 348 77 261 77 Z"/>
+      <path fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M220 320 L247 357 L279 327 M247 357 L209 442 M247 357 L287 442"/>
+      <path fill="none" stroke="#103C2C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M201 435 L273 464 M210 414 L282 443 M219 393 L291 422 M227 372 L299 401"/>
+      <g fill="none" stroke="#103C2C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".9">
+        <path d="M151 135 C205 182 271 228 337 269 M136 177 C193 218 257 262 316 297 M130 222 C181 252 230 282 282 315"/>
+        <path d="M317 98 C283 171 243 244 190 311 M277 81 C247 160 207 237 159 285 M352 128 C320 200 282 268 238 322"/>
+      </g>
+      <circle cx="382" cy="304" r="23" fill="none" stroke="#4E3265" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      <path fill="none" stroke="#4E3265" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" d="M361 309 C369 298 377 295 391 294 C400 293 406 289 410 283"/>
+
+</svg>

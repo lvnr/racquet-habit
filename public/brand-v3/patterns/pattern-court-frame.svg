@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Racquet Habit unresolved court frame">
+  <rect width="400" height="400" fill="#103C2C"/>
+  <g fill="none" stroke="#F3EBD8" stroke-width="11">
+    <path d="M-20 42 L296 358 H421"/>
+    <path d="M-20 358 H238"/>
+    <path d="M278 358 H421"/>
+    <path d="M316 -20 V358"/>
+  </g>
+  <circle cx="258" cy="358" r="6" fill="#4E3265"/>
+</svg>

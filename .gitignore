@@ -25,6 +25,9 @@ pnpm-debug.log*
 .wrangler/
 .fourthwall-state.json
 
+# generated visual QA captures
+design/brand-v3/site-qa/
+
 # macOS-specific files
 .DS_Store
 

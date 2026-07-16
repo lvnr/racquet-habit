@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Racquet Habit flip scoreboard illustration">
+  <title>Racquet Habit flip scoreboard illustration</title>
+
+      <rect fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" x="74" y="82" width="364" height="330" rx="10"/>
+      <path fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M74 145 H438 M256 145 V412 M100 183 H226 M286 183 H412"/>
+      <rect fill="none" stroke="#103C2C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" x="105" y="215" width="116" height="132" rx="5"/>
+      <rect fill="none" stroke="#103C2C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" x="291" y="215" width="116" height="132" rx="5"/>
+      <path fill="none" stroke="#103C2C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="M105 281 H221 M291 281 H407"/>
+      <path fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M143 244 Q178 218 197 250 Q207 273 180 289 Q145 308 132 334 H202"/>
+      <path fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M372 226 L320 301 H390 M370 227 V334"/>
+      <circle cx="114" cy="115" r="8" fill="#4E3265"/><circle cx="398" cy="115" r="8" fill="#4E3265"/>
+
+</svg>

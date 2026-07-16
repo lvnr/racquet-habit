@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Racquet Habit net post illustration">
+  <title>Racquet Habit net post illustration</title>
+
+      <path fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M92 130 V420 M420 132 V420 M70 421 H115 M398 421 H443"/>
+      <path fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M92 156 C185 145 321 145 420 157 V344 C313 333 192 333 92 345 Z"/>
+      <g fill="none" stroke="#103C2C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity=".88">
+        <path d="M132 153 V341 M174 150 V338 M216 148 V336 M258 148 V335 M300 148 V336 M342 150 V338 M384 153 V342"/>
+        <path d="M93 197 C190 188 319 188 420 198 M93 239 C194 231 320 231 420 240 M93 282 C196 273 320 274 420 283 M93 323 C199 314 316 315 420 324"/>
+      </g>
+      <circle fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" cx="447" cy="211" r="25"/><path fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="M447 236 V278 L467 295"/>
+      <path fill="none" stroke="#4E3265" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" d="M93 157 C192 146 322 146 419 158"/>
+
+</svg>

@@ -4,9 +4,11 @@ const { compact = false, light = false } = Astro.props;
 ---
 
 <a class:list={["brand-mark", { compact, light }]} href="/" aria-label="Racquet Habit home">
-  <span class="brand-mark__word" aria-hidden="true">
-    <span>RACQUET</span>
-    <em>Habit</em>
-  </span>
+  <img
+    class="brand-mark__logo"
+    src={light ? "/brand-v3/logo-primary-horizontal-ivory.svg" : "/brand-v3/logo-primary-horizontal.svg"}
+    alt=""
+    aria-hidden="true"
+  />
   {!compact && <small>Tennis Addicts Society · Est. 2026</small>}
 </a>

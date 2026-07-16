@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-16T00:00:00.000Z",
+  "title": "Design System: Racquet Habit",
+  "extensions": {
+    "colorMeta": {
+      "centre-court-green": { "role": "primary", "displayName": "Centre Court Green", "canonical": "#103C2C" },
+      "championship-ivory": { "role": "neutral", "displayName": "Championship Ivory", "canonical": "#F3EBD8" },
+      "royal-trim": { "role": "secondary", "displayName": "Royal Trim", "canonical": "#4E3265" },
+      "service-red": { "role": "tertiary", "displayName": "Service Red", "canonical": "#B83D34" },
+      "ball-yellow": { "role": "tertiary", "displayName": "Ball Yellow", "canonical": "#D7E63D" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Tournament Display", "purpose": "Campaign statements and section headlines." },
+      "body": { "displayName": "Commerce Body", "purpose": "Navigation, product information, and prose." },
+      "utility": { "displayName": "Collection Utility", "purpose": "Short production and collection metadata." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "court-reveal", "value": "cubic-bezier(.2,.8,.2,1)", "purpose": "Single hero and image reveal." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "700px" },
+      { "name": "tablet", "value": "980px" }
+    ]
+  },
+  "components": [],
+  "narrative": {
+    "northStar": "The Tournament Programme in Motion",
+    "overview": "Championship formality made warm, social, physical, and direct enough for modern commerce.",
+    "keyCharacteristics": ["Committed green and ivory", "Sunlit tactile photography", "Approved vector identity", "Plain-language commerce"],
+    "rules": [
+      { "name": "Rare Accent", "body": "Use red and yellow as interruptions, not broad fields.", "section": "colors" },
+      { "name": "Vector Wordmark", "body": "Use approved outlined SVG wordmarks rather than live-font reconstructions.", "section": "typography" }
+    ],
+    "dos": ["Use one decisive composition per section.", "Keep product and delivery information direct."],
+    "donts": ["Do not use fake heritage or generic country-club styling.", "Do not use rounded SaaS cards or decorative shadows."]
+  }
+}

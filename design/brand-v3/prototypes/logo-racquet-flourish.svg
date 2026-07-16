@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 260" role="img" aria-labelledby="title">
+  <title id="title">Racquet Habit service arc flourish</title>
+  <path d="M72 58 C208 44 342 104 456 204 C474 220 492 224 510 215" fill="none" stroke="#103C2C" stroke-width="13" stroke-linecap="round"/>
+  <path d="M528 208 C650 82 777 47 932 68" fill="none" stroke="#103C2C" stroke-width="13" stroke-linecap="round"/>
+  <circle cx="504" cy="220" r="10" fill="#103C2C"/>
+  <g fill="none" stroke="#103C2C" stroke-width="8" stroke-linecap="round">
+    <path d="M504 188 V172 M480 197 L468 185 M528 197 L540 185"/>
+  </g>
+</svg>

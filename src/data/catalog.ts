@@ -1,4 +1,20 @@
-export type ProductCategory = "Wear" | "Carry" | "Court" | "Drink" | "Coffee";
+export type ProductCategory = "Tees" | "Accessories";
+
+export type ProductType =
+  | "Heavyweight tee"
+  | "Crop tee"
+  | "Oversized tee"
+  | "Court cap"
+  | "Organic tote"
+  | "Beach towel"
+  | "MagSafe case";
+
+export type ProductCapsule =
+  | "The Daily Lineup"
+  | "Love Cherries"
+  | "Court-Side Pleasures"
+  | "Repeat Players"
+  | "Signed Rally — Founding Issue";
 
 export type ProductVariant = {
   id: string;
@@ -8,6 +24,14 @@ export type ProductVariant = {
   colorHex?: string;
   size?: string;
   inStock: boolean;
+  images: string[];
+};
+
+export type ProductInformation = {
+  title: string;
+  body: string;
+  link?: string;
+  linkLabel?: string;
 };
 
 export type CatalogProduct = {
@@ -15,178 +39,110 @@ export type CatalogProduct = {
   slug: string;
   name: string;
   category: ProductCategory;
-  edition: string;
+  productType: ProductType;
+  capsule: ProductCapsule;
+  sortRank: number;
   description: string;
   story: string;
-  material: string;
   price: number;
+  maxPrice: number;
   image: string;
   images: string[];
   variants: ProductVariant[];
-  comingSoon?: boolean;
-  source: "fourthwall" | "preview";
+  information: ProductInformation[];
+  source: "fourthwall";
 };
 
-const previewVariant = (slug: string, price: number): ProductVariant => ({
-  id: `preview-${slug}`,
-  name: "Standard",
-  price,
-  inStock: false,
-});
+export type ProductPresentation = Pick<
+  CatalogProduct,
+  "category" | "productType" | "capsule" | "sortRank" | "story"
+> & {
+  legacySlugs?: string[];
+};
 
-export const previewCatalog: CatalogProduct[] = [
-  {
-    id: "preview-society-tee",
-    slug: "society-tee-issue-001",
-    name: "Society Tee — Collection 01",
-    category: "Wear",
-    edition: "The Last Set",
-    description: "Heavyweight championship-ivory cotton with the Racquet Habit Society seal.",
-    story: "A restrained editorial wordmark at the front meets the two-colour Society seal on the back. Built for court, clubhouse and every hour after.",
-    material: "Premium heavyweight cotton · relaxed unisex fit",
-    price: 38,
-    image: "/images/v3/products/society-tee.webp",
-    images: ["/images/v3/products/society-tee.webp", "/images/v3/products/last-set-tee.webp"],
-    variants: [previewVariant("society-tee", 38)],
-    source: "preview",
+export const productPresentation: Record<string, ProductPresentation> = {
+  "b13b023b-29b9-4c23-a9e9-2bbe271e623b": {
+    category: "Tees",
+    productType: "Heavyweight tee",
+    capsule: "The Daily Lineup",
+    sortRank: 10,
+    story: "The day’s order, printed plainly: tennis, lunch, tennis. A heavyweight court tee for red clay, long tables and the match that somehow begins at sunset.",
   },
-  {
-    id: "preview-member-cap",
-    slug: "member-cap",
-    name: "Member Cap",
-    category: "Wear",
-    edition: "The Last Set",
-    description: "Low-profile ivory cotton twill with a woven green Society patch.",
-    story: "A quiet six-panel cap with Royal Trim at the patch edge and ONE MORE SET over the rear opening.",
-    material: "Cotton twill · adjustable closure",
-    price: 34,
-    image: "/images/v3/products/member-cap.webp",
-    images: ["/images/v3/products/member-cap.webp"],
-    variants: [previewVariant("member-cap", 34)],
-    source: "preview",
+  "c805433b-9cfc-43bf-babe-4482f1be9e35": {
+    category: "Tees",
+    productType: "Crop tee",
+    capsule: "The Daily Lineup",
+    sortRank: 20,
+    story: "The cropped edition of our preferred itinerary. Close to the body, easy through the afternoon and unlikely to improve your willingness to leave the court.",
   },
-  {
-    id: "preview-mug",
-    slug: "one-more-set-mug",
-    name: "One More Set Mug",
-    category: "Drink",
-    edition: "The Last Set",
-    description: "A deadpan reminder for the hours between court bookings.",
-    story: "Championship-ivory ceramic, Centre Court Green type, and the phrase responsible for most late dinners.",
-    material: "Gloss ceramic · color interior",
-    price: 24,
-    image: "/images/v3/products/one-more-set-mug.webp",
-    images: ["/images/v3/products/one-more-set-mug.webp"],
-    variants: [previewVariant("mug", 24)],
-    source: "preview",
+  "044a54cc-c0b9-4a80-bc08-6eb95b85f205": {
+    category: "Accessories",
+    productType: "Court cap",
+    capsule: "The Daily Lineup",
+    sortRank: 30,
+    story: "A low-profile court cap with a complete absence notice: ON COURT up front, OUT OF OFFICE at the side, return time still unconfirmed.",
   },
-  {
-    id: "preview-cup",
-    slug: "courtside-reuse-cup",
-    name: "Courtside Reuse Cup",
-    category: "Drink",
-    edition: "The Last Set",
-    description: "For the coffee before the first set and the coffee after the third.",
-    story: "A reusable clubhouse cup developed around the Habit Loop pattern. Pack it with a change of grips and pretend that counts as preparation.",
-    material: "Reusable insulated body · splash lid",
-    price: 28,
-    image: "/images/v3/products/court-vessel.webp",
-    images: ["/images/v3/products/court-vessel.webp"],
-    variants: [previewVariant("cup", 28)],
-    comingSoon: true,
-    source: "preview",
+  "5f2234ee-c019-43ae-b6c4-e86b67bbe57b": {
+    category: "Accessories",
+    productType: "Organic tote",
+    capsule: "Court-Side Pleasures",
+    sortRank: 40,
+    story: "Room for the spare shirt, the towel and one cold thing after play. The organic-cotton twill is substantial enough for daily court duty.",
   },
-  {
-    id: "preview-tumbler",
-    slug: "court-tumbler",
-    name: "Court Tumbler",
-    category: "Drink",
-    edition: "The Last Set",
-    description: "Stainless steel with the green and ivory New Court Classic Society seal.",
-    story: "A double-wall tumbler for long matches, early starts and every set after the supposedly final one.",
-    material: "Stainless steel · double-wall insulated",
-    price: 36,
-    image: "/images/v3/products/court-vessel.webp",
-    images: ["/images/v3/products/court-vessel.webp"],
-    variants: [previewVariant("tumbler", 36)],
-    source: "preview",
+  "5e4a6f7c-440a-4183-82a8-9fd4df6f6235": {
+    category: "Accessories",
+    productType: "Beach towel",
+    capsule: "Court-Side Pleasures",
+    sortRank: 50,
+    story: "An edge-to-edge still life for the bench, pool or beach, with a soft printed face and an absorbent terry reverse.",
   },
-  {
-    id: "preview-bottle",
-    slug: "habit-flask",
-    name: "Habit Flask",
-    category: "Drink",
-    edition: "The Last Set",
-    description: "The all-day court bottle, reduced to one mark and one message.",
-    story: "Cold for the match, discreet enough for everywhere after it. A single ball-seam line wraps the vessel.",
-    material: "Stainless steel · insulated screw top",
-    price: 39,
-    image: "/images/v3/products/court-vessel.webp",
-    images: ["/images/v3/products/court-vessel.webp"],
-    variants: [previewVariant("bottle", 39)],
-    source: "preview",
+  "a29cbcd4-c4e8-433b-acc3-2af51ae8d7be": {
+    category: "Tees",
+    productType: "Crop tee",
+    capsule: "Love Cherries",
+    sortRank: 60,
+    story: "Two tennis balls, one fine serve and a slightly romantic reading of the score. A relaxed crop for the softer side of competitive behavior.",
   },
-  {
-    id: "preview-tote",
-    slug: "society-carryall",
-    name: "Society Carryall",
-    category: "Carry",
-    edition: "The Last Set",
-    description: "For the spare racquet you absolutely did not need to bring.",
-    story: "A durable everyday court bag carrying the two-colour Society seal at considered scale.",
-    material: "Eco-conscious canvas · long handles",
-    price: 32,
-    image: "/images/v3/products/society-tote.webp",
-    images: ["/images/v3/products/society-tote.webp"],
-    variants: [previewVariant("tote", 32)],
-    source: "preview",
+  "4dc8e8fd-eafa-43ff-969a-3d5c617901fc": {
+    category: "Tees",
+    productType: "Oversized tee",
+    capsule: "Love Cherries",
+    sortRank: 70,
+    story: "The Love Cherries mark on a roomy midweight tee, cut for dropped shoulders and the very long walk from court to lunch.",
   },
-  {
-    id: "preview-towel",
-    slug: "string-lattice-towel",
-    name: "String Lattice Towel",
-    category: "Court",
-    edition: "The Last Set",
-    description: "A championship stripe court towel in deep green, ivory and Royal Trim.",
-    story: "The graphic member of the first collection: bold enough for court, disciplined enough for the club bag.",
-    material: "Performance terry · edge-to-edge graphic",
-    price: 42,
-    image: "/images/v3/products/championship-towel.webp",
-    images: ["/images/v3/products/championship-towel.webp"],
-    variants: [previewVariant("towel", 42)],
-    comingSoon: true,
-    source: "preview",
+  "d16cddbe-56e5-4258-9237-ec8b4af2d22d": {
+    category: "Accessories",
+    productType: "MagSafe case",
+    capsule: "Love Cherries",
+    sortRank: 80,
+    story: "The tennis-ball cherry mark composed around the camera on a warm ivory field. A glossy protective case for supported iPhone models.",
   },
-  {
-    id: "preview-roast",
-    slug: "after-set-limited-roast",
-    name: "After Set — Limited Roast",
-    category: "Coffee",
-    edition: "Guest roaster 001",
-    description: "A rotating coffee collaboration for matches that start before good judgment.",
-    story: "The first guest roast is being developed with an Armenian specialty roaster. Small lots, numbered bags, one court-side brew guide.",
-    material: "Whole bean · 250 g · collaboration release",
-    price: 24,
-    image: "/images/v3/products/after-set-coffee.webp",
-    images: ["/images/v3/products/after-set-coffee.webp"],
-    variants: [previewVariant("roast", 24)],
-    comingSoon: true,
-    source: "preview",
+  "016f8881-3755-42e9-a551-db711defea07": {
+    category: "Tees",
+    productType: "Heavyweight tee",
+    capsule: "Repeat Players",
+    sortRank: 90,
+    story: "Recovery, according to repeat players: back on court with the racquet in reach. Heavyweight cotton and a straight-faced illustrated alibi.",
   },
-  {
-    id: "preview-sports-drink",
-    slug: "fifth-set-seasonal-drink",
-    name: "Fifth Set — Seasonal Drink",
-    category: "Coffee",
-    edition: "Clubhouse special",
-    description: "A seasonal recovery drink developed with a local café partner.",
-    story: "Citrus, salt and restrained sweetness, served cold after matches and occasionally before them. Local release first.",
-    material: "Seasonal café collaboration · local availability",
-    price: 8,
-    image: "/images/v3/products/fifth-set-drink.webp",
-    images: ["/images/v3/products/fifth-set-drink.webp"],
-    variants: [previewVariant("sports-drink", 8)],
-    comingSoon: true,
-    source: "preview",
+  "fa963175-0030-4e47-b20d-f7d680768433": {
+    category: "Tees",
+    productType: "Oversized tee",
+    capsule: "Repeat Players",
+    sortRank: 100,
+    story: "For the racquet that comes to dinner, the beach and at least one wedding. The full resort illustration sits across the back.",
   },
-];
+  "d20d2671-af7b-47d4-ab2b-e170efce279d": {
+    category: "Tees",
+    productType: "Crop tee",
+    capsule: "Signed Rally — Founding Issue",
+    sortRank: 110,
+    story: "The Society’s first uniform: a quiet chest mark, an oversized Signed Rally composition and a cropped silhouette made for one more set.",
+  },
+  "7345291f-a3a9-47f7-8e15-dea8fd04f7ad": {
+    category: "Tees",
+    productType: "Oversized tee",
+    capsule: "Signed Rally — Founding Issue",
+    sortRank: 120,
+    story: "The Founding Issue in its roomier form: central chest mark, oversized back composition and a faded-bone court uniform with no closing time.",
+  },
+};

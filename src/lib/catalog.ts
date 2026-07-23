@@ -1,8 +1,15 @@
 import { env } from "cloudflare:workers";
-import { previewCatalog, type CatalogProduct, type ProductCategory, type ProductVariant } from "../data/catalog";
+import {
+  productPresentation,
+  type CatalogProduct,
+  type ProductInformation,
+  type ProductPresentation,
+  type ProductVariant,
+} from "../data/catalog";
 
 type FourthwallMoney = { value: number; currency: string };
 type FourthwallImage = { url?: string; transformedUrl?: string };
+type FourthwallInformation = { type?: string; title?: string; bodyHtml?: string };
 type FourthwallVariant = {
   id: string;
   name: string;
@@ -22,37 +29,51 @@ type FourthwallProduct = {
   description?: string;
   images?: FourthwallImage[];
   variants?: FourthwallVariant[];
+  additionalInformation?: FourthwallInformation[];
+  state?: { type?: string };
 };
 
-function categoryFor(name: string): ProductCategory {
-  const value = name.toLowerCase();
-  if (value.includes("tee") || value.includes("shirt") || value.includes("cap")) return "Wear";
-  if (value.includes("tote") || value.includes("bag")) return "Carry";
-  if (value.includes("towel")) return "Court";
-  if (value.includes("coffee") || value.includes("roast")) return "Coffee";
-  return "Drink";
-}
+const unknownPresentation: ProductPresentation = {
+  category: "Accessories",
+  productType: "Organic tote",
+  capsule: "The Daily Lineup",
+  sortRank: 999,
+  story: "A considered piece for play, lunch and every hour after the match.",
+};
 
 function plainText(value?: string) {
   return (value ?? "")
     .replace(/<br\s*\/?\s*>/gi, " ")
+    .replace(/<\/li>/gi, ". ")
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;/gi, " ")
     .replace(/&amp;/gi, "&")
     .replace(/&quot;/gi, '"')
     .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&times;/gi, "×")
+    .replace(/\s+([.,])/g, "$1")
+    .replace(/\.\s*\./g, ".")
     .replace(/\s+/g, " ")
     .trim();
 }
 
-function defaultArtwork(category: ProductCategory, name: string) {
-  if (category === "Wear" && name.toLowerCase().includes("cap")) return "/images/product-cap.svg";
-  if (category === "Wear") return "/images/product-apparel.svg";
-  if (category === "Carry") return "/images/product-tote.svg";
-  if (category === "Court") return "/images/product-towel.svg";
-  if (category === "Coffee") return "/images/product-coffee.svg";
-  if (name.toLowerCase().includes("mug")) return "/images/product-mug.svg";
-  return "/images/product-vessel.svg";
+function informationFrom(items?: FourthwallInformation[]): ProductInformation[] {
+  return (items ?? [])
+    .map((item) => {
+      const body = plainText(item.bodyHtml);
+      const linkMatch = item.bodyHtml?.match(/href="([^"]+)"/i);
+      return {
+        title: item.title || "Product information",
+        body,
+        link: linkMatch?.[1]?.replace(/&amp;/g, "&"),
+        linkLabel: item.type === "SIZE_AND_FIT" ? "View size chart" : undefined,
+      };
+    })
+    .filter((item) => Boolean(item.body || item.link));
+}
+
+function imageUrl(image?: FourthwallImage) {
+  return image?.transformedUrl || image?.url;
 }
 
 function variantInStock(variant: FourthwallVariant) {
@@ -63,93 +84,86 @@ function variantInStock(variant: FourthwallVariant) {
 }
 
 function mapProduct(product: FourthwallProduct): CatalogProduct {
-  const category = categoryFor(product.name);
+  const presentation = productPresentation[product.id] ?? unknownPresentation;
+  if (!productPresentation[product.id]) {
+    console.warn(`[catalog] Missing presentation mapping for Fourthwall product ${product.id} (${product.name})`);
+  }
   const variants: ProductVariant[] = (product.variants ?? []).map((variant) => ({
     id: variant.id,
-    name: variant.attributes?.description || variant.name,
+    name: plainText(variant.attributes?.description || variant.name),
     price: Number(variant.unitPrice?.value ?? 0),
     color: variant.attributes?.color?.name,
     colorHex: variant.attributes?.color?.swatch,
     size: variant.attributes?.size?.name,
     inStock: variantInStock(variant),
+    images: (variant.images ?? []).map(imageUrl).filter((value): value is string => Boolean(value)).slice(0, 8),
   }));
-  const images = (product.images ?? [])
-    .map((image) => image.transformedUrl || image.url)
-    .filter((image): image is string => Boolean(image))
-    .slice(0, 6);
-  const fallback = previewCatalog.find((item) => item.name.toLowerCase().split("—")[0].trim() === product.name.toLowerCase().split("—")[0].trim());
-  const description = plainText(product.description);
+  const images = (product.images ?? []).map(imageUrl).filter((value): value is string => Boolean(value));
+  const uniqueImages = [...new Set(images)];
+  const availablePrices = variants.filter((variant) => variant.inStock).map((variant) => variant.price);
+  const price = Math.min(...(availablePrices.length ? availablePrices : variants.map((variant) => variant.price)));
+  const maxPrice = Math.max(...(availablePrices.length ? availablePrices : variants.map((variant) => variant.price)));
 
   return {
     id: product.id,
     slug: product.slug,
     name: product.name,
-    category,
-    edition: fallback?.edition ?? "The Last Set",
-    description: description || fallback?.description || "Considered equipment for repeat players.",
-    story: fallback?.story || description || "Designed for the hours on court and the conversations that follow.",
-    material: fallback?.material || "Fourthwall made-to-order product",
-    price: variants.find((variant) => variant.inStock)?.price ?? variants[0]?.price ?? fallback?.price ?? 0,
-    image: images[0] || defaultArtwork(category, product.name),
-    images: images.length ? images : [defaultArtwork(category, product.name)],
+    category: presentation.category,
+    productType: presentation.productType,
+    capsule: presentation.capsule,
+    sortRank: presentation.sortRank,
+    description: plainText(product.description),
+    story: presentation.story,
+    price: Number.isFinite(price) ? price : 0,
+    maxPrice: Number.isFinite(maxPrice) ? maxPrice : 0,
+    image: uniqueImages[0] || variants[0]?.images[0] || "/images/riviera/laundry-hero-desktop.webp",
+    images: uniqueImages.slice(0, 8),
     variants,
+    information: informationFrom(product.additionalInformation),
     source: "fourthwall",
   };
 }
 
-function mergePreviews(live: CatalogProduct[]) {
-  const issueOrder = ["Society Tee", "Member Cap", "One More Set Mug", "Court Tumbler", "Habit Flask", "Society Carryall"];
-  live.sort((a, b) => {
-    const aIndex = issueOrder.findIndex((name) => a.name.startsWith(name));
-    const bIndex = issueOrder.findIndex((name) => b.name.startsWith(name));
-    return (aIndex < 0 ? 999 : aIndex) - (bIndex < 0 ? 999 : bIndex);
-  });
-  const covered = new Set(live.map((product) => {
-    const name = product.name.toLowerCase();
-    if (name.includes("tee") || name.includes("shirt")) return "tee";
-    if (name.includes("cap")) return "cap";
-    if (name.includes("mug")) return "mug";
-    if (name.includes("tumbler")) return "tumbler";
-    if (name.includes("bottle")) return "bottle";
-    if (name.includes("tote")) return "tote";
-    if (name.includes("towel")) return "towel";
-    return product.slug;
-  }));
-  const previewKey = (product: CatalogProduct) => {
-    const name = product.name.toLowerCase();
-    if (name.includes("tee")) return "tee";
-    if (name.includes("cap")) return "cap";
-    if (name.includes("mug")) return "mug";
-    if (name.includes("tumbler")) return "tumbler";
-    if (name.includes("flask") || name.includes("bottle")) return "bottle";
-    if (name.includes("carryall") || name.includes("tote")) return "tote";
-    if (name.includes("towel")) return "towel";
-    return product.slug;
-  };
-  return [...live, ...previewCatalog.filter((product) => !covered.has(previewKey(product)))];
+function storefrontToken() {
+  return env.FOURTHWALL_STOREFRONT_TOKEN;
 }
 
-export async function getCatalog(): Promise<CatalogProduct[]> {
-  const token = env.FOURTHWALL_STOREFRONT_TOKEN;
-  if (!token) return previewCatalog;
-
+async function storefrontFetch<T>(path: string): Promise<T | null> {
+  const token = storefrontToken();
+  if (!token) {
+    console.error("[catalog] FOURTHWALL_STOREFRONT_TOKEN is unavailable; live products cannot be rendered.");
+    return null;
+  }
   try {
+    const separator = path.includes("?") ? "&" : "?";
     const response = await fetch(
-      `https://storefront-api.fourthwall.com/v1/collections/all/products?storefront_token=${encodeURIComponent(token)}&size=50&page=0`,
+      `https://storefront-api.fourthwall.com/v1${path}${separator}storefront_token=${encodeURIComponent(token)}`,
       {
         headers: { Accept: "application/json" },
         cf: { cacheTtl: 300, cacheEverything: true },
       } as RequestInit,
     );
-    if (!response.ok) return previewCatalog;
-    const payload = await response.json() as { results?: FourthwallProduct[] };
-    const live = (payload.results ?? []).map(mapProduct);
-    return live.length ? mergePreviews(live) : previewCatalog;
-  } catch {
-    return previewCatalog;
+    if (!response.ok) {
+      console.error(`[catalog] Fourthwall request failed (${response.status}) for ${path}`);
+      return null;
+    }
+    return await response.json() as T;
+  } catch (error) {
+    console.error(`[catalog] Fourthwall request failed for ${path}`, error);
+    return null;
   }
 }
 
-export async function getProduct(slug: string) {
+export async function getCatalog(): Promise<CatalogProduct[]> {
+  const payload = await storefrontFetch<{ results?: FourthwallProduct[] }>("/collections/all/products?size=50&page=0");
+  return (payload?.results ?? [])
+    .filter((product) => product.state?.type === "AVAILABLE")
+    .map(mapProduct)
+    .sort((a, b) => a.sortRank - b.sortRank);
+}
+
+export async function getProduct(slug: string): Promise<CatalogProduct | undefined> {
+  const payload = await storefrontFetch<FourthwallProduct>(`/products/${encodeURIComponent(slug)}`);
+  if (payload?.id) return mapProduct(payload);
   return (await getCatalog()).find((product) => product.slug === slug);
 }

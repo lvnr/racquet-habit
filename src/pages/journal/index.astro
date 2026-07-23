@@ -1,0 +1,69 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageMasthead from "../../components/PageMasthead.astro";
+import EditorialImage from "../../components/EditorialImage.astro";
+
+const journalSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Racquet Habit Journal",
+  url: "https://racquethabit.com/journal",
+  description: "Court notes on tennis rituals, what to carry and the hours around play.",
+};
+---
+
+<BaseLayout
+  title="Tennis Stories & Court Notes | Racquet Habit Journal"
+  description="Read Racquet Habit court notes on tennis rituals, what to carry and the hours around play, filed from Yerevan for repeat players."
+  image="/images/editorial/out-of-office-newspaper.webp"
+  schema={journalSchema}
+>
+  <PageMasthead
+    title="Notes from beyond the baseline"
+    intro="A small journal about repeat players, useful rituals, Yerevan court light and the hours a match borrows from the rest of the day."
+    issue="The Journal · Court notes 001—002"
+    tone="blue"
+  />
+
+  <section class="journal-index">
+    <article class="journal-lead">
+      <a href="/journal/manifesto" aria-label="Read A difficult habit to break">
+        <EditorialImage
+          src="/images/editorial/out-of-office-newspaper.webp"
+          alt="A player reading a Racquet Habit newspaper beside a blue tennis court"
+          caption="Out of office, on court"
+          plate="Court note 001"
+          ratio="portrait"
+          eager
+        />
+      </a>
+      <div>
+        <span class="site-kicker">Court note 001 · 4 minute read</span>
+        <h2><a href="/journal/manifesto">A difficult habit to break</a></h2>
+        <p>The court is a rectangle. The habit is not nearly so contained.</p>
+        <a class="paper-link" href="/journal/manifesto">Read the manifesto <span>↗</span></a>
+      </div>
+    </article>
+
+    <article class="journal-secondary">
+      <EditorialImage
+        src="/images/editorial/highlands-court.webp"
+        alt="A remote tennis court in a dramatic highland landscape"
+        caption="A court worth packing for"
+        plate="Court note 002"
+        ratio="portrait"
+      />
+      <div>
+        <span class="site-kicker">Court note 002 · Practical file</span>
+        <h2><a href="/journal/court-bag-guide">What belongs in a court bag?</a></h2>
+        <p>A concise packing list for an afternoon match, the weather around it and the lunch that tends to follow.</p>
+        <a class="paper-link" href="/journal/court-bag-guide">Read the guide <span>↗</span></a>
+      </div>
+    </article>
+
+    <aside class="journal-field-note">
+      <img src="/images/editorial/habit-field-study.webp" alt="An illustrated Racquet Habit field study beside a tennis court" width="971" height="1619" loading="lazy" />
+      <div><span>Next file</span><p>Yerevan courts after six. Photographs and line calls forthcoming.</p></div>
+    </aside>
+  </section>
+</BaseLayout>

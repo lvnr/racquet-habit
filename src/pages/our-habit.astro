@@ -1,29 +1,91 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageMasthead from "../components/PageMasthead.astro";
+import EditorialImage from "../components/EditorialImage.astro";
+
+const aboutSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: "About Racquet Habit",
+  url: "https://racquethabit.com/our-habit",
+  description: "Racquet Habit is an open tennis society established in Yerevan for repeat players.",
+  mainEntity: { "@id": "https://racquethabit.com/#organization" },
+};
 ---
 
-<BaseLayout title="The Society — Racquet Habit" description="Racquet Habit is the unofficial society for people who always have time for one more set.">
-  <section class="editorial-hero editorial-hero--society">
-    <span class="eyebrow">The Society · Est. 2026</span>
-    <h1>A society for <em>repeat players.</em></h1>
-    <p>Racquet Habit began with a familiar lie: one more set, then we are definitely leaving.</p>
-    <img src="/brand-v3/illustrations/illustration-chair.svg" alt="" aria-hidden="true" />
+<BaseLayout
+  title="About Racquet Habit | Tennis Society in Yerevan"
+  description="Meet Racquet Habit, the Yerevan tennis society creating considered apparel, court goods and clubhouse collaborations for people who always play one more set."
+  image="/images/editorial/clubhouse-signage.webp"
+  schema={aboutSchema}
+>
+  <PageMasthead
+    title="A society for repeat players"
+    intro="Racquet Habit began with a familiar lie: one more set, then we are definitely leaving. We make the uniform, objects and rituals around a game that quietly reorganizes the rest of the day."
+    tone="green"
+  />
+
+  <section class="about-opening">
+    <div class="about-opening__index">
+      <span>Filed in Yerevan</span><span>Established for Issue 01</span><span>Open to all players</span><span>Status: on court</span>
+    </div>
+    <div class="about-opening__statement">
+      <p>Racquet Habit is an open tennis society and independent label based in Yerevan, Armenia.</p>
+      <h2>A society,<br /><em>not a country club.</em></h2>
+      <p>There is no gatekeeping here, no borrowed aristocracy and no requirement beyond a sincere willingness to rearrange a day for court time. Membership begins the first time a final set develops a sequel.</p>
+    </div>
   </section>
-  <section class="editorial-body">
-    <aside class="editorial-aside"><span>Filed in Yerevan</span><span>Established 2026</span><span>Open to all players</span><span>Status: on court</span></aside>
-    <div class="editorial-copy">
-      <p>We make the uniform, objects and rituals around a game that quietly reorganizes the rest of your life.</p>
-      <h2>A society, not a country club.</h2>
-      <p>There is no gatekeeping here, no borrowed aristocracy and no fake nostalgia. Membership begins when you rearrange a day for court time, inspect a weather forecast too closely or carry a racquet somewhere it has no practical reason to be.</p>
-      <p>The world is composed because the behavior already is: stringing with precision, repeating service motions, marking scores, booking the same hour and insisting there is time for another set.</p>
-      <div class="principles">
-        <div><h3>Sporting, not nostalgic.</h3><p>Tournament colors and useful materials, interpreted for now rather than dressed as inherited history.</p></div>
-        <div><h3>Dry wit, lightly applied.</h3><p>The exterior is composed. The joke arrives in the second read.</p></div>
-        <div><h3>Useful beyond court.</h3><p>Every piece should earn a life after the match through fabric, proportion and purpose.</p></div>
-      </div>
-      <h2>Collection 01: The Last Set.</h2>
-      <p>Our first collection establishes a working uniform: a society tee, member cap, court towel, carryall and daily vessels. Coffee and seasonal drinks follow through limited collaborations with makers we know.</p>
-      <a class="button button--green" href="/shop">View the collection <span>↗</span></a>
+
+  <section class="about-photo-spread">
+    <EditorialImage
+      src="/images/editorial/courtside-hospitality.webp"
+      alt="Two Racquet Habit players relaxing beside a clay tennis court"
+      caption="Good people, long lunch"
+      plate="Society plate 01"
+      eager
+    />
+    <blockquote>“The exterior is composed. The joke arrives in the second read.”</blockquote>
+  </section>
+
+  <section class="principle-ledger" aria-labelledby="principles-title">
+    <header>
+      <span class="site-kicker">Working principles · three points</span>
+      <h2 id="principles-title">How to form<br />a <em>habit.</em></h2>
+    </header>
+    <ol>
+      <li><b>01</b><h3>Play often.</h3><p>We make things for people who already want to be on court. The job is not motivation; it is better company for the ritual.</p></li>
+      <li><b>02</b><h3>Choose precisely.</h3><p>Useful fabrics, legible ideas and fewer pieces used long enough to acquire their own record.</p></li>
+      <li><b>03</b><h3>Stay for lunch.</h3><p>The hours around play count too. A court habit should improve the conversation after the match.</p></li>
+    </ol>
+  </section>
+
+  <section class="ritual-spread">
+    <div>
+      <span class="site-kicker">The day, correctly ordered</span>
+      <h2>Serve.<br /><em>Refuel.</em><br />Play again.</h2>
+      <p>Stringing with precision, repeating service motions, checking the forecast, packing the same bag, sitting down at the same table. The visual language is composed because the behavior already is.</p>
+    </div>
+    <EditorialImage
+      src="/images/editorial/tennis-lunch-table.webp"
+      alt="Two tennis lunches arranged on a yellow table with court accessories"
+      caption="Lunch between matches"
+      plate="Ritual study 02"
+      ratio="square"
+    />
+  </section>
+
+  <section class="about-closing">
+    <EditorialImage
+      src="/images/editorial/clubhouse-signage.webp"
+      alt="A player walking toward a quiet Racquet Habit tennis court"
+      caption="The court remains open"
+      plate="Yerevan file 03"
+    />
+    <div>
+      <span class="site-kicker">Collection 01 · The Last Set</span>
+      <h2>Wear the<br /><em>working theory.</em></h2>
+      <p>Our opening collection establishes a uniform for the repeat player: court tees, a cap, a tote, a towel and one glossy reminder that love is sometimes two tennis balls.</p>
+      <a class="paper-button" href="/shop">Shop Collection 01 <span>↗</span></a>
     </div>
   </section>
 </BaseLayout>

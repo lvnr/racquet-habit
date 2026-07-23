@@ -1,107 +1,55 @@
 ---
-import BrandMark from "./BrandMark.astro";
-type Props = { variant?: "default" | "riviera" };
-const { variant = "default" } = Astro.props;
 const path = Astro.url.pathname;
 const isArmenia = Astro.locals.isArmenia as boolean;
-const isRiviera = variant === "riviera";
+const links = [
+  { href: "/shop", label: "Shop", active: path.startsWith("/shop") || path.startsWith("/products") },
+  { href: "/journal", label: "Journal", active: path.startsWith("/journal") },
+  { href: "/our-habit", label: "The Society", active: path === "/our-habit" },
+];
 ---
 
-{isRiviera ? (
-  <header class="riviera-header" data-site-header>
-    <a class="riviera-header__brand" href="/" aria-label="Racquet Habit home">
-      <img
-        src="/images/riviera/racquet-habit-logo.webp"
-        alt=""
-        aria-hidden="true"
-        width="1200"
-        height="300"
-      />
-    </a>
+<header class="riviera-header" data-site-header>
+  <a class="riviera-header__brand" href="/" aria-label="Racquet Habit home">
+    <img src="/images/riviera/racquet-habit-logo.webp" alt="" aria-hidden="true" width="1200" height="300" />
+  </a>
 
-    <nav class="riviera-header__nav" aria-label="Primary navigation">
-      <a class:list={{ active: path.startsWith("/shop") || path.startsWith("/products") }} href="/shop">Shop</a>
-      <a class:list={{ active: path.startsWith("/journal") }} href="/journal/manifesto">Stories</a>
-      <a class:list={{ active: path === "/our-habit" }} href="/our-habit">About</a>
-    </nav>
+  <nav class="riviera-header__nav" aria-label="Primary navigation">
+    {links.map((link) => <a class:list={{ active: link.active }} href={link.href}>{link.label}</a>)}
+  </nav>
 
-    <div class="riviera-header__actions">
-      <span class="riviera-header__issue">Issue 01</span>
-      <button
-        class="riviera-header__currency"
-        type="button"
-        data-currency-toggle
-        aria-label={`Currency ${isArmenia ? "AMD ֏" : "USD $"}. Toggle display currency`}
-      >
-        <span data-currency-label>{isArmenia ? "AMD ֏" : "USD $"}</span>
-      </button>
-      <button class="riviera-header__bag" type="button" data-cart-open aria-label="Bag (0). Open shopping bag">
-        Bag <span>(<span data-cart-count>0</span>)</span>
-      </button>
-      <details class="mobile-nav riviera-mobile-nav">
-        <summary aria-label="Navigation menu"><span></span><span></span></summary>
-        <div class="riviera-mobile-nav__panel">
-          <p class="riviera-mobile-nav__issue">Riviera Match Annual · Issue 01</p>
-          <nav aria-label="Mobile navigation">
-            <a href="/shop">Shop</a>
-            <a href="/journal/manifesto">Stories</a>
-            <a href="/our-habit">About</a>
-            <a href="/shipping">Delivery</a>
-          </nav>
-          <div class="riviera-mobile-nav__foot">
-            <span>{isArmenia ? "Complimentary delivery across Armenia" : "Worldwide delivery · Free in Armenia"}</span>
-            <button
-              type="button"
-              data-currency-toggle
-              aria-label={`Currency ${isArmenia ? "AMD ֏" : "USD $"}. Toggle display currency`}
-            >
-              Currency · <span data-currency-label>{isArmenia ? "AMD ֏" : "USD $"}</span>
-            </button>
-          </div>
+  <div class="riviera-header__actions">
+    <span class="riviera-header__issue">Issue 01</span>
+    <button
+      class="riviera-header__currency"
+      type="button"
+      data-currency-toggle
+      aria-label={`Currency ${isArmenia ? "AMD ֏" : "USD $"}. Toggle display currency`}
+    >
+      <span data-currency-label>{isArmenia ? "AMD ֏" : "USD $"}</span>
+    </button>
+    <button class="riviera-header__bag" type="button" data-cart-open aria-label="Bag (0). Open shopping bag">
+      Bag <span>(<span data-cart-count>0</span>)</span>
+    </button>
+    <details class="mobile-nav riviera-mobile-nav">
+      <summary aria-label="Open navigation menu"><span></span><span></span></summary>
+      <div class="riviera-mobile-nav__panel">
+        <p class="riviera-mobile-nav__issue">Riviera Match Annual · Issue 01</p>
+        <nav aria-label="Mobile navigation">
+          {links.map((link) => <a href={link.href}>{link.label}</a>)}
+          <a href="/shipping">Delivery & returns</a>
+          <a href="/contact">Contact</a>
+        </nav>
+        <div class="riviera-mobile-nav__foot">
+          <span>{isArmenia ? "Complimentary delivery across Armenia" : "Worldwide delivery · free across Armenia"}</span>
+          <button
+            type="button"
+            data-currency-toggle
+            aria-label={`Currency ${isArmenia ? "AMD ֏" : "USD $"}. Toggle display currency`}
+          >
+            Currency · <span data-currency-label>{isArmenia ? "AMD ֏" : "USD $"}</span>
+          </button>
         </div>
-      </details>
-    </div>
-  </header>
-) : (
-  <>
-    <div class="dispatch-bar">
-      <span>Collection 01 · The Last Set</span>
-      <span>{isArmenia ? "Complimentary delivery across Armenia" : "Worldwide delivery · Free in Armenia"}</span>
-      <button
-        class="currency-toggle"
-        type="button"
-        data-currency-toggle
-        aria-label={`Currency ${isArmenia ? "AMD ֏" : "USD $"}. Toggle display currency`}
-      >
-        <span data-currency-label>{isArmenia ? "AMD ֏" : "USD $"}</span>
-      </button>
-    </div>
-
-    <header class="site-header" data-site-header>
-      <BrandMark />
-      <nav class="desktop-nav" aria-label="Primary navigation">
-        <a class:list={{ active: path.startsWith("/shop") || path.startsWith("/products") }} href="/shop">Collection</a>
-        <a class:list={{ active: path === "/our-habit" }} href="/our-habit">The Society</a>
-        <a class:list={{ active: path.startsWith("/journal") }} href="/journal/manifesto">Journal</a>
-        <a class:list={{ active: path === "/shipping" }} href="/shipping">Delivery</a>
-      </nav>
-      <div class="header-actions">
-        <button class="cart-trigger" type="button" data-cart-open aria-label="Bag (0). Open shopping bag">
-          <span>Bag</span><b>(<span data-cart-count>0</span>)</b>
-        </button>
-        <details class="mobile-nav">
-          <summary aria-label="Open navigation"><span></span><span></span></summary>
-          <div class="mobile-nav__panel">
-            <nav aria-label="Mobile navigation">
-              <a href="/shop">Collection</a>
-              <a href="/our-habit">The Society</a>
-              <a href="/journal/manifesto">Journal</a>
-              <a href="/shipping">Delivery</a>
-            </nav>
-            <p>The unofficial society for people who always have time for one more set.</p>
-          </div>
-        </details>
       </div>
-    </header>
-  </>
-)}
+    </details>
+  </div>
+</header>

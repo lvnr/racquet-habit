@@ -1,0 +1,27 @@
+---
+type Props = {
+  src: string;
+  alt: string;
+  caption: string;
+  plate?: string;
+  ratio?: "landscape" | "portrait" | "square";
+  eager?: boolean;
+};
+
+const { src, alt, caption, plate = "Filed in Yerevan", ratio = "landscape", eager = false } = Astro.props;
+---
+
+<figure class:list={["annual-image", `annual-image--${ratio}`]}>
+  <div>
+    <img
+      src={src}
+      alt={alt}
+      loading={eager ? "eager" : "lazy"}
+      fetchpriority={eager ? "high" : "low"}
+      decoding="async"
+      width={ratio === "portrait" ? "1620" : "2400"}
+      height={ratio === "portrait" ? "2400" : "1643"}
+    />
+  </div>
+  <figcaption><span>{caption}</span><span>{plate}</span></figcaption>
+</figure>

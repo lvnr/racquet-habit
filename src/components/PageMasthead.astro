@@ -1,0 +1,29 @@
+---
+type Props = {
+  issue?: string;
+  location?: string;
+  title: string;
+  intro: string;
+  tone?: "paper" | "green" | "red" | "blue";
+};
+
+const {
+  issue = "Riviera Match Annual · Issue 01",
+  location = "Yerevan · 2026",
+  title,
+  intro,
+  tone = "paper",
+} = Astro.props;
+---
+
+<header class:list={["page-masthead", `page-masthead--${tone}`]}>
+  <div class="page-masthead__meta">
+    <span>{issue}</span>
+    <span>{location}</span>
+  </div>
+  <h1>{title}</h1>
+  <div class="page-masthead__foot">
+    <p>{intro}</p>
+    <slot />
+  </div>
+</header>

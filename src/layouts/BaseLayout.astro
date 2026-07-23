@@ -4,6 +4,7 @@ import "@fontsource/instrument-serif/400-italic.css";
 import "@fontsource-variable/geist/index.css";
 import "@fontsource-variable/roboto-condensed/index.css";
 import "../styles/global.css";
+import "../styles/riviera.css";
 import Header from "../components/Header.astro";
 import CartDrawer from "../components/CartDrawer.astro";
 import Footer from "../components/Footer.astro";
@@ -13,18 +14,20 @@ type Props = {
   title?: string;
   description?: string;
   image?: string;
-  noFooter?: boolean;
-  headerVariant?: "default" | "riviera";
+  robots?: string;
+  pageType?: "website" | "article";
   bodyClass?: string;
+  schema?: Record<string, unknown> | Record<string, unknown>[];
 };
 
 const {
-  title = "Racquet Habit — Tennis Addicts Society",
-  description = "A contemporary tennis society for people with no intention of quitting. Habit-forming court goods, apparel and clubhouse collaborations.",
-  image = "/images/v3/final/og-racquet-habit.jpg",
-  noFooter = false,
-  headerVariant = "default",
-  bodyClass,
+  title = "Tennis Apparel & Court Goods | Racquet Habit",
+  description = "Shop Racquet Habit tennis apparel, court accessories and clubhouse goods for long lunches, late matches and repeat players, with worldwide delivery.",
+  image = "/images/riviera/laundry-hero-desktop.webp",
+  robots = "index,follow,max-image-preview:large",
+  pageType = "website",
+  bodyClass = "",
+  schema = [],
 } = Astro.props;
 
 const requestCountry = (Astro.request as Request & { cf?: { country?: string } }).cf?.country;
@@ -37,14 +40,30 @@ Astro.locals.isArmenia = isArmenia;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL(image, Astro.site);
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Brand",
-  name: "Racquet Habit",
-  slogan: "A difficult habit to break.",
-  url: "https://racquethabit.com",
-  logo: "https://racquethabit.com/brand-v3/logo-rh-monogram.svg",
-};
+const baseSchema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://racquethabit.com/#organization",
+    name: "Racquet Habit",
+    url: "https://racquethabit.com",
+    logo: {
+      "@type": "ImageObject",
+      url: "https://racquethabit.com/images/riviera/racquet-habit-logo.webp",
+    },
+    slogan: "A difficult habit to break.",
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://racquethabit.com/#website",
+    name: "Racquet Habit",
+    url: "https://racquethabit.com",
+    publisher: { "@id": "https://racquethabit.com/#organization" },
+  },
+];
+const pageSchema = Array.isArray(schema) ? schema : [schema];
+const schemas = [...baseSchema, ...pageSchema.filter((item) => Object.keys(item).length > 0)];
 ---
 
 <!doctype html>
@@ -52,33 +71,38 @@ const organizationSchema = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content={headerVariant === "riviera" ? "#EEE6D3" : "#103C2C"} />
+    <meta name="theme-color" content="#eee6d3" />
     <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={pageType} />
     <meta property="og:site_name" content="Racquet Habit" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={socialImage} />
+    <meta property="og:image:alt" content="Racquet Habit court goods and tennis apparel" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImage} />
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(organizationSchema)}></script>
+    <meta name="twitter:image:alt" content="Racquet Habit court goods and tennis apparel" />
+    {schemas.map((item) => (
+      <script is:inline type="application/ld+json" set:html={JSON.stringify(item)}></script>
+    ))}
     <slot name="head" />
     <title>{title}</title>
   </head>
-  <body class={bodyClass}>
+  <body class:list={["riviera-page", bodyClass]}>
     <a class="skip-link" href="#main">Skip to content</a>
-    <Header variant={headerVariant} />
+    <Header />
     <main id="main">
       <slot />
     </main>
-    {!noFooter && <Footer />}
+    <Footer />
     <CartDrawer />
     <div class="toast" data-toast role="status" aria-live="polite"></div>
     <script is:inline src="/scripts/storefront.js" type="module"></script>

@@ -9,6 +9,7 @@ type Props = {
 
 const { product, localImage, index } = Astro.props;
 const issueNumber = String(index + 1).padStart(2, "0");
+const priceLabel = product.maxPrice > product.price ? `From $${product.price.toFixed(0)}` : `$${product.price.toFixed(0)}`;
 ---
 
 <article class="riviera-product">
@@ -31,9 +32,9 @@ const issueNumber = String(index + 1).padStart(2, "0");
   </a>
   <div class="riviera-product__meta">
     <div>
-      <span>{product.category} · Issue 01</span>
+      <span>{product.productType} · Issue 01</span>
       <h2><a href={`/products/${product.slug}`}>{product.name}</a></h2>
     </div>
-    <strong data-price-usd={product.price}>${product.price.toFixed(2)}</strong>
+    <strong data-price-usd={product.price}>{priceLabel}</strong>
   </div>
 </article>

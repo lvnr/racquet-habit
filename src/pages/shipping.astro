@@ -1,17 +1,66 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageMasthead from "../components/PageMasthead.astro";
+import EditorialImage from "../components/EditorialImage.astro";
+
+const shippingSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "Delivery & Returns",
+  url: "https://racquethabit.com/shipping",
+  description: "Delivery, duties, order changes and quality-policy information for Racquet Habit orders.",
+};
 ---
 
-<BaseLayout title="Delivery & Returns — Racquet Habit" description="Racquet Habit delivery, duties and returns information for Armenia and international orders.">
-  <section class="page-hero">
-    <div class="page-hero__top eyebrow"><span>Delivery & returns</span><span>Updated July 2026</span></div>
-    <h1>Court goods, <em>delivered.</em></h1>
-    <div class="page-hero__bottom"><p>Made-to-order pieces ship through our production partners. Local collaborations may follow a separate, clearly marked timetable.</p></div>
+<BaseLayout
+  title="Tennis Shop Delivery & Returns | Racquet Habit"
+  description="Get Racquet Habit delivery, duties and returns information for Armenia and international orders, including free delivery across Armenia and USD checkout."
+  image="/images/editorial/equipment-room.webp"
+  schema={shippingSchema}
+>
+  <PageMasthead
+    title="Court goods, delivered"
+    intro="Current products are made to order and fulfilled by Fourthwall. Production and delivery estimates are calculated live from the piece, order and destination before payment."
+    issue="Service desk · Delivery & returns"
+  />
+
+  <section class="service-layout">
+    <aside>
+      <EditorialImage
+        src="/images/editorial/equipment-room.webp"
+        alt="Racquet Habit court goods arranged inside a vintage equipment locker"
+        caption="Packed after ordering"
+        plate="Dispatch plate"
+        ratio="portrait"
+      />
+    </aside>
+    <div class="service-copy">
+      <section class="service-answer">
+        <span class="site-kicker">The short version</span>
+        <h2>Made after you order.<br />Timed at checkout.</h2>
+        <p>Fourthwall shows the current production and delivery estimate during secure checkout. Tracking is sent by email after dispatch. International duties or import charges may be collected by local authorities.</p>
+      </section>
+
+      <div class="service-cards">
+        <article><b>AM</b><h3>Armenia</h3><p>Complimentary standard delivery is offered across Armenia. Product prices can be displayed in approximate AMD for convenience; checkout currently settles in USD.</p></article>
+        <article><b>INT</b><h3>International</h3><p>Fourthwall ships to many international destinations and calculates delivery from the package and address. Any destination duties are the recipient’s responsibility.</p></article>
+        <article><b>Q</b><h3>Quality issues</h3><p>If an item arrives with a visible quality issue or print error, Fourthwall’s quality guarantee provides a replacement or refund after review.</p></article>
+        <article><b>R</b><h3>General returns</h3><p>Because current products are made to order, general returns, exchanges and sizing-related returns are not accepted. Check the selected size, color or device carefully.</p></article>
+      </div>
+
+      <section class="service-faq" aria-labelledby="delivery-questions">
+        <h2 id="delivery-questions">Delivery questions</h2>
+        <details open><summary>How long will my order take?</summary><p>The current production and transit estimate appears at checkout because timing depends on the product and destination. The confirmation and dispatch emails provide the order-specific timeline and tracking.</p></details>
+        <details><summary>Can I change or cancel an order?</summary><p>Use the order-management link in the Fourthwall confirmation email as soon as possible. Changes are available only before production begins; made-to-order production can start quickly.</p></details>
+        <details><summary>Who handles order support?</summary><p>Fourthwall is the merchant and fulfillment partner for current product orders. Use the support link in your confirmation email for address changes, tracking, damage or production issues.</p></details>
+        <details><summary>What should I send for a quality claim?</summary><p>Include the order number and clear photographs of the item on a flat, well-lit surface showing the print or manufacturing issue. Submit the request promptly through Fourthwall order support.</p></details>
+        <details><summary>Are duties and taxes included?</summary><p>Applicable checkout taxes are shown by Fourthwall. Import duties or destination charges may still be assessed by local authorities and are not included in the product price.</p></details>
+      </section>
+
+      <div class="service-actions">
+        <a class="paper-button" href="https://racquet-habit-shop.fourthwall.com/pages/returns-faq" rel="external">Fourthwall returns policy <span>↗</span></a>
+        <a class="paper-link" href="/contact">Contact Racquet Habit <span>↗</span></a>
+      </div>
+    </div>
   </section>
-  <section class="shipping-grid">
-    <article class="shipping-card"><b>AM</b><h2>Armenia</h2><p>Complimentary delivery across Armenia. Prices are shown in Armenian dram for convenience when you visit from Armenia; secure checkout currently settles in USD.</p></article>
-    <article class="shipping-card"><b>INT</b><h2>International</h2><p>Fourthwall calculates the live delivery cost from order weight and destination. Destination duties and taxes are not included and may be collected by local authorities.</p></article>
-    <article class="shipping-card"><b>R</b><h2>Returns</h2><p>Made-to-order items follow Fourthwall’s return and replacement policy. Contact us promptly for a defect, damage or fulfillment issue so the order can be reviewed.</p></article>
-  </section>
-  <p class="shipping-disclaimer">Delivery windows vary by product and destination and are shown again at checkout. Coffee and seasonal drink collaborations may be Armenia-only where freshness, licensing or cold-chain requirements make international shipping impractical.</p>
 </BaseLayout>

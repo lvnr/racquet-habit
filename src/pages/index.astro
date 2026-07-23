@@ -1,9 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import RivieraProductPlate from "../components/RivieraProductPlate.astro";
+import ProductCard from "../components/ProductCard.astro";
+import EditorialImage from "../components/EditorialImage.astro";
 import { getCatalog } from "../lib/catalog";
 import type { CatalogProduct } from "../data/catalog";
-import "../styles/riviera.css";
 
 const catalog = await getCatalog();
 const preferredSlugs = [
@@ -11,25 +12,34 @@ const preferredSlugs = [
   "something-cold-organic-court-tote",
   "out-of-office-court-cap",
 ];
-
-const exactProducts = preferredSlugs
+const products = preferredSlugs
   .map((slug) => catalog.find((product) => product.slug === slug))
   .filter((product): product is CatalogProduct => Boolean(product));
-const products = exactProducts.length === 3 ? exactProducts : catalog.filter((product) => !product.comingSoon).slice(0, 3);
 const localImages = [
   "/images/riviera/tennis-lunch-tee.webp",
   "/images/riviera/something-cold-tote.webp",
   "/images/riviera/on-court-cap.webp",
 ];
+const signedRally = catalog.filter((product) => product.capsule === "Signed Rally — Founding Issue").slice(0, 2);
+const playful = catalog.filter((product) => ["Love Cherries", "Repeat Players"].includes(product.capsule)).slice(0, 3);
+const homeSchema = {
+  "@context": "https://schema.org",
+  "@type": "OnlineStore",
+  "@id": "https://racquethabit.com/#store",
+  name: "Racquet Habit",
+  url: "https://racquethabit.com",
+  description: "A Yerevan-based tennis society and shop for considered apparel, court goods and clubhouse collaborations.",
+  currenciesAccepted: "USD",
+  areaServed: "Worldwide",
+  parentOrganization: { "@id": "https://racquethabit.com/#organization" },
+};
 ---
 
 <BaseLayout
-  title="Racquet Habit — Long Lunch. Late Match."
-  description="Racquet Habit court goods for long lunches, late matches and everything between."
+  title="Tennis Apparel & Court Goods | Racquet Habit"
+  description="Shop Racquet Habit tennis apparel, court accessories and clubhouse goods for long lunches, late matches and repeat players, with worldwide delivery."
   image="/images/riviera/laundry-hero-desktop.webp"
-  headerVariant="riviera"
-  bodyClass="riviera-page"
-  noFooter={true}
+  schema={homeSchema}
 >
   <div class="riviera-spread">
     <section class="riviera-hero" aria-labelledby="riviera-title">
@@ -48,10 +58,7 @@ const localImages = [
 
       <figure class="riviera-hero__media">
         <picture>
-          <source media="(max-width: 700px)" srcset="/images/riviera/laundry-hero-mobile.avif" type="image/avif" />
           <source media="(max-width: 700px)" srcset="/images/riviera/laundry-hero-mobile.webp" type="image/webp" />
-          <source srcset="/images/riviera/laundry-hero-desktop.avif" type="image/avif" />
-          <source srcset="/images/riviera/laundry-hero-desktop.webp" type="image/webp" />
           <img
             src="/images/riviera/laundry-hero-desktop.webp"
             alt="Racquet Habit courtwear hanging from a clothesline in Mediterranean sun"
@@ -73,15 +80,17 @@ const localImages = [
           <span>Issue 01</span>
           <h2 id="court-goods-title">Court goods</h2>
         </div>
-        <p>Three founding pieces for play, lunch and the walk home.</p>
+        <p>{products.length ? "Three founding pieces for play, lunch and the walk home." : "The live collection is between serves. Please return shortly."}</p>
         <a href="/shop">View the complete collection ↗</a>
       </div>
 
-      <div class="riviera-product-grid">
-        {products.map((product, index) => (
-          <RivieraProductPlate product={product} localImage={localImages[index]} index={index} />
-        ))}
-      </div>
+      {products.length > 0 && (
+        <div class="riviera-product-grid">
+          {products.map((product, index) => (
+            <RivieraProductPlate product={product} localImage={localImages[index]} index={index} />
+          ))}
+        </div>
+      )}
 
       <div class="riviera-folio" aria-hidden="true">
         <span>01</span>
@@ -89,4 +98,81 @@ const localImages = [
       </div>
     </section>
   </div>
+
+  <section class="annual-chapter annual-chapter--green" aria-labelledby="signed-rally-title">
+    <div class="annual-chapter__copy">
+      <span class="site-kicker">Collection 01 · Founding issue</span>
+      <h2 id="signed-rally-title">The first<br /><em>uniform.</em></h2>
+      <p>Signed Rally is the formal line in Issue 01: quiet at the chest, expressive across the back, made for the people who are always staying for another set.</p>
+      <a class="paper-link paper-link--light" href="/shop?capsule=Signed%20Rally%20%E2%80%94%20Founding%20Issue">Shop the founding issue <span>↗</span></a>
+    </div>
+    <div class="annual-chapter__products">
+      {signedRally.map((product, index) => <ProductCard product={product} index={index} feature="compact" />)}
+    </div>
+  </section>
+
+  <section class="clubhouse-story" aria-labelledby="clubhouse-title">
+    <div class="clubhouse-story__copy">
+      <span class="site-kicker">The clubhouse, properly understood</span>
+      <h2 id="clubhouse-title">Play first.<br /><em>Stay longer.</em></h2>
+      <p>Racquet Habit is a Yerevan-based tennis society and shop for repeat players. We make considered apparel, court goods and clubhouse collaborations for the hours sport quietly reorganizes.</p>
+      <dl>
+        <div><dt>Based</dt><dd>Yerevan, Armenia</dd></div>
+        <div><dt>Established</dt><dd>Issue 01 · 2026</dd></div>
+        <div><dt>Membership</dt><dd>One court booking</dd></div>
+      </dl>
+      <a class="paper-link" href="/our-habit">Meet the society <span>↗</span></a>
+    </div>
+    <EditorialImage
+      src="/images/editorial/courtside-hospitality.webp"
+      alt="Two Racquet Habit players sitting beside a clay tennis court after play"
+      caption="Lunch after the first match"
+      plate="Clubhouse plate 02"
+    />
+  </section>
+
+  <section class="annual-capsule" aria-labelledby="capsule-title">
+    <header>
+      <div>
+        <span class="site-kicker">Between sets · less formal</span>
+        <h2 id="capsule-title">A playful<br /><em>side draw.</em></h2>
+      </div>
+      <p>Love Cherries, emotional support racquets and recovery days spent suspiciously close to a court.</p>
+      <a class="paper-link" href="/shop?capsule=Love%20Cherries">See the capsule <span>↗</span></a>
+    </header>
+    <div class="annual-product-grid">
+      {playful.map((product, index) => <ProductCard product={product} index={index} />)}
+    </div>
+  </section>
+
+  <section class="yerevan-file" aria-labelledby="yerevan-title">
+    <EditorialImage
+      src="/images/editorial/clubhouse-signage.webp"
+      alt="A player walking toward a shaded Racquet Habit tennis court"
+      caption="A court of one’s own"
+      plate="Yerevan file 01"
+    />
+    <div class="yerevan-file__copy">
+      <span class="site-kicker">Filed in Yerevan</span>
+      <h2 id="yerevan-title">A local point<br />of <em>view.</em></h2>
+      <p>The game travels, but every issue begins here: dry summer light, long stone shadows, late bookings and a city that knows how to sit down after play.</p>
+      <a class="paper-button" href="/journal">Read the court notes <span>↗</span></a>
+    </div>
+  </section>
+
+  <section class="journal-poster" aria-labelledby="journal-poster-title">
+    <EditorialImage
+      src="/images/editorial/out-of-office-newspaper.webp"
+      alt="A tennis player reading a Racquet Habit newspaper beside a blue court"
+      caption="Out of office, on court"
+      plate="Court note 001"
+      ratio="portrait"
+    />
+    <article>
+      <span class="site-kicker">From the journal · Court note 001</span>
+      <h2 id="journal-poster-title">A difficult habit<br />to <em>break.</em></h2>
+      <p>It begins with one booking. Then another racquet, a preferred grip, a weather app checked with unreasonable frequency, and a final set that develops sequels.</p>
+      <a class="paper-link paper-link--light" href="/journal/manifesto">Read the manifesto <span>↗</span></a>
+    </article>
+  </section>
 </BaseLayout>

@@ -1,0 +1,57 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageMasthead from "../components/PageMasthead.astro";
+import EditorialImage from "../components/EditorialImage.astro";
+
+const contactSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: "Contact Racquet Habit",
+  url: "https://racquethabit.com/contact",
+  description: "Official product, press and order-support channels for Racquet Habit.",
+};
+---
+
+<BaseLayout
+  title="Contact Racquet Habit | Customer Support"
+  description="Contact Racquet Habit for product, sizing, delivery, returns or order support. Find the official customer service and brand inquiry channels in one place."
+  image="/images/editorial/clubhouse-signage.webp"
+  schema={contactSchema}
+>
+  <PageMasthead
+    title="The service desk"
+    intro="For tracking, address changes or a quality issue, use the support link inside your Fourthwall order email. For product, press and brand questions, write to Racquet Habit directly."
+    issue="Help desk · Yerevan"
+    tone="blue"
+  />
+
+  <section class="contact-grid">
+    <article>
+      <span class="site-kicker">01 · Existing orders</span>
+      <h2>Order support</h2>
+      <p>Fourthwall handles payment, production, dispatch and order resolutions. The confirmation email contains the fastest route to the correct order record.</p>
+      <a class="paper-button" href="/shipping">Delivery & returns <span>↗</span></a>
+    </article>
+    <article>
+      <span class="site-kicker">02 · Product & press</span>
+      <h2>General inquiries</h2>
+      <p>Questions about sizing, the collection, collaborations or press are welcome. Include the product name when your note concerns a specific piece.</p>
+      <a class="paper-button" href="mailto:levonarakelian@live.com">Email Racquet Habit <span>↗</span></a>
+    </article>
+    <article>
+      <span class="site-kicker">03 · The shop</span>
+      <h2>Secure checkout</h2>
+      <p>If the custom cart is unavailable, the complete live assortment remains accessible through Racquet Habit’s secure Fourthwall storefront.</p>
+      <a class="paper-button" href="https://racquet-habit-shop.fourthwall.com" rel="external">Open Fourthwall <span>↗</span></a>
+    </article>
+  </section>
+
+  <section class="contact-closing">
+    <EditorialImage
+      src="/images/editorial/clubhouse-signage.webp"
+      alt="A player entering a quiet Racquet Habit tennis court surrounded by trees"
+      caption="Return time unconfirmed"
+      plate="Service desk closed for play"
+    />
+  </section>
+</BaseLayout>

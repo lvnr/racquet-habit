@@ -1,0 +1,66 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageMasthead from "../../components/PageMasthead.astro";
+import EditorialImage from "../../components/EditorialImage.astro";
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "What Belongs in a Tennis Court Bag?",
+  description: "A practical court-bag checklist for an afternoon tennis match.",
+  image: "https://racquethabit.com/images/editorial/accessories-flat-lay.webp",
+  mainEntityOfPage: "https://racquethabit.com/journal/court-bag-guide",
+  author: { "@type": "Organization", name: "Racquet Habit" },
+  publisher: { "@id": "https://racquethabit.com/#organization" },
+  datePublished: "2026-07-23",
+  dateModified: "2026-07-23",
+};
+---
+
+<BaseLayout
+  title="What to Pack in a Tennis Bag | Racquet Habit"
+  description="Use this practical tennis court-bag checklist for an afternoon match: racquets, water, towel, sun protection, a dry layer and the small items players forget."
+  image="/images/editorial/accessories-flat-lay.webp"
+  pageType="article"
+  schema={articleSchema}
+>
+  <PageMasthead
+    title="What belongs in a court bag?"
+    intro="For an afternoon tennis match, pack at least one racquet, water, a towel, sun protection, spare grips, a dry layer and the small personal items your court does not provide."
+    issue="Court note 002 · Practical file"
+  >
+    <div class="article-byline"><span>By Racquet Habit</span><time datetime="2026-07-23">23 July 2026</time></div>
+  </PageMasthead>
+
+  <article class="guide-layout">
+    <EditorialImage
+      src="/images/editorial/accessories-flat-lay.webp"
+      alt="Tennis racquets, towel, tote and court accessories arranged on a clay court"
+      caption="The useful things"
+      plate="Packing plate 01"
+      ratio="square"
+      eager
+    />
+    <div class="guide-copy">
+      <section>
+        <span class="site-kicker">The short answer</span>
+        <h2>Start with what keeps the match going.</h2>
+        <p>Bring your racquet, enough water for the weather, a towel and the shoes required by the surface. Add sun protection for outdoor play and any medication or personal support you may need.</p>
+      </section>
+      <ol class="packing-list">
+        <li><b>01</b><div><h3>Racquet and court shoes</h3><p>One reliable racquet is enough for most casual matches; a second is useful if a broken string would end the session. Check the court’s footwear rules before arriving.</p></div></li>
+        <li><b>02</b><div><h3>Water and a towel</h3><p>Bring more water in heat or when refill access is uncertain. A small absorbent towel handles both sweat and a damp bench.</p></div></li>
+        <li><b>03</b><div><h3>Sun and weather protection</h3><p>A cap, sunscreen and sunglasses help outdoors. A light warm-up layer is useful once the sun drops or wind arrives.</p></div></li>
+        <li><b>04</b><div><h3>Spare grips and small repairs</h3><p>One overgrip, a vibration dampener if you use one, blister care and a small plastic bag for damp items solve the most common interruptions.</p></div></li>
+        <li><b>05</b><div><h3>A dry shirt for after</h3><p>The least technical item is often the most appreciated at lunch. Pack it in a separate pouch from the towel and worn courtwear.</p></div></li>
+      </ol>
+      <section class="guide-faq">
+        <h2>Useful questions</h2>
+        <details open><summary>How many racquets should a beginner carry?</summary><p>One racquet is enough to start. Carry a second only when you play often enough that a broken string would otherwise end a booked match.</p></details>
+        <details><summary>Should tennis balls go in the bag?</summary><p>Yes, unless your club or coach supplies them. Confirm before leaving; a sealed can is a useful default for a casual booking.</p></details>
+        <details><summary>What changes for clay?</summary><p>Use shoes permitted for the surface and expect more dust. A separate shoe bag, small towel and dry socks keep the rest of the bag cleaner.</p></details>
+      </section>
+      <a class="paper-button" href="/shop?category=Accessories">Shop court accessories <span>↗</span></a>
+    </div>
+  </article>
+</BaseLayout>

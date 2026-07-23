@@ -1,40 +1,125 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import PageMasthead from "../components/PageMasthead.astro";
 import ProductCard from "../components/ProductCard.astro";
+import EditorialImage from "../components/EditorialImage.astro";
 import { getCatalog } from "../lib/catalog";
 
 const catalog = await getCatalog();
-const categories = ["All", "Wear", "Carry", "Court", "Drink", "Coffee"];
+const categories = ["All", "Tees", "Accessories"];
+const collectionSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Collection 01 — The Last Set",
+  url: "https://racquethabit.com/shop",
+  description: "Tennis tees, caps, totes, towels and accessories for repeat players.",
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: catalog.length,
+    itemListElement: catalog.map((product, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `https://racquethabit.com/products/${product.slug}`,
+      name: product.name,
+    })),
+  },
+};
 ---
 
-<BaseLayout title="Collection 01 — The Last Set · Racquet Habit" description="The first Racquet Habit collection: courtwear, objects and clubhouse collaborations for repeat players.">
-  <section class="page-hero page-hero--collection">
-    <div class="page-hero__top eyebrow"><span>Collection 01</span><span>Yerevan · 2026</span></div>
-    <h1>The Last <em>Set.</em></h1>
-    <div class="page-hero__bottom"><p>Considered courtwear and clubhouse objects for people who always have time for another set.</p><span class="eyebrow">{catalog.length} pieces</span></div>
-    <img src="/brand-v3/illustrations/illustration-scoreboard.svg" alt="" aria-hidden="true" />
-  </section>
-  <div class="shop-controls">
-    <div class="filter-list" role="group" aria-label="Filter products">
-      {categories.map((category) => <button type="button" class={category === "All" ? "active" : ""} data-filter={category}>{category}</button>)}
+<BaseLayout
+  title="Tennis Apparel & Court Accessories | Racquet Habit"
+  description="Explore Collection 01: tennis tees, caps, totes, towels and court accessories for repeat players, with worldwide delivery and free delivery across Armenia."
+  schema={collectionSchema}
+>
+  <PageMasthead
+    title="Collection 01: The Last Set"
+    intro="A twelve-piece opening issue for repeat players: heavyweight tees, relaxed crops, court accessories and one very complete excuse to remain out of office."
+  >
+    <span class="page-masthead__count"><b data-visible-count>{catalog.length}</b> pieces available</span>
+  </PageMasthead>
+
+  <div class="annual-filter-bar">
+    <div class="annual-filter-list" role="group" aria-label="Filter products">
+      {categories.map((category) => (
+        <button type="button" class={category === "All" ? "active" : ""} data-filter={category}>{category}</button>
+      ))}
     </div>
-    <span><b data-visible-count>{catalog.length}</b> pieces</span>
+    <a href="#capsules">Browse by story ↓</a>
   </div>
-  <section class="shop-grid"><div class="product-grid" data-shop-grid>{catalog.map((product, index) => <ProductCard product={product} index={index} />)}</div></section>
+
+  <section class="shop-annual" aria-label="Collection 01 products">
+    {catalog.length > 0 ? (
+      <div class="annual-product-grid annual-product-grid--shop" data-shop-grid>
+        {catalog.map((product, index) => <ProductCard product={product} index={index} />)}
+      </div>
+    ) : (
+      <div class="catalog-unavailable">
+        <span class="site-kicker">Between serves</span>
+        <h2>The live collection is temporarily unavailable.</h2>
+        <p>No substitute or preview products are shown. Please return shortly, or visit the secure Fourthwall shop.</p>
+        <a class="paper-button" href="https://racquet-habit-shop.fourthwall.com">Visit Fourthwall <span>↗</span></a>
+      </div>
+    )}
+  </section>
+
+  <section class="equipment-gatefold" id="capsules" aria-labelledby="equipment-title">
+    <EditorialImage
+      src="/images/editorial/equipment-room.webp"
+      alt="Racquet Habit caps, shirts, towels and tennis equipment arranged inside a vintage locker"
+      caption="The equipment room"
+      plate="Inventory plate 01"
+      ratio="portrait"
+    />
+    <div class="equipment-gatefold__copy">
+      <span class="site-kicker">Five stories · one collection</span>
+      <h2 id="equipment-title">Choose your<br /><em>draw.</em></h2>
+      <div class="capsule-index">
+        <button type="button" data-capsule-filter="The Daily Lineup"><b>01</b><span>The Daily Lineup</span><small>Tennis, lunch, tennis.</small></button>
+        <button type="button" data-capsule-filter="Court-Side Pleasures"><b>02</b><span>Court-Side Pleasures</span><small>Racquets, sunshine, something cold.</small></button>
+        <button type="button" data-capsule-filter="Love Cherries"><b>03</b><span>Love Cherries</span><small>A romantic interpretation of the score.</small></button>
+        <button type="button" data-capsule-filter="Repeat Players"><b>04</b><span>Repeat Players</span><small>Recovery remains theoretical.</small></button>
+        <button type="button" data-capsule-filter="Signed Rally — Founding Issue"><b>05</b><span>Signed Rally</span><small>The Society’s first uniform.</small></button>
+      </div>
+      <button class="paper-link capsule-reset" type="button" data-capsule-reset>Show the complete collection ↗</button>
+    </div>
+  </section>
+
+  <section class="shop-service-note">
+    <div><span>Worldwide delivery</span><p>Live delivery cost and timing are calculated at secure checkout from your destination and order.</p></div>
+    <div><span>Made to order</span><p>Every current piece is produced after ordering. Please check the size and device selection carefully.</p></div>
+    <div><span>Quality guaranteed</span><p>Visible print errors and quality issues are eligible for replacement or refund under Fourthwall’s policy.</p></div>
+  </section>
+
   <script>
     const filters = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
+    const capsuleFilters = document.querySelectorAll<HTMLButtonElement>("[data-capsule-filter]");
+    const reset = document.querySelector<HTMLButtonElement>("[data-capsule-reset]");
     const cards = document.querySelectorAll<HTMLElement>("[data-product-card]");
     const count = document.querySelector<HTMLElement>("[data-visible-count]");
     const params = new URLSearchParams(location.search);
-    const initial = params.get("category") || "All";
-    const applyFilter = (category: string) => {
+
+    const apply = (category: string, capsule = "") => {
       let visible = 0;
-      filters.forEach((button) => button.classList.toggle("active", button.dataset.filter === category));
-      cards.forEach((card) => { const show = category === "All" || card.dataset.category === category; card.hidden = !show; if (show) visible += 1; });
+      filters.forEach((button) => button.classList.toggle("active", button.dataset.filter === category && !capsule));
+      capsuleFilters.forEach((button) => button.classList.toggle("active", button.dataset.capsuleFilter === capsule));
+      cards.forEach((card) => {
+        const show = capsule ? card.dataset.capsule === capsule : category === "All" || card.dataset.category === category;
+        card.hidden = !show;
+        if (show) visible += 1;
+      });
       if (count) count.textContent = String(visible);
-      const url = new URL(location.href); if (category === "All") url.searchParams.delete("category"); else url.searchParams.set("category", category); history.replaceState({}, "", url);
+      const url = new URL(location.href);
+      url.searchParams.delete("category");
+      url.searchParams.delete("capsule");
+      if (capsule) url.searchParams.set("capsule", capsule);
+      else if (category !== "All") url.searchParams.set("category", category);
+      history.replaceState({}, "", url);
+      if (capsule) document.querySelector("[data-shop-grid]")?.scrollIntoView({ behavior: "smooth", block: "start" });
     };
-    filters.forEach((button) => button.addEventListener("click", () => applyFilter(button.dataset.filter || "All")));
-    applyFilter(initial);
+
+    filters.forEach((button) => button.addEventListener("click", () => apply(button.dataset.filter || "All")));
+    capsuleFilters.forEach((button) => button.addEventListener("click", () => apply("All", button.dataset.capsuleFilter || "")));
+    reset?.addEventListener("click", () => apply("All"));
+    apply(params.get("category") || "All", params.get("capsule") || "");
   </script>
 </BaseLayout>

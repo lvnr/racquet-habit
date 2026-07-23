@@ -3,6 +3,19 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 Astro.response.status = 404;
 ---
 
-<BaseLayout title="Page Out — Racquet Habit">
-  <section class="not-found"><span class="eyebrow">Unforced error / 404</span><h1>That page was <em>out.</em></h1><img src="/brand-v3/illustrations/illustration-scoreboard.svg" alt="" /><p>The line call stands. Return to the collection or begin again from the baseline.</p><a class="button button--red" href="/">Return to court <span>↗</span></a></section>
+<BaseLayout
+  title="Page Not Found | Racquet Habit"
+  description="The requested Racquet Habit page could not be found. Return to the collection to browse tennis apparel, court goods and clubhouse accessories."
+  robots="noindex,follow"
+  bodyClass="not-found-page"
+>
+  <section class="annual-404">
+    <div>
+      <span class="site-kicker">Unforced error · 404</span>
+      <h1>That page<br />was <em>out.</em></h1>
+      <p>The line call stands. Return to the collection or begin again from the baseline.</p>
+      <div><a class="paper-button" href="/">Return to court <span>↗</span></a><a class="paper-link" href="/shop">Shop Issue 01 <span>↗</span></a></div>
+    </div>
+    <img src="/images/editorial/two-ball-collage.webp" alt="Two tennis balls arranged in an archival collage" width="1003" height="1568" />
+  </section>
 </BaseLayout>

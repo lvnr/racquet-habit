@@ -6,10 +6,16 @@ import sitemap from "@astrojs/sitemap";
 export default defineConfig({
   site: "https://racquethabit.com",
   output: "server",
+  trailingSlash: "never",
   adapter: cloudflare({
     imageService: "compile",
   }),
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => !page.endsWith("/404"),
+      customSitemaps: ["https://racquethabit.com/sitemap-products.xml"],
+    }),
+  ],
   vite: {
     build: {
       minify: false,

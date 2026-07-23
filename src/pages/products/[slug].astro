@@ -1,90 +1,280 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ProductCard from "../../components/ProductCard.astro";
-import { getCatalog } from "../../lib/catalog";
+import EditorialImage from "../../components/EditorialImage.astro";
+import { getCatalog, getProduct } from "../../lib/catalog";
 
+const product = await getProduct(Astro.params.slug || "");
+if (!product) return Astro.rewrite("/404");
 const catalog = await getCatalog();
-const product = catalog.find((item) => item.slug === Astro.params.slug);
-if (!product) return Astro.redirect("/404", 302);
-const purchasable = product.source === "fourthwall" && !product.comingSoon && product.variants.some((variant) => variant.inStock);
 const variants = product.variants.filter((variant) => variant.inStock);
-const defaultVariant = variants[0] || product.variants[0];
-const related = catalog.filter((item) => item.id !== product.id && item.category === product.category).slice(0, 3);
-const productSchema = {
-  "@context": "https://schema.org",
+const defaultVariant = variants[0];
+const initialImages = (defaultVariant?.images.length ? defaultVariant.images : product.images).slice(0, 4);
+const colors = [...new Map(variants.filter((variant) => variant.color).map((variant) => [variant.color, variant.colorHex])).entries()];
+const sizes = [...new Set(variants.map((variant) => variant.size).filter((value): value is string => Boolean(value)))];
+const related = catalog
+  .filter((item) => item.id !== product.id)
+  .sort((a, b) => Number(b.capsule === product.capsule) - Number(a.capsule === product.capsule))
+  .slice(0, 3);
+const canonical = `https://racquethabit.com/products/${product.slug}`;
+const variantSchema = variants.map((variant) => ({
   "@type": "Product",
-  name: product.name,
-  description: product.description,
-  image: product.images.map((image) => new URL(image, Astro.site).toString()),
-  brand: { "@type": "Brand", name: "Racquet Habit" },
+  name: `${product.name} — ${variant.name}`,
+  sku: variant.id,
+  color: variant.color,
+  size: variant.size,
+  image: variant.images,
   offers: {
     "@type": "Offer",
+    url: canonical,
     priceCurrency: "USD",
-    price: product.price,
-    availability: purchasable ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
+    price: variant.price,
+    availability: "https://schema.org/InStock",
+    seller: { "@id": "https://racquethabit.com/#organization" },
   },
+}));
+const productSchema = variants.length > 1 ? {
+  "@context": "https://schema.org",
+  "@type": "ProductGroup",
+  "@id": `${canonical}#product`,
+  productGroupID: product.id,
+  name: product.name,
+  description: product.description,
+  url: canonical,
+  image: product.images,
+  brand: { "@type": "Brand", name: "Racquet Habit" },
+  category: `${product.category} > ${product.productType}`,
+  variesBy: [
+    ...(colors.length > 1 ? ["https://schema.org/color"] : []),
+    ...(sizes.length > 1 ? ["https://schema.org/size"] : []),
+  ],
+  hasVariant: variantSchema,
+} : {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": `${canonical}#product`,
+  name: product.name,
+  sku: defaultVariant?.id || product.id,
+  description: product.description,
+  url: canonical,
+  image: product.images,
+  brand: { "@type": "Brand", name: "Racquet Habit" },
+  category: `${product.category} > ${product.productType}`,
+  offers: variantSchema[0]?.offers,
 };
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Shop", item: "https://racquethabit.com/shop" },
+    { "@type": "ListItem", position: 2, name: product.category, item: `https://racquethabit.com/shop?category=${product.category}` },
+    { "@type": "ListItem", position: 3, name: product.name, item: canonical },
+  ],
+};
+const optionsJson = JSON.stringify(variants).replace(/</g, "\\u003c");
+const productDescription = `${product.description} Shop ${product.name} by Racquet Habit with worldwide delivery.`;
 ---
 
-<BaseLayout title={`${product.name} — Racquet Habit`} description={product.description} image={product.image}>
-  <script is:inline type="application/ld+json" set:html={JSON.stringify(productSchema)} slot="head"></script>
-  <section class="product-page">
-    <div class="product-gallery">
-      {product.images.map((image, index) => <figure><img src={image} alt={index === 0 ? product.name : `${product.name}, view ${index + 1}`} fetchpriority={index === 0 ? "high" : "auto"} /></figure>)}
+<BaseLayout
+  title={`${product.name} | Racquet Habit`}
+  description={productDescription}
+  image={product.image}
+  schema={[productSchema, breadcrumbSchema]}
+  bodyClass="product-detail-page"
+>
+  <section class="annual-product-page" data-product-detail>
+    <div class="annual-product-gallery" data-product-gallery>
+      {initialImages.map((image, index) => (
+        <figure>
+          <img
+            src={image}
+            alt={index === 0 ? product.name : `${product.name}, view ${index + 1}`}
+            fetchpriority={index === 0 ? "high" : "low"}
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
+            width="1536"
+            height="2048"
+          />
+          <figcaption><span>{product.productType}</span><span>View {String(index + 1).padStart(2, "0")}</span></figcaption>
+        </figure>
+      ))}
     </div>
-    <div class="product-info">
-      <div class="product-breadcrumb"><a href="/shop">Collection 01</a> / {product.category} / {product.edition}</div>
-      <div class="product-info__head">
+
+    <div class="annual-product-info">
+      <nav class="product-breadcrumb" aria-label="Breadcrumb">
+        <a href="/shop">Collection 01</a><span>/</span><a href={`/shop?category=${product.category}`}>{product.category}</a>
+      </nav>
+      <span class="site-kicker">{product.capsule} · {product.productType}</span>
+      <div class="annual-product-info__title">
         <h1>{product.name}</h1>
-        <strong class="money" data-product-price data-price-usd={product.price}>${product.price.toFixed(2)}</strong>
+        <strong data-product-price data-price-usd={defaultVariant?.price ?? product.price}>${(defaultVariant?.price ?? product.price).toFixed(2)}</strong>
       </div>
-      <p class="product-info__description">{product.description}</p>
-      {variants.length > 1 && (
-        <div class="product-option">
-          <label for="variant">Choose an option</label>
-          <select id="variant" data-variant-select>
-            {variants.map((variant) => <option value={variant.id} data-price={variant.price}>{variant.name} — ${variant.price.toFixed(2)}</option>)}
-          </select>
-        </div>
-      )}
+      <p class="annual-product-info__description">{product.description}</p>
+
+      <div class="product-options">
+        {colors.length > 1 && (
+          <fieldset class="color-options">
+            <legend>Color <span data-selected-color>{defaultVariant?.color}</span></legend>
+            <div>
+              {colors.map(([color, hex], index) => (
+                <button
+                  type="button"
+                  class:list={{ active: index === 0 }}
+                  data-color-option={color}
+                  aria-label={color}
+                  aria-pressed={index === 0 ? "true" : "false"}
+                  title={color}
+                >
+                  <i style={`--swatch:${hex || "#eee6d3"}`}></i>
+                </button>
+              ))}
+            </div>
+          </fieldset>
+        )}
+
+        {sizes.length > 1 && (
+          <label class="size-option" for="product-size">
+            <span>{product.productType === "MagSafe case" ? "Device" : "Size"}</span>
+            <select id="product-size" data-size-select>
+              {sizes.map((size) => <option value={size}>{size}</option>)}
+            </select>
+          </label>
+        )}
+      </div>
+
       <button
-        class="button button--red button--full"
+        class="paper-button paper-button--red paper-button--full"
         type="button"
         data-add-to-cart
-        data-coming-soon={String(!purchasable)}
         data-variant-id={defaultVariant?.id}
         data-name={product.name}
         data-variant={defaultVariant?.name}
         data-price={defaultVariant?.price ?? product.price}
-        data-image={product.image}
+        data-image={initialImages[0] || product.image}
       >
-        <span>{purchasable ? "Add to bag" : product.comingSoon ? "Coming soon" : "Preview — opening shortly"}</span><span>↗</span>
+        <span>Add to bag</span><span>↗</span>
       </button>
-      <p class="product-note">Made to order where applicable. Armenian visitors see an approximate AMD display; secure checkout settles in USD.</p>
-      <div class="product-meta">
+      <p class="product-note">Made to order. Local-currency display is approximate; secure checkout settles in USD.</p>
+
+      <div class="product-answer">
+        <h2>At a glance</h2>
+        <dl>
+          <div><dt>Availability</dt><dd>Available now · made to order</dd></div>
+          <div><dt>Options</dt><dd>{colors.length || 1} {colors.length === 1 ? "color" : "colors"} · {sizes.length || 1} {product.productType === "MagSafe case" ? "device options" : sizes.length === 1 ? "size" : "sizes"}</dd></div>
+          <div><dt>Delivery</dt><dd>Worldwide · live timing at checkout</dd></div>
+          <div><dt>Returns</dt><dd>Quality issues covered; general and sizing returns are not accepted</dd></div>
+        </dl>
+      </div>
+
+      <div class="product-accordions">
         <details open>
           <summary>The piece</summary>
           <p>{product.story}</p>
         </details>
+        {product.information.map((item) => (
+          <details>
+            <summary>{item.title}</summary>
+            {item.body && <p>{item.body}</p>}
+            {item.link && <a href={item.link} target="_blank" rel="noreferrer">{item.linkLabel || "Learn more"} ↗</a>}
+          </details>
+        ))}
         <details>
-          <summary>Material & make</summary>
-          <p>{product.material}. Production details and sizing are confirmed on the secure checkout page for made-to-order goods.</p>
-        </details>
-        <details>
-          <summary>Delivery</summary>
-          <p>Complimentary standard delivery in Armenia is applied automatically. International delivery is calculated by Fourthwall from the order weight and destination. Duties may apply.</p>
+          <summary>Delivery & order support</summary>
+          <p>Fourthwall calculates production and delivery timing from the item and destination at checkout. Tracking and order-support links are included in your confirmation email.</p>
+          <a href="/shipping">Read delivery & returns ↗</a>
         </details>
       </div>
     </div>
   </section>
+
+  <section class="product-context" aria-labelledby="annual-context-title">
+    <div>
+      <span class="site-kicker">From the annual · not an additional product view</span>
+      <h2 id="annual-context-title">Made for the<br /><em>hours around play.</em></h2>
+      <p>Issue 01 begins in the shade, travels through a late court booking and normally ends wherever lunch is still being served.</p>
+    </div>
+    <EditorialImage
+      src={product.category === "Accessories" ? "/images/editorial/accessories-flat-lay.webp" : "/images/riviera/laundry-hero-desktop.webp"}
+      alt={product.category === "Accessories" ? "Racquet Habit court accessories arranged beside tennis equipment" : "Racquet Habit courtwear hanging in Mediterranean sun"}
+      caption={product.category === "Accessories" ? "Equipment for the hours after" : "Laundry day on court"}
+      plate="Annual context"
+    />
+  </section>
+
   {related.length > 0 && (
-    <section class="related">
-      <header class="section-heading">
-        <span class="section-heading__number">From the same collection</span>
-        <h2>You may also like</h2>
-        <p>More objects for court and clubhouse.</p>
+    <section class="related-annual">
+      <header>
+        <span class="site-kicker">Continue the draw</span>
+        <h2>More from Issue 01</h2>
+        <a class="paper-link" href="/shop">View all twelve pieces <span>↗</span></a>
       </header>
-      <div class="product-grid">{related.map((item, index) => <ProductCard product={item} index={index} />)}</div>
+      <div class="annual-product-grid">
+        {related.map((item, index) => <ProductCard product={item} index={index} />)}
+      </div>
     </section>
   )}
+
+  <script is:inline id="product-options-data" type="application/json" set:html={optionsJson}></script>
+  <script>
+    const dataNode = document.querySelector<HTMLScriptElement>("#product-options-data");
+    const variants = JSON.parse(dataNode?.textContent || "[]");
+    const colorButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-color-option]")];
+    const sizeSelect = document.querySelector("[data-size-select]") as any;
+    const colorLabel = document.querySelector<HTMLElement>("[data-selected-color]");
+    const addButton = document.querySelector<HTMLButtonElement>("[data-add-to-cart]");
+    const price = document.querySelector<HTMLElement>("[data-product-price]");
+    const gallery = document.querySelector<HTMLElement>("[data-product-gallery]");
+    let selectedColor = colorButtons.find((button) => button.classList.contains("active"))?.dataset.colorOption || variants[0]?.color;
+
+    const availableSizes = (color: string) => variants.filter((variant: any) => !color || variant.color === color).map((variant: any) => variant.size);
+
+    const renderVariant = () => {
+      if (sizeSelect && !availableSizes(selectedColor).includes(sizeSelect.value)) {
+        sizeSelect.value = availableSizes(selectedColor)[0] || sizeSelect.options[0]?.value;
+      }
+      [...(sizeSelect?.options || [])].forEach((option) => {
+        option.disabled = Boolean(selectedColor) && !availableSizes(selectedColor).includes(option.value);
+      });
+      const variant = variants.find((item: any) =>
+        (!selectedColor || item.color === selectedColor) &&
+        (!sizeSelect?.value || item.size === sizeSelect.value)
+      ) || variants.find((item: any) => !selectedColor || item.color === selectedColor) || variants[0];
+      if (!variant) return;
+      if (price) {
+        price.dataset.priceUsd = String(variant.price);
+        price.textContent = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(variant.price);
+      }
+      if (addButton) {
+        addButton.dataset.variantId = variant.id;
+        addButton.dataset.variant = variant.name;
+        addButton.dataset.price = String(variant.price);
+        addButton.dataset.image = variant.images?.[0] || addButton.dataset.image;
+      }
+      const images = variant.images?.length ? variant.images : [];
+      if (images.length && gallery) {
+        const figures = [...gallery.querySelectorAll<HTMLElement>("figure")];
+        figures.forEach((figure, index) => {
+          figure.hidden = !images[index];
+          const img = figure.querySelector<HTMLImageElement>("img");
+          if (img && images[index]) {
+            img.src = images[index];
+            img.alt = index === 0 ? addButton?.dataset.name || "" : `${addButton?.dataset.name || ""}, view ${index + 1}`;
+          }
+        });
+      }
+    };
+
+    colorButtons.forEach((button) => button.addEventListener("click", () => {
+      selectedColor = button.dataset.colorOption || "";
+      colorButtons.forEach((item) => {
+        const active = item === button;
+        item.classList.toggle("active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
+      if (colorLabel) colorLabel.textContent = selectedColor;
+      renderVariant();
+    }));
+    sizeSelect?.addEventListener("change", renderVariant);
+    renderVariant();
+  </script>
 </BaseLayout>

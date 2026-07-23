@@ -1,20 +1,38 @@
 ---
 import type { CatalogProduct } from "../data/catalog";
-type Props = { product: CatalogProduct; index?: number; featured?: boolean };
-const { product, index = 0, featured = false } = Astro.props;
+type Props = { product: CatalogProduct; index?: number; feature?: "standard" | "wide" | "compact" };
+const { product, index = 0, feature = "standard" } = Astro.props;
+const priceLabel = product.maxPrice > product.price ? `From $${product.price.toFixed(0)}` : `$${product.price.toFixed(0)}`;
 ---
 
-<article class:list={["product-card", { "product-card--featured": featured }]} data-product-card data-category={product.category}>
-  <a class="product-card__image" href={`/products/${product.slug}`} aria-label={`View ${product.name}`}>
-    <img src={product.image} alt={product.name} loading={index < 2 ? "eager" : "lazy"} decoding="async" />
-    <span class:list={["product-card__status", { soon: product.comingSoon }]}>{product.comingSoon ? "Coming soon" : product.edition}</span>
-    <span class="product-card__view">View</span>
+<article
+  class:list={["annual-product-card", `annual-product-card--${feature}`]}
+  data-product-card
+  data-category={product.category}
+  data-capsule={product.capsule}
+>
+  <a
+    class="annual-product-card__image"
+    href={`/products/${product.slug}`}
+    aria-label={`${String(index + 1).padStart(2, "0")}. View ${product.name}`}
+  >
+    <span class="annual-product-card__number" aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+    <img
+      src={product.image}
+      alt={product.name}
+      loading={index < 2 ? "eager" : "lazy"}
+      decoding="async"
+      fetchpriority={index < 2 ? "high" : "low"}
+      width="1536"
+      height="2048"
+    />
+    <span class="annual-product-card__view" aria-hidden="true">View piece ↗</span>
   </a>
-  <div class="product-card__meta">
+  <div class="annual-product-card__meta">
     <div>
-      <span>{product.category} · {String(index + 1).padStart(2, "0")}</span>
-      <h3><a href={`/products/${product.slug}`}>{product.name}</a></h3>
+      <span>{product.productType} · {product.capsule}</span>
+      <h2><a href={`/products/${product.slug}`}>{product.name}</a></h2>
     </div>
-    <strong class="money" data-price-usd={product.price}>${product.price.toFixed(2)}</strong>
+    <strong data-price-usd={product.price}>{priceLabel}</strong>
   </div>
 </article>

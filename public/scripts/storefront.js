@@ -71,9 +71,7 @@ document.addEventListener("click", (event) => {
     toast("This piece is coming soon.");
     return;
   }
-  const variantSelect = document.querySelector("[data-variant-select]");
-  const selected = variantSelect?.selectedOptions?.[0];
-  const variantId = selected?.value || button.dataset.variantId;
+  const variantId = button.dataset.variantId;
   if (!variantId || variantId.startsWith("preview-")) {
     toast("This preview will open for ordering shortly.");
     return;
@@ -84,28 +82,14 @@ document.addEventListener("click", (event) => {
   else cart.push({
     variantId,
     name: button.dataset.name,
-    variant: selected?.textContent?.trim() || button.dataset.variant || "Standard",
-    price: Number(selected?.dataset.price || button.dataset.price || 0),
+    variant: button.dataset.variant || "Standard",
+    price: Number(button.dataset.price || 0),
     image: button.dataset.image,
     quantity: 1,
   });
   setCart(cart);
   toast(`${button.dataset.name} added to your bag.`);
   openCart();
-});
-
-document.querySelector("[data-variant-select]")?.addEventListener("change", (event) => {
-  const option = event.target.selectedOptions[0];
-  const price = document.querySelector("[data-product-price]");
-  const add = document.querySelector("[data-add-to-cart]");
-  if (price) {
-    price.dataset.priceUsd = option.dataset.price;
-    price.textContent = formatPrice(option.dataset.price);
-  }
-  if (add) {
-    add.dataset.variantId = option.value;
-    add.dataset.price = option.dataset.price;
-  }
 });
 
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>'"]/g, (character) => ({
@@ -185,11 +169,5 @@ window.addEventListener("scroll", () => {
   header.classList.toggle("site-header--hidden", currentY > previousY && currentY > 180);
   previousY = currentY;
 }, { passive: true });
-
-document.querySelector("[data-join-form]")?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  event.currentTarget.reset();
-  toast("Welcome to the Society register.");
-});
 
 renderCart();

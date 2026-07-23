@@ -1,26 +1,47 @@
----
-import BrandMark from "./BrandMark.astro";
----
-
-<footer class="site-footer">
-  <div class="site-footer__join">
+<footer class="riviera-footer">
+  <div class="riviera-footer__tear" aria-hidden="true"></div>
+  <div class="riviera-footer__register">
     <div>
-      <span class="eyebrow">The Society Register</span>
-      <h2>One more set,<br /><em>in your inbox.</em></h2>
+      <span class="site-kicker">Court notes · served irregularly</span>
+      <h2>Stay for<br /><em>one more set.</em></h2>
     </div>
-    <form action="https://racquet-habit-shop.fourthwall.com" method="get" class="join-form" data-join-form>
-      <p>New collections, court notes and occasional proof that the last set was never the last set.</p>
-      <label class="sr-only" for="join-email">Email address</label>
-      <div><input id="join-email" name="email" type="email" placeholder="EMAIL ADDRESS" autocomplete="email" required /><button type="submit">Join</button></div>
-    </form>
-  </div>
-  <div class="site-footer__main">
-    <BrandMark light />
-    <div class="footer-links">
-      <div><span>Collection</span><a href="/shop">The Last Set</a><a href="/shop?category=Wear">Wear</a><a href="/shop?category=Court">Court</a><a href="/shop?category=Coffee">Coffee</a></div>
-      <div><span>Society</span><a href="/our-habit">About</a><a href="/journal/manifesto">Journal</a><a href="/shipping">Delivery & returns</a></div>
-      <div><span>Contact</span><a href="mailto:levonarakelian@live.com">Email</a><a href="https://www.instagram.com/" rel="noreferrer">Instagram</a></div>
+    <div class="riviera-footer__register-copy">
+      <p>New uniforms, court notes and the occasional excuse to remain out of office.</p>
+      <a class="paper-button paper-button--light" href="https://racquet-habit-shop.fourthwall.com" rel="external">
+        Join on Fourthwall <span>↗</span>
+      </a>
+      <small>Subscription and preferences are managed securely by Fourthwall.</small>
     </div>
   </div>
-  <div class="site-footer__bottom"><span>© {new Date().getFullYear()} Racquet Habit</span><span>Yerevan · Armenia</span><span>A difficult habit to break.</span></div>
+
+  <div class="riviera-footer__scorecard">
+    <div class="scorecard-brand">
+      <img src="/images/riviera/racquet-habit-logo.webp" alt="Racquet Habit" width="1200" height="300" />
+      <p>A Yerevan tennis society for repeat players, long lunches and late matches.</p>
+    </div>
+    <nav aria-label="Shop">
+      <span>Shop</span>
+      <a href="/shop">Collection 01</a>
+      <a href="/shop?category=Tees">Tees</a>
+      <a href="/shop?category=Accessories">Accessories</a>
+    </nav>
+    <nav aria-label="Society">
+      <span>Society</span>
+      <a href="/our-habit">Our habit</a>
+      <a href="/journal">Journal</a>
+      <a href="/shipping">Delivery & returns</a>
+    </nav>
+    <nav aria-label="Help">
+      <span>Help</span>
+      <a href="/contact">Contact</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+    </nav>
+  </div>
+
+  <div class="riviera-footer__bottom">
+    <span>© {new Date().getFullYear()} Racquet Habit</span>
+    <span>Yerevan · Armenia</span>
+    <span>Riviera Match Annual · Issue 01</span>
+  </div>
 </footer>

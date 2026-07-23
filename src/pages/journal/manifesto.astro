@@ -1,28 +1,81 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageMasthead from "../../components/PageMasthead.astro";
+import EditorialImage from "../../components/EditorialImage.astro";
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "A Difficult Habit to Break",
+  description: "A court note on repeat players, tennis rituals and the hours around play.",
+  image: "https://racquethabit.com/images/editorial/shadow-rally.webp",
+  mainEntityOfPage: "https://racquethabit.com/journal/manifesto",
+  author: { "@type": "Organization", name: "Racquet Habit" },
+  publisher: { "@id": "https://racquethabit.com/#organization" },
+  datePublished: "2026-07-23",
+  dateModified: "2026-07-23",
+};
 ---
 
-<BaseLayout title="A Difficult Habit to Break — Racquet Habit" description="Court Note 001 from Racquet Habit, a society of repeat players established in Yerevan in 2026.">
-  <section class="editorial-hero editorial-hero--journal">
-    <span class="eyebrow">Court Note 001 · Two-minute read</span>
-    <h1>A difficult habit to <em>break.</em></h1>
-    <p>There is always time for another set. At least that is the working theory.</p>
-  </section>
-  <section class="editorial-body">
-    <aside class="editorial-aside"><span>Journal no. 001</span><span>Yerevan / July 2026</span><span>Filed after court hours</span></aside>
-    <article class="editorial-copy">
-      <p>The court is a rectangle. The habit is not nearly so contained.</p>
-      <h2>We know the pattern.</h2>
-      <p>It starts with one booking. Then another racquet, a preferred grip, a particular warm-up, a weather app checked with unreasonable frequency. Weekends become draw sheets. Friends become opponents. The final set develops sequels.</p>
-      <p>Racquet Habit exists for the space between sport and daily life—for people who do not need encouragement to play, only better things to carry with them.</p>
-      <h2>Our uniform is deliberately composed.</h2>
-      <p>No loud performance slogans. No borrowed club crest. No claim that every point is a metaphor for greatness. We prefer useful materials, exact typography and visual devices built from the game itself.</p>
-      <div class="principles">
-        <div><h3>Play often.</h3><p>Court hours are never quite over.</p></div>
-        <div><h3>Choose precisely.</h3><p>Fewer pieces, better considered, used until they acquire their own record.</p></div>
-        <div><h3>Leave room for another.</h3><p>Because the last set is almost always a myth.</p></div>
+<BaseLayout
+  title="A Difficult Habit to Break | Racquet Habit Journal"
+  description="Read Court Note 001 on repeat players, tennis rituals and the considered apparel and court goods behind Racquet Habit, founded in Yerevan in 2026."
+  image="/images/editorial/shadow-rally.webp"
+  pageType="article"
+  schema={articleSchema}
+>
+  <PageMasthead
+    title="A difficult habit to break"
+    intro="The court is a rectangle. The habit is not nearly so contained. There is always time for another set—or at least that is the working theory."
+    issue="Court note 001 · 4 minute read"
+    tone="red"
+  >
+    <div class="article-byline"><span>By Racquet Habit</span><time datetime="2026-07-23">23 July 2026</time></div>
+  </PageMasthead>
+
+  <article class="annual-article">
+    <EditorialImage
+      src="/images/editorial/shadow-rally.webp"
+      alt="The shadows of two tennis players meeting at the net"
+      caption="The final set develops sequels"
+      plate="Opening plate"
+      eager
+    />
+    <div class="annual-article__body">
+      <aside><span>Journal no. 001</span><span>Filed in Yerevan</span><span>Subject: repeat players</span></aside>
+      <div class="prose">
+        <p class="lede">It starts with one booking. Then another racquet, a preferred grip, a particular warm-up and a weather app checked with unreasonable frequency.</p>
+        <h2>We know the pattern.</h2>
+        <p>Weekends become draw sheets. Friends become opponents. The final set develops sequels. A racquet appears in photographs where a racquet has no practical reason to be.</p>
+        <p>Racquet Habit exists for the space between sport and daily life—for people who do not need encouragement to play, only better things to carry with them.</p>
+        <blockquote>One more set is not a plan. It is a recurring condition.</blockquote>
+        <h2>The uniform is deliberately composed.</h2>
+        <p>No loud performance slogans. No borrowed club crest. No claim that every point is a metaphor for greatness. We prefer useful materials, exact typography and visual devices built from the game itself.</p>
+        <p>The outside is restrained because the behavior is expressive enough: stringing with precision, repeating service motions, replaying the same point at lunch, remaining in damp socks much longer than good judgment recommends.</p>
       </div>
-      <a class="button button--red" href="/shop">Shop Collection 01 <span>↗</span></a>
-    </article>
-  </section>
+    </div>
+
+    <div class="article-interlude">
+      <EditorialImage
+        src="/images/editorial/habit-field-study.webp"
+        alt="An illustrated field study of a repeat tennis player"
+        caption="Habit field study"
+        plate="Figure 03"
+        ratio="portrait"
+      />
+      <div>
+        <span class="site-kicker">Three working rules</span>
+        <ol>
+          <li><b>01</b><span>Play often.</span><p>Court hours are never quite over.</p></li>
+          <li><b>02</b><span>Choose precisely.</span><p>Fewer pieces, better considered, used until they acquire a record.</p></li>
+          <li><b>03</b><span>Leave room for another.</span><p>The last set is almost always a myth.</p></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="annual-article__closing">
+      <p>The habit does not need curing. It needs a clean shirt, something cold and a table held for lunch.</p>
+      <a class="paper-button" href="/shop">Shop the opening issue <span>↗</span></a>
+    </div>
+  </article>
 </BaseLayout>

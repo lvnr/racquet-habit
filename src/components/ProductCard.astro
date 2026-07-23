@@ -50,11 +50,27 @@ const galleryImages = [...new Set([
       <span class="annual-product-card__view" aria-hidden="true">View piece ↗</span>
     </a>
     {galleryImages.length > 1 && (
-      <div class="annual-product-card__gallery-controls">
-        <button type="button" data-gallery-prev aria-label={`Previous image of ${product.name}`}>←</button>
-        <span data-gallery-status aria-live="polite">01 / {String(galleryImages.length).padStart(2, "0")}</span>
-        <button type="button" data-gallery-next aria-label={`Next image of ${product.name}`}>→</button>
-      </div>
+      <>
+        <div
+          class="product-gallery-dots"
+          data-gallery-dots
+          aria-label={`Image 1 of ${galleryImages.length}`}
+        >
+          {galleryImages.map((_, imageIndex) => (
+            <button
+              type="button"
+              data-gallery-dot={imageIndex}
+              aria-label={`Show image ${imageIndex + 1} of ${product.name}`}
+              aria-current={imageIndex === 0 ? "true" : "false"}
+            ></button>
+          ))}
+        </div>
+        <div class="annual-product-card__gallery-controls">
+          <button type="button" data-gallery-prev aria-label={`Previous image of ${product.name}`}>←</button>
+          <span data-gallery-status aria-live="polite">01 / {String(galleryImages.length).padStart(2, "0")}</span>
+          <button type="button" data-gallery-next aria-label={`Next image of ${product.name}`}>→</button>
+        </div>
+      </>
     )}
   </div>
   <div class="annual-product-card__meta">

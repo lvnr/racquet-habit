@@ -1,0 +1,478 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Full-Bleed Match Day — Racquet Habit Visual Study"
+  description="A private image-scale and art-direction study for the Racquet Habit homepage."
+  image="/images/riviera/laundry-hero-desktop.webp"
+  robots="noindex,nofollow"
+  bodyClass="visual-study-page"
+>
+  <section class="study-intro" aria-labelledby="study-title">
+    <div>
+      <span class="site-kicker">Homepage study · private review</span>
+      <h1 id="study-title">Three pictures.<br /><em>One match day.</em></h1>
+    </div>
+    <div class="study-intro__note">
+      <p>The current homepage is unchanged. This page tests a larger, more cinematic image rhythm using only the photographs already worth building around.</p>
+      <a class="paper-link" href="#laundry-study">Enter the study <span>↓</span></a>
+    </div>
+  </section>
+
+  <section class="study-frame study-frame--laundry" id="laundry-study" aria-labelledby="laundry-study-title">
+    <picture class="study-frame__picture">
+      <source media="(max-width: 700px)" srcset="/images/riviera/laundry-hero-mobile-720.webp" type="image/webp" />
+      <img
+        src="/images/riviera/laundry-hero-desktop.webp"
+        alt="Racquet Habit courtwear drying on a sunlit Mediterranean wall"
+        fetchpriority="high"
+        loading="eager"
+        width="2400"
+        height="1291"
+      />
+    </picture>
+    <div class="study-frame__tint study-frame__tint--laundry" aria-hidden="true"></div>
+    <div class="study-ribbon" aria-hidden="true">Riviera Match Annual · Issue 01</div>
+    <article class="study-timecard study-timecard--paper">
+      <span>10:30 · Clubhouse laundry</span>
+      <h2 id="laundry-study-title">Ready<br /><em>before noon.</em></h2>
+      <p>The complete day’s order, still warm from the line: tennis, lunch, tennis.</p>
+      <a href="/shop">Shop the lineup <span>↗</span></a>
+    </article>
+    <div class="study-frame__caption"><span>Laundry day on court</span><span>Match-day plate 01</span></div>
+  </section>
+
+  <section class="study-frame study-frame--lunch" aria-labelledby="lunch-study-title">
+    <picture class="study-frame__picture">
+      <img
+        src="/images/editorial/courtside-hospitality.webp"
+        alt="Two Racquet Habit players sharing lunch beside a clay tennis court"
+        loading="lazy"
+        decoding="async"
+        width="2000"
+        height="1333"
+      />
+    </picture>
+    <div class="study-frame__tint study-frame__tint--lunch" aria-hidden="true"></div>
+    <div class="study-sun" aria-hidden="true"></div>
+    <article class="study-timecard study-timecard--blue">
+      <span>14:15 · After the first match</span>
+      <h2 id="lunch-study-title">The match ends.<br /><em>The afternoon doesn’t.</em></h2>
+      <p>Long tables, cold bottles and precisely no reason to change out of court clothes.</p>
+      <a href="/our-habit">Meet the society <span>↗</span></a>
+    </article>
+    <div class="study-frame__caption study-frame__caption--light"><span>Lunch after the first match</span><span>Clubhouse plate 02</span></div>
+  </section>
+
+  <section class="study-frame study-frame--court" aria-labelledby="court-study-title">
+    <picture class="study-frame__picture">
+      <img
+        src="/images/editorial/clubhouse-signage.webp"
+        alt="A player walking toward a shaded Racquet Habit tennis court"
+        loading="lazy"
+        decoding="async"
+        width="2400"
+        height="1643"
+      />
+    </picture>
+    <div class="study-frame__tint study-frame__tint--court" aria-hidden="true"></div>
+    <div class="study-court-mark" aria-hidden="true"></div>
+    <article class="study-timecard study-timecard--night">
+      <span>19:40 · Last court</span>
+      <h2 id="court-study-title">A court<br /><em>of one’s own.</em></h2>
+      <p>The day finishes where it began: one booking, one more set, one difficult habit to break.</p>
+      <a href="/journal">Read the court notes <span>↗</span></a>
+    </article>
+    <div class="study-frame__caption study-frame__caption--light"><span>Filed in Yerevan</span><span>Yerevan file 01</span></div>
+  </section>
+
+  <section class="study-outro">
+    <span class="site-kicker">End of study · homepage remains unchanged</span>
+    <h2>Keep the restraint.<br /><em>Increase the scale.</em></h2>
+    <p>If this image rhythm feels right, the three chapters can be folded into the existing homepage without changing its product architecture or Riviera Match Annual identity.</p>
+    <a class="paper-button" href="/">Return to the current homepage <span>↗</span></a>
+  </section>
+</BaseLayout>
+
+<style is:global>
+  .visual-study-page main {
+    overflow: clip;
+  }
+
+  .study-intro,
+  .study-outro {
+    min-height: min(42rem, 76svh);
+    padding: clamp(4rem, 8vw, 8rem) var(--riviera-page-gutter);
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    align-items: end;
+    gap: clamp(3rem, 8vw, 9rem);
+    border-bottom: 1px solid var(--riviera-line);
+  }
+
+  .study-intro h1,
+  .study-outro h2 {
+    margin-top: 1.3rem;
+    font: 400 clamp(4.6rem, 9vw, 9.5rem)/.76 var(--display);
+    letter-spacing: -.055em;
+    text-transform: uppercase;
+  }
+
+  .study-intro h1 em,
+  .study-outro h2 em {
+    color: var(--riviera-red);
+    text-transform: none;
+  }
+
+  .study-intro__note {
+    max-width: 34rem;
+    justify-self: end;
+  }
+
+  .study-intro__note p,
+  .study-outro p {
+    margin-bottom: 2rem;
+    color: var(--riviera-muted);
+    font: 450 clamp(1rem, 1.4vw, 1.2rem)/1.7 var(--sans);
+  }
+
+  .study-frame {
+    position: relative;
+    min-height: min(72rem, calc(100svh - 4rem));
+    isolation: isolate;
+    overflow: hidden;
+    color: var(--riviera-paper-light);
+    background: var(--riviera-ink);
+  }
+
+  .study-frame__picture,
+  .study-frame__picture img,
+  .study-frame__tint {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .study-frame__picture img {
+    object-fit: cover;
+    filter: saturate(.9) contrast(1.035) sepia(.025);
+  }
+
+  .study-frame::after {
+    content: "";
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(20, 62, 50, .07), transparent 35%, rgba(198, 61, 44, .04)),
+      repeating-radial-gradient(circle at 0 0, rgba(246, 240, 227, .045) 0 1px, transparent 1.5px 4px);
+    mix-blend-mode: multiply;
+  }
+
+  .study-frame__tint {
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .study-frame__tint--laundry {
+    background: linear-gradient(90deg, rgba(20, 62, 50, .22), transparent 38% 78%, rgba(198, 61, 44, .08));
+    mix-blend-mode: multiply;
+  }
+
+  .study-frame__tint--lunch {
+    width: min(38%, 34rem);
+    right: auto;
+    background-color: rgba(28, 88, 162, .92);
+    background-image: url("/images/riviera/blue-paper-grain-v3.webp");
+    background-size: 720px 320px;
+    mix-blend-mode: multiply;
+  }
+
+  .study-frame__tint--court {
+    background: linear-gradient(90deg, rgba(9, 29, 23, .46), transparent 42% 72%, rgba(9, 29, 23, .18));
+    mix-blend-mode: multiply;
+  }
+
+  .study-ribbon {
+    position: absolute;
+    z-index: 3;
+    top: clamp(2rem, 6vw, 5.5rem);
+    right: -2.5rem;
+    padding: .9rem 4rem;
+    color: var(--riviera-paper-light);
+    background-color: var(--riviera-red);
+    background-image: url("/images/riviera/red-paper-grain-v3.webp");
+    background-size: 720px 320px;
+    font: 720 .72rem/1 var(--utility);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    transform: rotate(2.5deg);
+    mix-blend-mode: multiply;
+  }
+
+  .study-timecard {
+    position: absolute;
+    z-index: 4;
+    left: var(--riviera-page-gutter);
+    bottom: clamp(4.5rem, 7vw, 7rem);
+    width: min(34rem, calc(100% - (2 * var(--riviera-page-gutter))));
+    padding: clamp(1.5rem, 3vw, 2.8rem);
+    box-shadow: 0 1.5rem 3rem rgba(20, 24, 18, .18);
+  }
+
+  .study-timecard > span,
+  .study-frame__caption {
+    font: 700 .68rem/1.25 var(--utility);
+    letter-spacing: .13em;
+    text-transform: uppercase;
+  }
+
+  .study-timecard h2 {
+    margin: 1rem 0 1.3rem;
+    font: 400 clamp(3.7rem, 6.5vw, 7rem)/.78 var(--display);
+    letter-spacing: -.045em;
+    text-transform: uppercase;
+  }
+
+  .study-timecard h2 em {
+    text-transform: none;
+  }
+
+  .study-timecard p {
+    max-width: 29rem;
+    margin-bottom: 1.5rem;
+    font: 470 clamp(.92rem, 1.25vw, 1.08rem)/1.58 var(--sans);
+  }
+
+  .study-timecard a {
+    padding-bottom: .28rem;
+    display: inline-flex;
+    gap: 2rem;
+    border-bottom: 1px solid currentColor;
+    font: 720 .7rem/1 var(--utility);
+    letter-spacing: .11em;
+    text-transform: uppercase;
+  }
+
+  .study-timecard--paper {
+    color: var(--riviera-ink);
+    background-color: rgba(246, 240, 227, .96);
+    background-image: url("/images/riviera/paper-stock.webp");
+    background-size: 620px;
+    transform: rotate(-.7deg);
+  }
+
+  .study-timecard--paper h2 em {
+    color: var(--riviera-red);
+  }
+
+  .study-timecard--blue {
+    top: 50%;
+    bottom: auto;
+    color: var(--riviera-paper-light);
+    background: transparent;
+    box-shadow: none;
+    transform: translateY(-50%);
+  }
+
+  .study-timecard--blue h2 em {
+    color: #ffd067;
+  }
+
+  .study-timecard--night {
+    left: auto;
+    right: var(--riviera-page-gutter);
+    color: var(--riviera-paper-light);
+    background: rgba(11, 39, 31, .88);
+    border: 1px solid rgba(246, 240, 227, .28);
+    backdrop-filter: blur(10px);
+    transform: rotate(.55deg);
+  }
+
+  .study-timecard--night h2 em {
+    color: #ffd067;
+  }
+
+  .study-sun {
+    position: absolute;
+    z-index: 3;
+    top: 8%;
+    right: 7%;
+    width: clamp(8rem, 17vw, 18rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #ffd067 url("/images/riviera/paper-stock.webp") center / 520px;
+    mix-blend-mode: multiply;
+    opacity: .88;
+  }
+
+  .study-court-mark {
+    position: absolute;
+    z-index: 3;
+    left: 4%;
+    bottom: 7%;
+    width: min(32vw, 32rem);
+    height: min(18vw, 14rem);
+    border: clamp(.5rem, 1vw, 1rem) solid rgba(198, 61, 44, .82);
+    border-right: 0;
+    border-bottom: 0;
+    mix-blend-mode: screen;
+  }
+
+  .study-frame__caption {
+    position: absolute;
+    z-index: 4;
+    right: var(--riviera-page-gutter);
+    bottom: 1.2rem;
+    display: flex;
+    gap: 2rem;
+    color: var(--riviera-ink);
+  }
+
+  .study-frame__caption--light {
+    color: rgba(246, 240, 227, .82);
+  }
+
+  .study-outro {
+    min-height: min(46rem, 82svh);
+    grid-template-columns: 1fr .7fr;
+  }
+
+  .study-outro > p,
+  .study-outro > a {
+    grid-column: 2;
+  }
+
+  .study-outro > a {
+    justify-self: start;
+  }
+
+  @media (max-width: 900px) {
+    .study-intro,
+    .study-outro {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    .study-intro__note {
+      justify-self: start;
+    }
+
+    .study-outro > p,
+    .study-outro > a {
+      grid-column: auto;
+    }
+
+    .study-frame {
+      min-height: max(48rem, 92svh);
+    }
+
+    .study-frame--laundry .study-frame__picture img {
+      object-position: center center;
+    }
+
+    .study-frame--lunch .study-frame__picture img {
+      object-position: 57% center;
+    }
+
+    .study-frame__tint--lunch {
+      top: auto;
+      width: 100%;
+      height: 46%;
+    }
+
+    .study-timecard {
+      bottom: 4.5rem;
+    }
+
+    .study-timecard--blue {
+      top: auto;
+      bottom: 4.6rem;
+      transform: none;
+    }
+
+    .study-timecard--night {
+      right: auto;
+      left: var(--riviera-page-gutter);
+    }
+
+    .study-frame__caption {
+      left: var(--riviera-page-gutter);
+      right: auto;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .study-intro,
+    .study-outro {
+      min-height: auto;
+      padding: 4.5rem 1rem 5rem 1.75rem;
+    }
+
+    .study-intro h1,
+    .study-outro h2 {
+      font-size: clamp(4rem, 19vw, 6rem);
+    }
+
+    .study-frame {
+      min-height: 52rem;
+    }
+
+    .study-frame--laundry .study-frame__picture img {
+      object-position: center 42%;
+    }
+
+    .study-frame--court .study-frame__picture img {
+      object-position: 53% center;
+    }
+
+    .study-ribbon {
+      top: 1.5rem;
+      right: -3.5rem;
+      padding-inline: 4.2rem;
+      font-size: .62rem;
+    }
+
+    .study-timecard {
+      left: 1.25rem;
+      right: auto;
+      bottom: 4.5rem;
+      width: calc(100% - 2.5rem);
+      padding: 1.45rem;
+    }
+
+    .study-timecard h2 {
+      font-size: clamp(3.25rem, 14vw, 4.7rem);
+    }
+
+    .study-timecard--blue {
+      bottom: 4.2rem;
+    }
+
+    .study-timecard--night {
+      right: 1.25rem;
+    }
+
+    .study-sun {
+      top: 6%;
+      right: -8%;
+      width: 10rem;
+    }
+
+    .study-court-mark {
+      display: none;
+    }
+
+    .study-frame__caption {
+      left: 1.25rem;
+      right: 1.25rem;
+      bottom: 1rem;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: .59rem;
+    }
+  }
+</style>

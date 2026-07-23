@@ -379,17 +379,25 @@ body.riviera-page main {
   aspect-ratio: 1 / 1.13;
   display: block;
   overflow: hidden;
+  touch-action: pan-y;
+  -webkit-user-drag: none;
 }
 
 .riviera-product__track,
 .annual-product-card__track {
   --gallery-index: 0;
+  --gallery-offset: 0%;
   position: absolute;
   inset: 0;
   display: flex;
-  transform: translate3d(calc(var(--gallery-index) * -100%), 0, 0);
+  transform: translate3d(calc(var(--gallery-offset) + var(--gallery-drag, 0px)), 0, 0);
   transition: transform .32s cubic-bezier(.22, .8, .24, 1);
   will-change: transform;
+}
+
+.is-dragging .riviera-product__track,
+.is-dragging .annual-product-card__track {
+  transition: none;
 }
 
 .riviera-product__slide,
@@ -398,6 +406,13 @@ body.riviera-page main {
   height: 100%;
   display: grid;
   place-items: center;
+}
+
+.riviera-product__slide img,
+.annual-product-card__slide img {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .riviera-product__image img {
@@ -491,6 +506,51 @@ body.riviera-page main {
   text-align: center;
   font: 700 .67rem/1 var(--utility);
   letter-spacing: .08em;
+}
+
+.product-gallery-dots {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: .72rem;
+  padding: .38rem .48rem;
+  display: flex;
+  align-items: center;
+  gap: .32rem;
+  border: 1px solid rgba(20, 62, 50, .12);
+  border-radius: 999px;
+  background: rgba(246, 240, 227, .88);
+  box-shadow: 0 .35rem .9rem rgba(58, 46, 24, .1);
+  opacity: .78;
+  transform: translateX(-50%);
+  transition: opacity .2s ease;
+  backdrop-filter: blur(6px);
+}
+
+.product-gallery-dots button {
+  width: .34rem;
+  height: .34rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(20, 62, 50, .32);
+  cursor: pointer;
+  transition: width .22s cubic-bezier(.22, .8, .24, 1), background-color .2s ease;
+}
+
+.product-gallery-dots button[aria-current="true"] {
+  width: 1rem;
+  background: var(--riviera-ink);
+}
+
+.product-gallery-dots button:focus-visible {
+  outline: 2px solid var(--riviera-blue);
+  outline-offset: 2px;
+}
+
+[data-card-gallery]:hover .product-gallery-dots,
+[data-card-gallery]:focus-within .product-gallery-dots {
+  opacity: 1;
 }
 
 .riviera-product__meta {
@@ -980,6 +1040,8 @@ body.riviera-page main {
   overflow: hidden;
   border: 1px solid rgba(20,62,50,.12);
   background: rgba(246,240,227,.58);
+  touch-action: pan-y;
+  -webkit-user-drag: none;
 }
 
 .annual-product-card__image::after {
@@ -1051,6 +1113,7 @@ body.riviera-page main {
 @media (hover: none), (pointer: coarse) {
   .riviera-product__gallery-controls,
   .annual-product-card__gallery-controls { display: flex; }
+  .product-gallery-dots { display: none; }
   .riviera-product__view,
   .annual-product-card__view { display: none; }
 }
@@ -1150,7 +1213,14 @@ body.riviera-page main {
 .yerevan-file .annual-image { transform: rotate(-.45deg); }
 .yerevan-file h2 em { color: #ffd067; }
 .yerevan-file__copy > p { opacity: 1; }
-.journal-poster { min-height: 58rem; grid-template-columns: .7fr 1.3fr; color: var(--riviera-paper-light); background: var(--riviera-blue); }
+.journal-poster {
+  min-height: 58rem;
+  grid-template-columns: .7fr 1.3fr;
+  color: var(--riviera-paper-light);
+  background-color: var(--riviera-blue);
+  background-image: url("/images/riviera/blue-paper-grain-v3.webp");
+  background-size: 720px 320px;
+}
 .journal-poster .annual-image { width: min(100%, 38rem); justify-self: center; transform: rotate(.65deg); }
 .journal-poster h2 em { color: #ffd067; }
 .journal-poster article > p { opacity: .82; }
@@ -1172,20 +1242,20 @@ body.riviera-page main {
 .riviera-footer__tear {
   position: relative;
   z-index: 2;
-  height: clamp(4.5rem, 7vw, 7.5rem);
+  height: clamp(3rem, 3.4vw, 4.25rem);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 100% auto;
+  background-size: 100% 100%;
 }
 
 .riviera-footer__tear--blue-red {
   background-color: var(--riviera-red);
-  background-image: url("/images/riviera/tear-blue-red-v2.webp");
+  background-image: url("/images/riviera/tear-blue-red-seam-v3.webp");
 }
 
 .riviera-footer__tear--red-paper {
-  background-color: var(--riviera-paper);
-  background-image: url("/images/riviera/tear-red-paper-v2.webp");
+  background-color: transparent;
+  background-image: url("/images/riviera/tear-red-paper-overlay-v4.webp");
 }
 
 .riviera-footer__register {
@@ -1195,7 +1265,9 @@ body.riviera-page main {
   align-items: end;
   gap: clamp(3rem, 8vw, 9rem);
   color: var(--riviera-paper-light);
-  background: var(--riviera-red);
+  background-color: var(--riviera-red);
+  background-image: url("/images/riviera/red-paper-grain-v3.webp");
+  background-size: 720px 320px;
 }
 
 .riviera-footer__register h2 { margin-top: 1.2rem; font: 400 clamp(4rem, 7vw, 7.4rem)/.78 var(--display); letter-spacing: -.045em; text-transform: uppercase; }

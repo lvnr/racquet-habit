@@ -162,12 +162,16 @@ document.querySelectorAll(".mobile-nav a").forEach((link) => link.addEventListen
 
 const header = document.querySelector("[data-site-header]");
 let previousY = window.scrollY;
+let headerFrame = 0;
 window.addEventListener("scroll", () => {
-  if (!header) return;
-  const currentY = window.scrollY;
-  header.classList.toggle("site-header--compact", currentY > 28);
-  header.classList.toggle("site-header--hidden", currentY > previousY && currentY > 180);
-  previousY = currentY;
+  if (!header || headerFrame) return;
+  headerFrame = window.requestAnimationFrame(() => {
+    const currentY = window.scrollY;
+    header.classList.toggle("site-header--compact", currentY > 28);
+    header.classList.toggle("site-header--hidden", currentY > previousY && currentY > 180);
+    previousY = currentY;
+    headerFrame = 0;
+  });
 }, { passive: true });
 
 renderCart();

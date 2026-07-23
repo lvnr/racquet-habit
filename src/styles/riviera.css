@@ -285,17 +285,6 @@ body.riviera-page main {
   transform: rotate(.35deg);
 }
 
-.riviera-hero__media::after {
-  content: "";
-  position: absolute;
-  inset: clamp(.45rem, .75vw, .8rem);
-  background: url("/images/riviera/paper-stock.webp");
-  background-size: 520px;
-  mix-blend-mode: soft-light;
-  opacity: .2;
-  pointer-events: none;
-}
-
 .riviera-hero__media picture,
 .riviera-hero__media img {
   width: 100%;

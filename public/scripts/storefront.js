@@ -13,11 +13,15 @@ const formatPrice = (value, currency = root.dataset.currency || "USD") => {
 };
 
 const updatePrices = () => {
+  const currencyLabel = root.dataset.currency === "AMD" ? "AMD ֏" : "USD $";
   document.querySelectorAll("[data-price-usd]").forEach((node) => {
     node.textContent = formatPrice(node.dataset.priceUsd);
   });
   document.querySelectorAll("[data-currency-label]").forEach((node) => {
-    node.textContent = root.dataset.currency === "AMD" ? "AMD ֏" : "USD $";
+    node.textContent = currencyLabel;
+  });
+  document.querySelectorAll("[data-currency-toggle]").forEach((button) => {
+    button.setAttribute("aria-label", `Currency ${currencyLabel}. Toggle display currency`);
   });
 };
 
@@ -112,6 +116,9 @@ function renderCart() {
   const cart = getCart();
   const count = cart.reduce((sum, item) => sum + item.quantity, 0);
   document.querySelectorAll("[data-cart-count]").forEach((node) => node.textContent = String(count));
+  document.querySelectorAll("[data-cart-open]").forEach((button) => {
+    button.setAttribute("aria-label", `Bag (${count}). Open shopping bag`);
+  });
   const items = document.querySelector("[data-cart-items]");
   const empty = document.querySelector("[data-cart-empty]");
   const summary = document.querySelector("[data-cart-summary]");

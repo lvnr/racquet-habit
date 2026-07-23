@@ -1,0 +1,39 @@
+---
+import type { CatalogProduct } from "../data/catalog";
+
+type Props = {
+  product: CatalogProduct;
+  localImage: string;
+  index: number;
+};
+
+const { product, localImage, index } = Astro.props;
+const issueNumber = String(index + 1).padStart(2, "0");
+---
+
+<article class="riviera-product">
+  <a
+    class="riviera-product__image"
+    href={`/products/${product.slug}`}
+    aria-label={`${issueNumber}. View ${product.name}. View piece.`}
+  >
+    <span class="riviera-product__number" aria-hidden="true">{issueNumber}</span>
+    <img
+      src={localImage}
+      alt={product.name}
+      loading="lazy"
+      decoding="async"
+      fetchpriority="low"
+      width="1536"
+      height="2048"
+    />
+    <span class="riviera-product__view" aria-hidden="true">View piece ↗</span>
+  </a>
+  <div class="riviera-product__meta">
+    <div>
+      <span>{product.category} · Issue 01</span>
+      <h2><a href={`/products/${product.slug}`}>{product.name}</a></h2>
+    </div>
+    <strong data-price-usd={product.price}>${product.price.toFixed(2)}</strong>
+  </div>
+</article>

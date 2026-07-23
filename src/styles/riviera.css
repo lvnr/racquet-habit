@@ -1,0 +1,762 @@
+:root {
+  --riviera-paper: #eee6d3;
+  --riviera-paper-light: #f6f0e3;
+  --riviera-ink: #143e32;
+  --riviera-red: #d94b34;
+  --riviera-blue: #1c58a2;
+  --riviera-muted: #6c6a5e;
+  --riviera-line: rgba(20, 62, 50, .27);
+  --riviera-page-gutter: clamp(1.1rem, 3.1vw, 3.5rem);
+}
+
+body.riviera-page {
+  min-width: 320px;
+  color: var(--riviera-ink);
+  background: #baae94;
+}
+
+body.riviera-page main {
+  min-height: auto;
+}
+
+.riviera-header,
+.riviera-spread {
+  width: min(100%, 1800px);
+  margin-inline: auto;
+  background-color: var(--riviera-paper);
+  background-image: url("/images/riviera/paper-stock.webp");
+  background-size: 620px 620px;
+}
+
+.riviera-header {
+  position: sticky;
+  z-index: 90;
+  top: 0;
+  min-height: clamp(4.8rem, 6.5vw, 6.6rem);
+  padding: 1rem var(--riviera-page-gutter);
+  display: grid;
+  grid-template-columns: minmax(13rem, .85fr) 1fr minmax(16rem, .85fr);
+  align-items: center;
+  gap: 2rem;
+  border-bottom: 1px solid var(--riviera-line);
+  transition: transform .35s cubic-bezier(.2, .8, .2, 1), box-shadow .25s ease;
+}
+
+.riviera-header::after {
+  content: "";
+  position: absolute;
+  left: var(--riviera-page-gutter);
+  right: var(--riviera-page-gutter);
+  bottom: -.35rem;
+  height: 1px;
+  background: var(--riviera-red);
+  opacity: .68;
+  transform: scaleX(.18);
+  transform-origin: left;
+}
+
+.riviera-header.site-header--compact {
+  box-shadow: 0 .6rem 1.6rem rgba(54, 44, 26, .08);
+}
+
+.riviera-header.site-header--hidden {
+  transform: translateY(-110%);
+}
+
+.riviera-header__brand {
+  width: clamp(12.5rem, 16vw, 17.5rem);
+}
+
+.riviera-header__brand img {
+  width: 100%;
+  height: auto;
+}
+
+.riviera-header__nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(1.75rem, 3.2vw, 3.8rem);
+}
+
+.riviera-header__nav a,
+.riviera-header__actions,
+.riviera-mobile-nav__issue,
+.riviera-mobile-nav__foot {
+  font: 620 .67rem/1 var(--utility);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.riviera-header__nav a,
+.riviera-header__bag,
+.riviera-header__currency {
+  position: relative;
+}
+
+.riviera-header__nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -.55rem;
+  height: 2px;
+  background: var(--riviera-red);
+  transition: right .2s ease;
+}
+
+.riviera-header__nav a:hover::after,
+.riviera-header__nav a:focus-visible::after,
+.riviera-header__nav a.active::after {
+  right: 0;
+}
+
+.riviera-header__actions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: clamp(.9rem, 1.7vw, 1.8rem);
+}
+
+.riviera-header__issue {
+  color: var(--riviera-blue);
+}
+
+.riviera-header__currency,
+.riviera-header__bag {
+  padding: .35rem 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+
+.riviera-header__bag {
+  padding-left: 1.2rem;
+  border-left: 1px solid var(--riviera-line);
+}
+
+.riviera-mobile-nav {
+  display: none;
+}
+
+.riviera-spread {
+  position: relative;
+  min-height: calc(100svh - 6.6rem);
+  overflow: hidden;
+  box-shadow: 0 1.5rem 4rem rgba(58, 46, 24, .18);
+  isolation: isolate;
+}
+
+.riviera-spread::before {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  bottom: 0;
+  left: var(--riviera-page-gutter);
+  width: 4px;
+  background: var(--riviera-red);
+  opacity: .9;
+  pointer-events: none;
+}
+
+.riviera-spread::after {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: clamp(1.6rem, 2.8vw, 3.4rem);
+  pointer-events: none;
+  transform: translateX(-50%);
+  background:
+    linear-gradient(90deg, transparent, rgba(75, 62, 38, .1) 34%, rgba(255, 252, 242, .5) 49%, rgba(68, 55, 32, .12) 63%, transparent);
+  mix-blend-mode: multiply;
+  opacity: .72;
+}
+
+.riviera-hero {
+  position: relative;
+  min-height: clamp(35rem, 63vw, 59rem);
+  padding: clamp(2rem, 4vw, 4.8rem) var(--riviera-page-gutter) clamp(2.5rem, 5vw, 5rem);
+  display: grid;
+  grid-template-columns: minmax(26rem, .78fr) minmax(0, 1.32fr);
+  align-items: center;
+  gap: clamp(1.8rem, 4vw, 5.6rem);
+  border-bottom: 1px solid var(--riviera-line);
+}
+
+.riviera-hero__copy {
+  position: relative;
+  z-index: 2;
+  padding-left: clamp(2rem, 3.3vw, 4rem);
+}
+
+.riviera-hero__kicker {
+  margin-bottom: clamp(2.5rem, 5vw, 5.5rem);
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  color: var(--riviera-muted);
+  font: 650 .64rem/1.2 var(--utility);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.riviera-hero h1 {
+  max-width: 7.2ch;
+  font: 400 clamp(5.2rem, 8.5vw, 10.2rem)/.76 var(--display);
+  letter-spacing: -.055em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.riviera-hero h1 span {
+  display: block;
+}
+
+.riviera-hero h1 span:first-child::after {
+  content: "";
+  width: min(4.5rem, 15%);
+  height: .07em;
+  margin: .13em 0 .09em .05em;
+  display: block;
+  background: var(--riviera-red);
+}
+
+.riviera-hero__copy > p {
+  max-width: 25rem;
+  margin: clamp(1.5rem, 2.4vw, 2.5rem) 0 1.4rem;
+  color: var(--riviera-muted);
+  font: 470 clamp(.92rem, 1.1vw, 1.08rem)/1.6 var(--sans);
+}
+
+.riviera-button {
+  width: min(100%, 18.5rem);
+  min-height: 3.4rem;
+  padding: 0 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--riviera-paper-light);
+  background: var(--riviera-ink);
+  border: 1px solid var(--riviera-ink);
+  font: 680 .65rem/1 var(--utility);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  transition: color .2s ease, background .2s ease;
+}
+
+.riviera-button:hover,
+.riviera-button:focus-visible {
+  color: var(--riviera-ink);
+  background: transparent;
+}
+
+.riviera-hero__media {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  padding: clamp(.45rem, .75vw, .8rem);
+  background: rgba(248, 242, 226, .9);
+  box-shadow: 0 1.4rem 2.8rem rgba(62, 49, 28, .17);
+  transform: rotate(.35deg);
+}
+
+.riviera-hero__media::after {
+  content: "";
+  position: absolute;
+  inset: clamp(.45rem, .75vw, .8rem);
+  background: url("/images/riviera/paper-stock.webp");
+  background-size: 520px;
+  mix-blend-mode: soft-light;
+  opacity: .2;
+  pointer-events: none;
+}
+
+.riviera-hero__media picture,
+.riviera-hero__media img {
+  width: 100%;
+  display: block;
+}
+
+.riviera-hero__media img {
+  height: auto;
+  aspect-ratio: 1.68 / 1;
+  object-fit: cover;
+  object-position: 58% center;
+  filter: saturate(.88) contrast(1.03) sepia(.04);
+}
+
+.riviera-hero__media figcaption {
+  padding: .65rem .15rem .05rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--riviera-muted);
+  font: 650 .56rem/1.2 var(--utility);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.riviera-collection {
+  position: relative;
+  padding: clamp(3.5rem, 6vw, 7rem) var(--riviera-page-gutter) clamp(4.5rem, 7vw, 8rem);
+}
+
+.riviera-collection__head {
+  padding: 0 0 clamp(2rem, 3.5vw, 3.8rem) clamp(2rem, 3.3vw, 4rem);
+  display: grid;
+  grid-template-columns: 1fr .9fr auto;
+  align-items: end;
+  gap: 2rem;
+  border-bottom: 1px solid var(--riviera-line);
+}
+
+.riviera-collection__head > div > span,
+.riviera-collection__head > p,
+.riviera-collection__head > a {
+  color: var(--riviera-muted);
+  font: 650 .62rem/1.4 var(--utility);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.riviera-collection__head h2 {
+  margin-top: .5rem;
+  font: 400 clamp(3.2rem, 5vw, 5.4rem)/.8 var(--display);
+  letter-spacing: -.045em;
+  text-transform: uppercase;
+}
+
+.riviera-collection__head > p {
+  max-width: 28rem;
+  letter-spacing: .07em;
+}
+
+.riviera-collection__head > a {
+  padding-bottom: .35rem;
+  border-bottom: 1px solid currentColor;
+  color: var(--riviera-ink);
+  white-space: nowrap;
+}
+
+.riviera-product-grid {
+  padding-left: clamp(2rem, 3.3vw, 4rem);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.riviera-product {
+  position: relative;
+  min-width: 0;
+  padding: clamp(2rem, 3vw, 3.5rem);
+}
+
+.riviera-product + .riviera-product {
+  border-left: 1px solid var(--riviera-line);
+}
+
+.riviera-product__image {
+  position: relative;
+  aspect-ratio: 1 / 1.13;
+  display: grid;
+  place-items: center;
+}
+
+.riviera-product__image img {
+  width: 92%;
+  height: 92%;
+  object-fit: contain;
+  filter: drop-shadow(0 1.2rem 1.1rem rgba(58, 46, 24, .13));
+  transition: transform .55s cubic-bezier(.2, .8, .2, 1), filter .55s ease;
+}
+
+.riviera-product:nth-child(2) .riviera-product__image img {
+  width: 100%;
+  height: 100%;
+}
+
+.riviera-product:nth-child(3) .riviera-product__image img {
+  width: 100%;
+  height: 100%;
+}
+
+.riviera-product__image:hover img,
+.riviera-product__image:focus-visible img {
+  transform: translateY(-.45rem) rotate(-.6deg);
+  filter: drop-shadow(0 1.7rem 1.3rem rgba(58, 46, 24, .18));
+}
+
+.riviera-product__number {
+  position: absolute;
+  z-index: 1;
+  top: .5rem;
+  left: .25rem;
+  color: var(--riviera-blue);
+  font: 400 clamp(2.2rem, 3.4vw, 4rem)/1 var(--display);
+}
+
+.riviera-product__view {
+  position: absolute;
+  right: .2rem;
+  bottom: .65rem;
+  padding-bottom: .2rem;
+  border-bottom: 1px solid currentColor;
+  font: 650 .55rem/1 var(--utility);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(.3rem);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.riviera-product__image:hover .riviera-product__view,
+.riviera-product__image:focus-visible .riviera-product__view {
+  opacity: 1;
+  transform: none;
+}
+
+.riviera-product__meta {
+  padding-top: 1.1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 1rem;
+  border-top: 1px solid var(--riviera-line);
+}
+
+.riviera-product__meta span {
+  color: var(--riviera-muted);
+  font: 650 .55rem/1.2 var(--utility);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.riviera-product__meta h2 {
+  max-width: 15ch;
+  margin-top: .45rem;
+  font: 400 clamp(1.4rem, 1.9vw, 2.15rem)/.96 var(--display);
+}
+
+.riviera-product__meta strong {
+  padding-top: .2rem;
+  color: var(--riviera-ink);
+  white-space: nowrap;
+  font: 650 .7rem/1 var(--utility);
+  letter-spacing: .05em;
+}
+
+.riviera-folio {
+  margin: clamp(2.5rem, 5vw, 5rem) 0 0 clamp(2rem, 3.3vw, 4rem);
+  padding-top: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  border-top: 4px solid var(--riviera-red);
+}
+
+.riviera-folio span:first-child {
+  color: var(--riviera-blue);
+  font: 400 clamp(4.5rem, 7vw, 8rem)/.72 var(--display);
+}
+
+.riviera-folio span:last-child {
+  color: var(--riviera-muted);
+  font: 650 .58rem/1 var(--utility);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1100px) {
+  .riviera-header {
+    grid-template-columns: 1fr auto;
+  }
+
+  .riviera-header__nav {
+    display: none;
+  }
+
+  .riviera-header__issue,
+  .riviera-header__currency {
+    display: none;
+  }
+
+  .riviera-mobile-nav {
+    display: block;
+  }
+
+  .riviera-mobile-nav summary {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-content: center;
+    gap: .32rem;
+    border: 1px solid var(--riviera-line);
+    border-radius: 50%;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .riviera-mobile-nav summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .riviera-mobile-nav summary span {
+    width: 1rem;
+    height: 1px;
+    background: currentColor;
+  }
+
+  .riviera-mobile-nav__panel {
+    position: fixed;
+    z-index: 101;
+    top: clamp(4.8rem, 6.5vw, 6.6rem);
+    right: max(0px, calc((100vw - 1800px) / 2));
+    left: max(0px, calc((100vw - 1800px) / 2));
+    min-height: calc(100svh - clamp(4.8rem, 6.5vw, 6.6rem));
+    padding: clamp(2rem, 5vw, 4rem) var(--riviera-page-gutter);
+    color: var(--riviera-ink);
+    background-color: var(--riviera-paper);
+    background-image: url("/images/riviera/paper-stock.webp");
+    background-size: 620px;
+    border-top: 1px solid var(--riviera-line);
+  }
+
+  .riviera-mobile-nav__panel nav {
+    margin-top: clamp(2.5rem, 6vw, 5rem);
+    display: grid;
+  }
+
+  .riviera-mobile-nav__panel nav a {
+    padding: .7rem 0;
+    border-bottom: 1px solid var(--riviera-line);
+    font: 400 clamp(3.7rem, 10vw, 7rem)/.85 var(--display);
+    letter-spacing: -.04em;
+    text-transform: uppercase;
+  }
+
+  .riviera-mobile-nav__foot {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    color: var(--riviera-muted);
+  }
+
+  .riviera-mobile-nav__foot button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+  }
+
+  .riviera-hero {
+    grid-template-columns: minmax(20rem, .8fr) 1.2fr;
+  }
+
+  .riviera-collection__head {
+    grid-template-columns: 1fr auto;
+  }
+
+  .riviera-collection__head > p {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  :root {
+    --riviera-page-gutter: 1rem;
+  }
+
+  body.riviera-page {
+    background: var(--riviera-paper);
+  }
+
+  .riviera-header {
+    min-height: 4.7rem;
+    padding-block: .8rem;
+    grid-template-columns: 1fr auto;
+    gap: .75rem;
+  }
+
+  .riviera-header::after {
+    bottom: -.25rem;
+    transform: scaleX(.32);
+  }
+
+  .riviera-header__brand {
+    width: min(13.4rem, 48vw);
+  }
+
+  .riviera-header__actions {
+    gap: .72rem;
+  }
+
+  .riviera-header__bag {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .riviera-mobile-nav summary {
+    width: 2.3rem;
+    height: 2.3rem;
+  }
+
+  .riviera-mobile-nav__panel {
+    top: 4.7rem;
+    min-height: calc(100svh - 4.7rem);
+    padding: 2rem 1rem;
+  }
+
+  .riviera-mobile-nav__panel nav a {
+    font-size: clamp(3.5rem, 16vw, 5.4rem);
+  }
+
+  .riviera-mobile-nav__foot {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .riviera-spread {
+    min-height: auto;
+    box-shadow: none;
+  }
+
+  .riviera-spread::before {
+    left: .6rem;
+    width: 3px;
+  }
+
+  .riviera-spread::after {
+    display: none;
+  }
+
+  .riviera-hero {
+    min-height: auto;
+    padding: 2.2rem 1rem 3.4rem 1.75rem;
+    grid-template-columns: 1fr;
+    gap: 2.2rem;
+  }
+
+  .riviera-hero__copy {
+    padding-left: 0;
+  }
+
+  .riviera-hero__kicker {
+    margin-bottom: 2.5rem;
+  }
+
+  .riviera-hero h1 {
+    max-width: 7.5ch;
+    font-size: clamp(4.5rem, 21.5vw, 7rem);
+    line-height: .77;
+  }
+
+  .riviera-hero__copy > p {
+    max-width: 21rem;
+    margin-top: 1.5rem;
+  }
+
+  .riviera-button {
+    width: 100%;
+  }
+
+  .riviera-hero__media {
+    grid-row: 2;
+    padding: .5rem;
+    transform: none;
+  }
+
+  .riviera-hero__media img {
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-position: center;
+  }
+
+  .riviera-hero__media figcaption {
+    font-size: .5rem;
+  }
+
+  .riviera-collection {
+    padding: 3.4rem 1rem 4rem 1.75rem;
+  }
+
+  .riviera-collection__head {
+    padding: 0 0 1.8rem;
+    grid-template-columns: 1fr;
+    gap: 1.3rem;
+    align-items: start;
+  }
+
+  .riviera-collection__head h2 {
+    font-size: clamp(3.5rem, 15vw, 5rem);
+  }
+
+  .riviera-collection__head > a {
+    justify-self: start;
+  }
+
+  .riviera-product-grid {
+    padding-left: 0;
+    display: block;
+  }
+
+  .riviera-product {
+    padding: 2.4rem 0 2.8rem;
+  }
+
+  .riviera-product + .riviera-product {
+    border-top: 1px solid var(--riviera-line);
+    border-left: 0;
+  }
+
+  .riviera-product__image {
+    aspect-ratio: 1 / 1.05;
+  }
+
+  .riviera-product__image img,
+  .riviera-product:nth-child(2) .riviera-product__image img,
+  .riviera-product:nth-child(3) .riviera-product__image img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .riviera-product__number {
+    top: .1rem;
+    font-size: 3.2rem;
+  }
+
+  .riviera-product__view {
+    display: none;
+  }
+
+  .riviera-product__meta h2 {
+    max-width: 12ch;
+    font-size: clamp(1.9rem, 8vw, 2.7rem);
+  }
+
+  .riviera-folio {
+    margin: 2rem 0 0;
+  }
+
+  .riviera-folio span:first-child {
+    font-size: 5.6rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .riviera-header,
+  .riviera-product__image img,
+  .riviera-product__view {
+    transition: none;
+  }
+}

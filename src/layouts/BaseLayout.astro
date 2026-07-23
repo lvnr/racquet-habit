@@ -14,6 +14,8 @@ type Props = {
   description?: string;
   image?: string;
   noFooter?: boolean;
+  headerVariant?: "default" | "riviera";
+  bodyClass?: string;
 };
 
 const {
@@ -21,6 +23,8 @@ const {
   description = "A contemporary tennis society for people with no intention of quitting. Habit-forming court goods, apparel and clubhouse collaborations.",
   image = "/images/v3/final/og-racquet-habit.jpg",
   noFooter = false,
+  headerVariant = "default",
+  bodyClass,
 } = Astro.props;
 
 const requestCountry = (Astro.request as Request & { cf?: { country?: string } }).cf?.country;
@@ -48,7 +52,7 @@ const organizationSchema = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#103C2C" />
+    <meta name="theme-color" content={headerVariant === "riviera" ? "#EEE6D3" : "#103C2C"} />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -68,9 +72,9 @@ const organizationSchema = {
     <slot name="head" />
     <title>{title}</title>
   </head>
-  <body>
+  <body class={bodyClass}>
     <a class="skip-link" href="#main">Skip to content</a>
-    <Header />
+    <Header variant={headerVariant} />
     <main id="main">
       <slot />
     </main>

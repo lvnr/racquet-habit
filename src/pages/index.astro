@@ -1,119 +1,92 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import ProductCard from "../components/ProductCard.astro";
+import RivieraProductPlate from "../components/RivieraProductPlate.astro";
 import { getCatalog } from "../lib/catalog";
+import type { CatalogProduct } from "../data/catalog";
+import "../styles/riviera.css";
 
 const catalog = await getCatalog();
-const featured = catalog.filter((product) => !product.comingSoon).slice(0, 4);
+const preferredSlugs = [
+  "tennis-lunch-tennis-tee",
+  "something-cold-organic-court-tote",
+  "out-of-office-court-cap",
+];
+
+const exactProducts = preferredSlugs
+  .map((slug) => catalog.find((product) => product.slug === slug))
+  .filter((product): product is CatalogProduct => Boolean(product));
+const products = exactProducts.length === 3 ? exactProducts : catalog.filter((product) => !product.comingSoon).slice(0, 3);
+const localImages = [
+  "/images/riviera/tennis-lunch-tee.webp",
+  "/images/riviera/something-cold-tote.webp",
+  "/images/riviera/on-court-cap.webp",
+];
 ---
 
 <BaseLayout
-  title="Racquet Habit — Tennis Addicts Society"
-  description="New Court Classic apparel, court objects, drinkware and collaborations for people who always have time for one more set."
+  title="Racquet Habit — Long Lunch. Late Match."
+  description="Racquet Habit court goods for long lunches, late matches and everything between."
+  image="/images/riviera/laundry-hero-desktop.webp"
+  headerVariant="riviera"
+  bodyClass="riviera-page"
+  noFooter={true}
 >
-  <section class="campaign-hero">
-    <picture class="campaign-hero__media">
-      <source media="(max-width: 700px)" srcset="/images/v3/final/campaign-hero-mobile.avif" type="image/avif" />
-      <source media="(max-width: 700px)" srcset="/images/v3/final/campaign-hero-mobile.webp" type="image/webp" />
-      <source srcset="/images/v3/final/campaign-hero.avif" type="image/avif" />
-      <source srcset="/images/v3/final/campaign-hero.webp" type="image/webp" />
-      <img src="/images/v3/final/campaign-hero.jpg" alt="A tennis player carrying a racquet and court bag from an ivory clubhouse into the sun" fetchpriority="high" />
-    </picture>
-    <div class="campaign-hero__shade"></div>
-    <div class="campaign-hero__identity">
-      <img src="/brand-v3/logo-primary-editorial-ivory.svg" alt="Racquet Habit" />
-      <p>The unofficial society for people who always have time for one more set.</p>
-      <a class="button button--ivory" href="/shop">View Collection 01 <span>↗</span></a>
-    </div>
-    <div class="campaign-hero__meta eyebrow"><span>Tennis Addicts Society</span><span>Yerevan · Est. 2026</span></div>
-  </section>
+  <div class="riviera-spread">
+    <section class="riviera-hero" aria-labelledby="riviera-title">
+      <div class="riviera-hero__copy">
+        <div class="riviera-hero__kicker">
+          <span>Riviera Match Annual</span>
+          <span>Yerevan · 2026</span>
+        </div>
+        <h1 id="riviera-title">
+          <span>Long lunch.</span>
+          <span>Late match.</span>
+        </h1>
+        <p>Considered court goods for the hours around play.</p>
+        <a class="riviera-button" href="#court-goods">Shop court goods <span>↓</span></a>
+      </div>
 
-  <div class="campaign-strip">
-    <span>Collection 01 · The Last Set</span>
-    <span>Free delivery across Armenia</span>
-    <span>International delivery · $25</span>
+      <figure class="riviera-hero__media">
+        <picture>
+          <source media="(max-width: 700px)" srcset="/images/riviera/laundry-hero-mobile.avif" type="image/avif" />
+          <source media="(max-width: 700px)" srcset="/images/riviera/laundry-hero-mobile.webp" type="image/webp" />
+          <source srcset="/images/riviera/laundry-hero-desktop.avif" type="image/avif" />
+          <source srcset="/images/riviera/laundry-hero-desktop.webp" type="image/webp" />
+          <img
+            src="/images/riviera/laundry-hero-desktop.webp"
+            alt="Racquet Habit courtwear hanging from a clothesline in Mediterranean sun"
+            fetchpriority="high"
+            width="2400"
+            height="1291"
+          />
+        </picture>
+        <figcaption>
+          <span>Laundry day on court</span>
+          <span>Plate 01</span>
+        </figcaption>
+      </figure>
+    </section>
+
+    <section class="riviera-collection" id="court-goods" aria-labelledby="court-goods-title">
+      <div class="riviera-collection__head">
+        <div>
+          <span>Issue 01</span>
+          <h2 id="court-goods-title">Court goods</h2>
+        </div>
+        <p>Three founding pieces for play, lunch and the walk home.</p>
+        <a href="/shop">View the complete collection ↗</a>
+      </div>
+
+      <div class="riviera-product-grid">
+        {products.map((product, index) => (
+          <RivieraProductPlate product={product} localImage={localImages[index]} index={index} />
+        ))}
+      </div>
+
+      <div class="riviera-folio" aria-hidden="true">
+        <span>01</span>
+        <span>Racquet Habit · Match Annual</span>
+      </div>
+    </section>
   </div>
-
-  <section class="collection-intro">
-    <div class="collection-intro__meta"><span>Collection 01</span><span>Yerevan / 2026</span></div>
-    <div>
-      <h1>The Last <em>Set.</em></h1>
-      <p>Considered courtwear and clubhouse objects for repeat players. Tournament manners, contemporary proportions, and just enough wit in the small print.</p>
-    </div>
-  </section>
-
-  <section class="collection-preview">
-    <div class="product-grid product-grid--home">
-      {featured.map((product, index) => <ProductCard product={product} index={index} featured={index === 0} />)}
-    </div>
-    <div class="collection-preview__foot"><span>{featured.length} founding pieces shown</span><a class="text-link" href="/shop">Shop the complete collection <span>↗</span></a></div>
-  </section>
-
-  <section class="last-set-statement">
-    <img src="/brand-v3/logo-racquet-flourish-ivory.svg" alt="" />
-    <div>
-      <p>We said one more set two sets ago.</p>
-      <h2>The last set<br />is a <em>myth.</em></h2>
-    </div>
-  </section>
-
-  <section class="editorial-feature">
-    <figure>
-      <picture>
-        <source srcset="/images/v3/final/court-still-life.avif" type="image/avif" />
-        <source srcset="/images/v3/final/court-still-life.webp" type="image/webp" />
-        <img src="/images/v3/final/court-still-life.jpg" alt="Ivory cap, towel, racquet, balls and bottle arranged on a green court" loading="lazy" />
-      </picture>
-    </figure>
-    <div class="editorial-feature__copy">
-      <span class="feature-label">After the match</span>
-      <h2>Built for the hours around play.</h2>
-      <p>Racquet Habit lives between match point and the next booking: the cap by the door, the towel in the bag, the coffee that outlasts the warm-up.</p>
-      <div class="object-row" aria-hidden="true"><img src="/brand-v3/illustrations/illustration-ball-can.svg" alt="" /><img src="/brand-v3/illustrations/illustration-towel.svg" alt="" /><img src="/brand-v3/illustrations/illustration-court-bag.svg" alt="" /></div>
-      <a class="text-link" href="/our-habit">About the Society <span>↗</span></a>
-    </div>
-  </section>
-
-  <section class="campaign-pair">
-    <picture>
-      <source srcset="/images/v3/final/campaign-between-sets.avif" type="image/avif" />
-      <source srcset="/images/v3/final/campaign-between-sets.webp" type="image/webp" />
-      <img src="/images/v3/final/campaign-between-sets.jpg" alt="Two tennis players sharing a quiet moment on a court bench" loading="lazy" />
-    </picture>
-    <div>
-      <img src="/brand-v3/logo-society-patch.svg" alt="Racquet Habit Tennis Addicts Society, established 2026" />
-      <blockquote>“The final set keeps developing sequels.”</blockquote>
-      <p>No gatekeeping and no borrowed aristocracy. If you make room for another racquet, you already belong.</p>
-    </div>
-  </section>
-
-  <section class="journal-teaser">
-    <div class="journal-teaser__copy">
-      <span class="feature-label">Court Notes · No. 001</span>
-      <h2>A difficult habit to break.</h2>
-      <p>It starts with one booking. Then another racquet, a preferred grip, and a weather app checked with unreasonable frequency.</p>
-      <a class="button button--green" href="/journal/manifesto">Read the first note <span>↗</span></a>
-    </div>
-    <figure>
-      <picture>
-        <source srcset="/images/v3/final/tournament-poster.avif" type="image/avif" />
-        <source srcset="/images/v3/final/tournament-poster.webp" type="image/webp" />
-        <img src="/images/v3/final/tournament-poster.jpg" alt="Abstract screen-print poster with a cropped yellow tennis ball and court lines" loading="lazy" />
-      </picture>
-      <figcaption>Impact / Collection 01 screen-print study</figcaption>
-    </figure>
-  </section>
-
-  <section class="packaging-story">
-    <div>
-      <span class="feature-label">The issue arrives considered</span>
-      <h2>From court bag<br />to shipping box.</h2>
-      <p>Every surface follows the same system: outlined identity, uncoated ivory, Centre Court Green, and one disciplined trim. Final production files will be fitted to supplier dielines and physically sampled before release.</p>
-    </div>
-    <picture>
-      <source srcset="/images/v3/final/packaging-tournament-desk.avif" type="image/avif" />
-      <source srcset="/images/v3/final/packaging-tournament-desk.webp" type="image/webp" />
-      <img src="/images/v3/final/packaging-tournament-desk.jpg" alt="Ivory Racquet Habit packaging system arranged in sunlight" loading="lazy" />
-    </picture>
-  </section>
 </BaseLayout>

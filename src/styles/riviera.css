@@ -1218,8 +1218,10 @@ body.riviera-page main {
   grid-template-columns: .7fr 1.3fr;
   color: var(--riviera-paper-light);
   background-color: var(--riviera-blue);
-  background-image: url("/images/riviera/blue-paper-grain-v3.webp");
-  background-size: 720px 320px;
+  background-image: url("/images/riviera/blue-paper-grain-panel-v4.webp");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 .journal-poster .annual-image { width: min(100%, 38rem); justify-self: center; transform: rotate(.65deg); }
 .journal-poster h2 em { color: #ffd067; }
@@ -1266,8 +1268,10 @@ body.riviera-page main {
   gap: clamp(3rem, 8vw, 9rem);
   color: var(--riviera-paper-light);
   background-color: var(--riviera-red);
-  background-image: url("/images/riviera/red-paper-grain-v3.webp");
-  background-size: 720px 320px;
+  background-image: url("/images/riviera/red-paper-grain-panel-v4.webp");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 .riviera-footer__register h2 { margin-top: 1.2rem; font: 400 clamp(4rem, 7vw, 7.4rem)/.78 var(--display); letter-spacing: -.045em; text-transform: uppercase; }

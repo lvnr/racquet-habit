@@ -1,8 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
   <title id="title">Racquet Habit RH icon</title>
-  <rect width="64" height="64" fill="#103C2C"/>
+  <rect width="64" height="64" rx="10" fill="#2A62A7"/>
+  <circle cx="32" cy="30.5" r="26" fill="#F3EBD8"/>
   <g transform="translate(5 9) scale(.07)">
-    <g transform="translate(0 643) scale(.1 -.1)" fill="#F3EBD8">
+    <g transform="translate(0 643) scale(.1 -.1)" fill="#103C2C">
       <path d="M1431 6407 c-19 -48 -34 -107 -29 -112 2 -3 39 -10 82 -16 43 -6 108
 -20 145 -31 49 -15 77 -31 107 -62 25 -24 46 -58 53 -81 15 -55 14 -141 -4
 -224 -21 -101 -371 -1275 -685 -2301 -61 -201 -210 -687 -330 -1080 -120 -394
@@ -44,4 +45,5 @@ c-4 -6 11 -39 33 -73 22 -34 48 -84 58 -112 22 -66 23 -225 0 -320 -17 -73
 -8 -5 -11 -10z"/>
     </g>
   </g>
+  <path d="M14 56.5c11-1.4 23.5-1.2 36 0" fill="none" stroke="#D9432D" stroke-width="2.8" stroke-linecap="round"/>
 </svg>

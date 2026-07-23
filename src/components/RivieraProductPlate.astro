@@ -10,26 +10,50 @@ type Props = {
 const { product, localImage, index } = Astro.props;
 const issueNumber = String(index + 1).padStart(2, "0");
 const priceLabel = product.maxPrice > product.price ? `From $${product.price.toFixed(0)}` : `$${product.price.toFixed(0)}`;
+const galleryImages = [...new Set([
+  localImage,
+  ...product.images,
+  product.editorialImage,
+].filter((image): image is string => Boolean(image)))].slice(0, 4);
 ---
 
 <article class="riviera-product">
-  <a
-    class="riviera-product__image"
-    href={`/products/${product.slug}`}
-    aria-label={`${issueNumber}. View ${product.name}. View piece.`}
-  >
-    <span class="riviera-product__number" aria-hidden="true">{issueNumber}</span>
-    <img
-      src={localImage}
-      alt={product.name}
-      loading="lazy"
-      decoding="async"
-      fetchpriority="low"
-      width="720"
-      height="960"
-    />
-    <span class="riviera-product__view" aria-hidden="true">View piece ↗</span>
-  </a>
+  <div class="riviera-product__media" data-card-gallery data-gallery-count={galleryImages.length}>
+    <a
+      class="riviera-product__image"
+      href={`/products/${product.slug}`}
+      aria-label={`${issueNumber}. View ${product.name}. View piece.`}
+      data-gallery-link
+    >
+      <span class="riviera-product__number" aria-hidden="true">{issueNumber}</span>
+      <span class="riviera-product__track" data-gallery-track>
+        {galleryImages.map((image, imageIndex) => (
+          <span
+            class:list={["riviera-product__slide", { "is-editorial": image === product.editorialImage }]}
+            aria-hidden={imageIndex === 0 ? "false" : "true"}
+          >
+            <img
+              src={image}
+              alt={imageIndex === 0 ? product.name : `${product.name}, view ${imageIndex + 1}`}
+              loading="lazy"
+              decoding="async"
+              fetchpriority="low"
+              width={image === product.editorialImage ? "1400" : "720"}
+              height={image === product.editorialImage ? "1400" : "960"}
+            />
+          </span>
+        ))}
+      </span>
+      <span class="riviera-product__view" aria-hidden="true">View piece ↗</span>
+    </a>
+    {galleryImages.length > 1 && (
+      <div class="riviera-product__gallery-controls">
+        <button type="button" data-gallery-prev aria-label={`Previous image of ${product.name}`}>←</button>
+        <span data-gallery-status aria-live="polite">01 / {String(galleryImages.length).padStart(2, "0")}</span>
+        <button type="button" data-gallery-next aria-label={`Next image of ${product.name}`}>→</button>
+      </div>
+    )}
+  </div>
   <div class="riviera-product__meta">
     <div>
       <span>{product.productType} · Issue 01</span>

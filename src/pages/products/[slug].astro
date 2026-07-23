@@ -9,7 +9,9 @@ if (!product) return Astro.rewrite("/404");
 const catalog = await getCatalog();
 const variants = product.variants.filter((variant) => variant.inStock);
 const defaultVariant = variants[0];
-const initialImages = (defaultVariant?.images.length ? defaultVariant.images : product.images).slice(0, 4);
+const maxProductGalleryImages = 6;
+const initialImages = (defaultVariant?.images.length ? defaultVariant.images : product.images).slice(0, maxProductGalleryImages);
+const productGallerySlots = Array.from({ length: maxProductGalleryImages }, (_, index) => initialImages[index]);
 const colors = [...new Map(variants.filter((variant) => variant.color).map((variant) => [variant.color, variant.colorHex])).entries()];
 const sizes = [...new Set(variants.map((variant) => variant.size).filter((value): value is string => Boolean(value)))];
 const related = catalog
@@ -78,26 +80,48 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
 <BaseLayout
   title={`${product.name} | Racquet Habit`}
   description={productDescription}
-  image={product.image}
+  image={product.editorialImage || product.image}
   schema={[productSchema, breadcrumbSchema]}
   bodyClass="product-detail-page"
 >
   <section class="annual-product-page" data-product-detail>
-    <div class="annual-product-gallery" data-product-gallery>
-      {initialImages.map((image, index) => (
-        <figure>
-          <img
-            src={image}
-            alt={index === 0 ? product.name : `${product.name}, view ${index + 1}`}
-            fetchpriority={index === 0 ? "high" : "low"}
-            loading={index === 0 ? "eager" : "lazy"}
-            decoding="async"
-            width="1536"
-            height="2048"
-          />
-          <figcaption><span>{product.productType}</span><span>View {String(index + 1).padStart(2, "0")}</span></figcaption>
-        </figure>
-      ))}
+    <div class="annual-product-gallery-shell" data-pdp-gallery>
+      <div class="annual-product-gallery" data-product-gallery>
+        {productGallerySlots.map((image, index) => (
+          <figure data-gallery-slot={index} hidden={!image}>
+            <img
+              src={image || product.image}
+              alt={index === 0 ? product.name : `${product.name}, view ${index + 1}`}
+              fetchpriority={index === 0 ? "high" : "low"}
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              width="1536"
+              height="2048"
+            />
+            <figcaption><span>{product.productType}</span><span>View {String(index + 1).padStart(2, "0")}</span></figcaption>
+          </figure>
+        ))}
+        {product.editorialImage && (
+          <figure class="annual-product-gallery__editorial" data-editorial-image>
+            <img
+              src={product.editorialImage}
+              alt={`${product.name} photographed for the Racquet Habit annual`}
+              loading="lazy"
+              decoding="async"
+              width="1400"
+              height="1400"
+            />
+            <figcaption><span>From the annual</span><span>Editorial</span></figcaption>
+          </figure>
+        )}
+      </div>
+      <div class="annual-product-gallery__controls">
+        <button type="button" data-pdp-gallery-prev aria-label="Previous product image">←</button>
+        <span data-pdp-gallery-status aria-live="polite">
+          01 / {String(initialImages.length + Number(Boolean(product.editorialImage))).padStart(2, "0")}
+        </span>
+        <button type="button" data-pdp-gallery-next aria-label="Next product image">→</button>
+      </div>
     </div>
 
     <div class="annual-product-info">
@@ -180,7 +204,7 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
         ))}
         <details>
           <summary>Delivery & order support</summary>
-          <p>Fourthwall calculates production and delivery timing from the item and destination at checkout. Tracking and order-support links are included in your confirmation email.</p>
+          <p>Production and delivery timing are calculated from the item and destination at checkout. Tracking and order-support links are included in your confirmation email.</p>
           <a href="/shipping">Read delivery & returns ↗</a>
         </details>
       </div>
@@ -194,9 +218,9 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
       <p>Issue 01 begins in the shade, travels through a late court booking and normally ends wherever lunch is still being served.</p>
     </div>
     <EditorialImage
-      src={product.category === "Accessories" ? "/images/editorial/accessories-flat-lay.webp" : "/images/riviera/laundry-hero-desktop.webp"}
-      alt={product.category === "Accessories" ? "Racquet Habit court accessories arranged beside tennis equipment" : "Racquet Habit courtwear hanging in Mediterranean sun"}
-      caption={product.category === "Accessories" ? "Equipment for the hours after" : "Laundry day on court"}
+      src={product.category === "Accessories" ? "/images/editorial/accessories-flat-lay.webp" : "/images/editorial/locker-campaign-v2.webp"}
+      alt={product.category === "Accessories" ? "Racquet Habit court accessories arranged beside tennis equipment" : "Four Racquet Habit players wearing pieces from Collection 01 in a locker contact sheet"}
+      caption={product.category === "Accessories" ? "Equipment for the hours after" : "Five pieces · one locker call"}
       plate="Annual context"
     />
   </section>
@@ -224,9 +248,47 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
     const addButton = document.querySelector<HTMLButtonElement>("[data-add-to-cart]");
     const price = document.querySelector<HTMLElement>("[data-product-price]");
     const gallery = document.querySelector<HTMLElement>("[data-product-gallery]");
+    const galleryShell = document.querySelector<HTMLElement>("[data-pdp-gallery]");
+    const galleryStatus = galleryShell?.querySelector<HTMLElement>("[data-pdp-gallery-status]");
+    const galleryPrevious = galleryShell?.querySelector<HTMLButtonElement>("[data-pdp-gallery-prev]");
+    const galleryNext = galleryShell?.querySelector<HTMLButtonElement>("[data-pdp-gallery-next]");
     let selectedColor = colorButtons.find((button) => button.classList.contains("active"))?.dataset.colorOption || variants[0]?.color;
 
     const availableSizes = (color: string) => variants.filter((variant: any) => !color || variant.color === color).map((variant: any) => variant.size);
+    const visibleFigures = () => gallery ? [...gallery.querySelectorAll<HTMLElement>("figure:not([hidden])")] : [];
+    const currentFigureIndex = () => {
+      const figures = visibleFigures();
+      if (!gallery || !figures.length) return 0;
+      return figures.reduce((nearest, figure, index) => {
+        const distance = Math.abs(figure.offsetLeft - gallery.scrollLeft);
+        return distance < nearest.distance ? { index, distance } : nearest;
+      }, { index: 0, distance: Number.POSITIVE_INFINITY }).index;
+    };
+    const updateGalleryStatus = () => {
+      const figures = visibleFigures();
+      const current = currentFigureIndex();
+      if (galleryStatus) galleryStatus.textContent = `${String(current + 1).padStart(2, "0")} / ${String(figures.length).padStart(2, "0")}`;
+      if (galleryPrevious) galleryPrevious.disabled = current <= 0;
+      if (galleryNext) galleryNext.disabled = current >= figures.length - 1;
+    };
+    const moveGallery = (direction: number) => {
+      const figures = visibleFigures();
+      const nextIndex = Math.max(0, Math.min(figures.length - 1, currentFigureIndex() + direction));
+      const figure = figures[nextIndex];
+      if (!gallery || !figure) return;
+      gallery.scrollTo({ left: figure.offsetLeft, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    };
+
+    galleryPrevious?.addEventListener("click", () => moveGallery(-1));
+    galleryNext?.addEventListener("click", () => moveGallery(1));
+    let galleryFrame = 0;
+    gallery?.addEventListener("scroll", () => {
+      if (galleryFrame) return;
+      galleryFrame = window.requestAnimationFrame(() => {
+        updateGalleryStatus();
+        galleryFrame = 0;
+      });
+    }, { passive: true });
 
     const renderVariant = () => {
       if (sizeSelect && !availableSizes(selectedColor).includes(sizeSelect.value)) {
@@ -252,7 +314,7 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
       }
       const images = variant.images?.length ? variant.images : [];
       if (images.length && gallery) {
-        const figures = [...gallery.querySelectorAll<HTMLElement>("figure")];
+        const figures = [...gallery.querySelectorAll<HTMLElement>("[data-gallery-slot]")];
         figures.forEach((figure, index) => {
           figure.hidden = !images[index];
           const img = figure.querySelector<HTMLImageElement>("img");
@@ -261,6 +323,8 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
             img.alt = index === 0 ? addButton?.dataset.name || "" : `${addButton?.dataset.name || ""}, view ${index + 1}`;
           }
         });
+        gallery.scrollTo({ left: 0, behavior: "auto" });
+        window.requestAnimationFrame(updateGalleryStatus);
       }
     };
 
@@ -276,5 +340,6 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
     }));
     sizeSelect?.addEventListener("change", renderVariant);
     renderVariant();
+    updateGalleryStatus();
   </script>
 </BaseLayout>

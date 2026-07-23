@@ -23,7 +23,7 @@ type Props = {
 const {
   title = "Tennis Apparel & Court Goods | Racquet Habit",
   description = "Shop Racquet Habit tennis apparel, court accessories and clubhouse goods for long lunches, late matches and repeat players, with worldwide delivery.",
-  image = "/images/riviera/laundry-hero-desktop.webp",
+  image = "/images/og-riviera-v2.jpg",
   robots = "index,follow,max-image-preview:large",
   pageType = "website",
   bodyClass = "",
@@ -105,6 +105,7 @@ const schemas = [...baseSchema, ...pageSchema.filter((item) => Object.keys(item)
     <Footer />
     <CartDrawer />
     <div class="toast" data-toast role="status" aria-live="polite"></div>
+    <script is:inline src="/scripts/product-galleries.js" type="module"></script>
     <script is:inline src="/scripts/storefront.js" type="module"></script>
   </body>
 </html>

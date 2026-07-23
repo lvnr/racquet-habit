@@ -133,11 +133,15 @@ function renderCart() {
   const checkout = document.querySelector("[data-cart-checkout]");
   if (checkout) {
     const products = cart.map((item) => `${item.variantId}:${item.quantity}`).join(",");
-    const coupon = country === "AM" ? "&coupon=ARMENIA" : "";
-    checkout.href = `https://racquet-habit-shop.fourthwall.com/cart/checkout?products=${encodeURIComponent(products)}&currency=USD${coupon}`;
+    checkout.href = `https://racquet-habit-shop.fourthwall.com/cart/checkout?products=${encodeURIComponent(products)}&currency=USD`;
   }
   const shipping = document.querySelector("[data-cart-shipping]");
-  if (shipping) shipping.textContent = country === "AM" ? "Complimentary delivery across Armenia · applied automatically" : "International delivery calculated at checkout";
+  if (shipping) {
+    const freeShippingThreshold = 150;
+    shipping.textContent = total >= freeShippingThreshold
+      ? "Free standard shipping unlocked · confirmed at checkout"
+      : `${formatPrice(freeShippingThreshold - total)} away from free standard shipping`;
+  }
 }
 
 document.addEventListener("click", (event) => {

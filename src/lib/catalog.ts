@@ -118,6 +118,7 @@ function mapProduct(product: FourthwallProduct): CatalogProduct {
     maxPrice: Number.isFinite(maxPrice) ? maxPrice : 0,
     image: uniqueImages[0] || variants[0]?.images[0] || "/images/riviera/laundry-hero-desktop.webp",
     images: uniqueImages.slice(0, 8),
+    editorialImage: presentation.editorialImage,
     variants,
     information: informationFrom(product.additionalInformation),
     source: "fourthwall",

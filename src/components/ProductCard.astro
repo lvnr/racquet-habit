@@ -1,7 +1,12 @@
 ---
 import type { CatalogProduct } from "../data/catalog";
-type Props = { product: CatalogProduct; index?: number; feature?: "standard" | "wide" | "compact" };
-const { product, index = 0, feature = "standard" } = Astro.props;
+type Props = {
+  product: CatalogProduct;
+  index?: number;
+  feature?: "standard" | "wide" | "compact";
+  priority?: boolean;
+};
+const { product, index = 0, feature = "standard", priority = false } = Astro.props;
 const priceLabel = product.maxPrice > product.price ? `From $${product.price.toFixed(0)}` : `$${product.price.toFixed(0)}`;
 ---
 
@@ -20,9 +25,9 @@ const priceLabel = product.maxPrice > product.price ? `From $${product.price.toF
     <img
       src={product.image}
       alt={product.name}
-      loading={index < 2 ? "eager" : "lazy"}
+      loading={priority ? "eager" : "lazy"}
       decoding="async"
-      fetchpriority={index < 2 ? "high" : "low"}
+      fetchpriority={priority ? "high" : "low"}
       width="1536"
       height="2048"
     />

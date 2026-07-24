@@ -28,6 +28,12 @@ pnpm-debug.log*
 # generated visual QA captures
 design/brand-v3/site-qa/
 
+# local design source archive
+design/
+
+# local generated and visual QA artifacts
+tmp/
+
 # macOS-specific files
 .DS_Store
 

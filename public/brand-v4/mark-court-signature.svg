@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-labelledby="title">
+  <title id="title">Racquet Habit court signature mark</title>
+  <g fill="currentColor">
+    <path d="M55 210c7-48 18-91 34-127C105 47 126 23 151 10c-18 25-32 51-41 78-7 20-12 40-15 61-4 25-6 45-5 61H55Z"/>
+    <path d="M91 147c15-22 31-35 49-39 18-4 35 1 50 16 20 20 31 50 33 89-15-24-29-44-43-59-13-14-25-21-36-21-15 0-28 12-39 35l-14-21Z"/>
+    <circle cx="210" cy="77" r="12"/>
+  </g>
+</svg>

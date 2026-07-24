@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1400" role="img" aria-labelledby="title desc">
+  <title id="title">Racquet Habit folded court artwork</title>
+  <desc id="desc">An abstract tennis court folding through saturated geometric planes.</desc>
+  <defs>
+    <clipPath id="canvas">
+      <rect width="1000" height="1400"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#canvas)">
+    <rect width="1000" height="1400" fill="#241038"/>
+
+    <path d="M0 780 258 714 570 1400H0Z" fill="#F4C943"/>
+    <path d="M162 142 628 276 628 796 162 744Z" fill="#1E50C7"/>
+    <path d="M162 492 628 796 628 1054 162 744Z" fill="#EE4F1B"/>
+    <path d="M162 744 628 796 1000 1400 352 1400 162 974Z" fill="#EE4F1B"/>
+    <path d="M628 544 1000 676 1000 984 628 826Z" fill="#2452C5"/>
+    <path d="M628 826 1000 984 1000 1164 628 1054Z" fill="#35144B"/>
+
+    <path d="M628 544 648 554 648 826 628 826Z" fill="#E7CA91"/>
+    <path d="M628 826 1000 984 1000 1002 628 844Z" fill="#E7CA91"/>
+
+    <path d="M0 162 162 312V462L0 280Z" fill="#1E50C7"/>
+
+    <g fill="none" stroke="#F8F0DD" stroke-linecap="square" stroke-linejoin="miter">
+      <path d="M162 142V974L352 1400" stroke-width="12"/>
+      <path d="M162 390 628 458" stroke-width="9"/>
+      <path d="M395 424V782" stroke-width="8"/>
+      <path d="M162 744 628 696" stroke-width="9"/>
+      <path d="M162 974 628 826" stroke-width="9"/>
+      <path d="M395 782 628 1054" stroke-width="8"/>
+      <path d="M628 544 1000 676" stroke-width="9"/>
+      <path d="M628 826 1000 984" stroke-width="9"/>
+      <path d="M806 608 1000 810" stroke-width="7"/>
+    </g>
+
+    <path d="M630 826C599 846 608 905 662 943" fill="none" stroke="#F8F0DD" stroke-width="8"/>
+
+    <path d="M616 816 1000 1156 1000 1250 610 894Z" fill="#1A1724" opacity=".58"/>
+    <path d="M176 1188 476 1400H322L140 1230Z" fill="#1A1724" opacity=".72"/>
+
+    <g transform="translate(105 1120) rotate(-11)">
+      <ellipse cx="72" cy="35" rx="55" ry="39" fill="none" stroke="#241038" stroke-width="10"/>
+      <path d="M17 35H-34" fill="none" stroke="#241038" stroke-width="12"/>
+      <path d="M31 8 5 62M52 0 26 70M75-3 49 74M98 4 72 70M120 15 94 62M18 18 117 48M15 36 110 63M27 4 120 34" fill="none" stroke="#241038" stroke-width="3"/>
+      <path d="M-34 35H-78" fill="none" stroke="#241038" stroke-width="18"/>
+    </g>
+
+    <circle cx="476" cy="1050" r="13" fill="#D7F13D"/>
+    <path d="M465 1044C472 1049 480 1052 487 1051M466 1056C474 1051 481 1044 483 1038" fill="none" stroke="#F8F0DD" stroke-width="2.5"/>
+    <ellipse cx="492" cy="1068" rx="18" ry="8" fill="#17151E" opacity=".55" transform="rotate(18 492 1068)"/>
+  </g>
+</svg>

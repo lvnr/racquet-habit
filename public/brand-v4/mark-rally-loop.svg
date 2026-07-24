@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 220" role="img" aria-labelledby="title">
+  <title id="title">Racquet Habit rally loop mark</title>
+  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M70 166 132 42" stroke-width="18"/>
+    <path d="M98 112c35-21 71-21 103-5 24 12 40 30 48 54-48 20-96 25-145 15-28-6-43-15-43-27 0-11 12-24 37-37Z" stroke-width="11"/>
+  </g>
+  <circle cx="258" cy="162" r="15" fill="currentColor"/>
+</svg>

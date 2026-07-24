@@ -1,0 +1,43 @@
+<section class="consent-panel" data-consent-panel hidden aria-label="Privacy choices">
+  <div class="consent-panel__summary" data-consent-summary>
+    <div>
+      <span class="site-kicker">Your call</span>
+      <h2>Cookies, without the crumbs.</h2>
+      <p>
+        We use optional analytics to improve the shop and marketing cookies to
+        measure campaigns. Essential storage keeps your bag and preferences working.
+      </p>
+    </div>
+    <div class="consent-panel__actions">
+      <button class="paper-button" type="button" data-consent-accept>Allow all</button>
+      <button class="paper-button paper-button--outline" type="button" data-consent-reject>Essential only</button>
+      <button class="consent-panel__text-button" type="button" data-consent-customize>Choose</button>
+    </div>
+  </div>
+
+  <form class="consent-panel__form" data-consent-form hidden>
+    <div class="consent-panel__form-heading">
+      <div>
+        <span class="site-kicker">Privacy settings</span>
+        <h2>Choose what leaves the clubhouse.</h2>
+      </div>
+      <button class="consent-panel__close" type="button" data-consent-close aria-label="Close privacy settings">×</button>
+    </div>
+    <label>
+      <span><strong>Essential</strong><small>Bag, currency and security. Always on.</small></span>
+      <input type="checkbox" checked disabled />
+    </label>
+    <label>
+      <span><strong>Analytics</strong><small>Google Analytics traffic and commerce measurement.</small></span>
+      <input type="checkbox" data-consent-analytics />
+    </label>
+    <label>
+      <span><strong>Marketing</strong><small>Meta, TikTok and Pinterest campaign measurement.</small></span>
+      <input type="checkbox" data-consent-marketing />
+    </label>
+    <div class="consent-panel__form-actions">
+      <button class="paper-button" type="submit">Save choices</button>
+      <a href="/privacy">Read the privacy notice <span>↗</span></a>
+    </div>
+  </form>
+</section>

@@ -4,6 +4,7 @@ const country = root.dataset.country || "";
 const cartKey = "rh-cart-v1";
 const currencyKey = "rh-currency-v1";
 const checkoutOrigin = "https://racquethabit.com";
+const sessionKey = "rh-session-id-v1";
 
 const analyticsItem = (item, quantity = item.quantity) => ({
   item_id: item.productId || item.variantId,
@@ -49,6 +50,38 @@ const buildCheckoutUrl = (cart) => {
     if (value) checkout.searchParams.set(cookieName, value);
   });
   return checkout.toString();
+};
+
+const sessionId = (() => {
+  const saved = localStorage.getItem(sessionKey);
+  if (saved) return saved;
+  const created = crypto.randomUUID();
+  localStorage.setItem(sessionKey, created);
+  return created;
+})();
+
+const checkoutIdentifiers = () => Object.fromEntries(
+  ["_ga", "_fbp", "_fbc", "FPID"]
+    .map((cookieName) => [cookieName, readCookie(cookieName)])
+    .filter(([, value]) => Boolean(value)),
+);
+
+const createCheckout = async (cart) => {
+  const response = await fetch("/api/checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      items: cart.map((item) => ({ variantId: item.variantId, quantity: item.quantity })),
+      consent: window.RacquetHabitConsent?.get?.() || {},
+      attribution: window.RacquetHabitAnalytics?.getAttribution?.() || {},
+      identifiers: checkoutIdentifiers(),
+      sessionId,
+    }),
+  });
+  if (!response.ok) throw new Error(`Checkout request failed: ${response.status}`);
+  const result = await response.json();
+  if (!result.url) throw new Error("Checkout URL missing");
+  return result.url;
 };
 
 const formatPrice = (value, currency = root.dataset.currency || "USD") => {
@@ -234,9 +267,21 @@ document.addEventListener("click", (event) => {
   setCart(cart.filter((entry) => entry.quantity > 0));
 });
 
-document.querySelector("[data-cart-checkout]")?.addEventListener("click", () => {
+document.querySelector("[data-cart-checkout]")?.addEventListener("click", async (event) => {
   const cart = getCart();
-  if (cart.length) trackCartEvent("begin_checkout", cart);
+  if (!cart.length) return;
+  event.preventDefault();
+  const checkout = event.currentTarget;
+  if (checkout.dataset.loading === "true") return;
+  checkout.dataset.loading = "true";
+  checkout.setAttribute("aria-busy", "true");
+  trackCartEvent("begin_checkout", cart);
+  try {
+    window.location.assign(await createCheckout(cart));
+  } catch (error) {
+    console.error("[checkout] Falling back to direct checkout", error);
+    window.location.assign(buildCheckoutUrl(cart));
+  }
 });
 
 document.querySelector("[data-cart-dialog]")?.addEventListener("click", (event) => {

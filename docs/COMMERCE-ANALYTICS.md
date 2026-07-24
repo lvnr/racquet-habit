@@ -10,6 +10,13 @@ Last reviewed: 24 July 2026
 - The same GA4 stream is installed on both domains.
 - GA4 cross-domain measurement is configured for both domains.
 - Fourthwall's cookie-policy banner is enabled.
+- Racquet Habit uses a first-party consent panel with separate analytics and
+  marketing choices. Optional provider scripts are not loaded before consent.
+- TikTok Pixel: `D9HKESBC77U1LOVTV5E0`
+- Pinterest ad account: `549770622978`
+- Pinterest Tag: `2613520753193`
+- Meta Pixel/Dataset: `3719611174858822`
+- Fourthwall `ORDER_PLACED` webhook: `wcon_YqYZfKCQTvSVIMGvjzc_Hw`
 
 The storefront emits Google's recommended ecommerce event names and hands
 campaign/click identifiers to Fourthwall's checkout endpoint. Fourthwall owns
@@ -32,14 +39,16 @@ Fourthwall product IDs. Monetary events also include `currency` and `value`.
 Do not add email addresses, names, addresses, or other personally identifying
 information to analytics events.
 
-The checkout handoff preserves the identifiers Fourthwall officially supports:
+The checkout handoff creates a Fourthwall Storefront API cart so privacy and
+attribution metadata survive through the paid-order webhook. It also preserves
+the identifiers Fourthwall officially supports:
 `utm_*`, `gclid`, `fbclid`, `_ga`, `_fbp`, `_fbc`, `FPID`, and `cart_origin`.
 The shared GA4 tag and cross-domain configuration are the primary mechanism for
 keeping one user/session across the storefront and checkout.
 
 The analytics helper also publishes a provider-neutral `rh:commerce` browser
-event. Future Meta, TikTok, or Pinterest browser adapters should listen for this
-event instead of duplicating commerce logic in UI components.
+event. Meta, TikTok and Pinterest adapters listen for this event instead of
+duplicating commerce logic in UI components.
 
 ## Release verification
 
@@ -58,16 +67,16 @@ After changing analytics or checkout:
 Google marks `purchase` as a key event by default. Confirm it remains enabled
 in the GA4 property after the first real purchase arrives.
 
-## Future advertising platforms
+## Advertising platforms
 
-Do not enable advertising pixels until consent behavior and the privacy notice
-cover the intended markets. Use a proper consent-management platform and
-Google Consent Mode v2 before launching personalized advertising in regions
-where consent is required.
+The storefront adapters listen to `rh:commerce`; they do not duplicate commerce
+logic in UI components. Google Consent Mode v2 defaults to denied before any
+provider configuration. Google Analytics loads only after analytics consent;
+Meta, TikTok and Pinterest load only after marketing consent.
 
 ### Meta
 
-1. Add the same Meta Pixel/Dataset ID to the custom storefront adapter and
+1. Use Meta Pixel/Dataset `3719611174858822` in the custom storefront adapter and
    Fourthwall.
 2. In Fourthwall, connect the Meta Ads app and Conversions API with that
    dataset's access token. Fourthwall's native integration sends server events
@@ -80,22 +89,42 @@ where consent is required.
 
 ### TikTok
 
-1. Create one TikTok Pixel for this storefront and add its ID in Fourthwall's
-   Tracking Pixels settings.
-2. Add a storefront adapter for pre-checkout `rh:commerce` events.
-3. Connect this GA4 property to that pixel in TikTok Events Manager. TikTok's
-   current GA connector imports the GA4 `purchase` key event; use a one-property
-   to one-pixel mapping.
-4. Validate with TikTok Pixel Helper and Events Manager diagnostics.
+1. Use Pixel `D9HKESBC77U1LOVTV5E0` on Racquet Habit and Fourthwall.
+2. The storefront adapter sends `ViewContent`, `AddToCart` and
+   `InitiateCheckout` after marketing consent.
+3. Fourthwall owns hosted-checkout and purchase events.
+4. Do not also import GA4 purchase into this pixel unless TikTok documents a
+   shared event ID/deduplication path; parallel purchase sources can double count.
 
 ### Pinterest
 
-Fourthwall does not currently expose a native Pinterest field beside its GA4,
-Meta, and TikTok settings. Add the Pinterest tag to the storefront for
-pre-checkout events, then use Pinterest Conversions API through server-side
-Google Tag Manager or an order webhook for authoritative purchases. Preserve
-Pinterest's click ID where the checkout integration supports it, use
-`event_id` for deduplication, and validate in Pinterest Events Manager.
+Fourthwall does not expose a native Pinterest field beside its GA4, Meta and
+TikTok settings. Tag `2613520753193` sends consented base page views, product
+`PageVisit`, `AddToCart` and an audience-only `InitiateCheckout` event. The
+signed `ORDER_PLACED` webhook sends
+Pinterest's authoritative `checkout` event only when the Fourthwall cart
+contains `rh_marketing_consent=granted`. Its deterministic `event_id` makes
+retries idempotent. A normalized SHA-256 email hash and `epik` click ID, when
+available, improve match quality without logging raw customer data.
+
+## Runtime configuration
+
+Public Worker variables:
+
+- `GA_MEASUREMENT_ID`
+- `META_PIXEL_ID`
+- `TIKTOK_PIXEL_ID`
+- `PINTEREST_TAG_ID`
+- `PINTEREST_AD_ACCOUNT_ID`
+
+Encrypted Cloudflare secrets:
+
+- `FOURTHWALL_STOREFRONT_TOKEN`
+- `FOURTHWALL_WEBHOOK_SECRET`
+- `PINTEREST_ACCESS_TOKEN`
+
+Never put access tokens, webhook secrets, API credentials or customer data in
+git, public Astro environment variables or browser JavaScript.
 
 ## Official references
 

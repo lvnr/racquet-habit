@@ -8,6 +8,7 @@ import "../styles/riviera.css";
 import Header from "../components/Header.astro";
 import CartDrawer from "../components/CartDrawer.astro";
 import Footer from "../components/Footer.astro";
+import ConsentBanner from "../components/ConsentBanner.astro";
 import { env } from "cloudflare:workers";
 
 type Props = {
@@ -36,6 +37,13 @@ const country = testCountry || requestCountry || Astro.request.headers.get("cf-i
 const isArmenia = country === "AM";
 const currency = isArmenia ? "AMD" : "USD";
 const amdRate = Number(env.AMD_PER_USD || 367);
+const runtimeEnv = env as unknown as Record<string, string | undefined>;
+const analyticsIds = {
+  ga: runtimeEnv.GA_MEASUREMENT_ID || "G-B53YGNVTNF",
+  meta: runtimeEnv.META_PIXEL_ID || "",
+  tiktok: runtimeEnv.TIKTOK_PIXEL_ID || "D9HKESBC77U1LOVTV5E0",
+  pinterest: runtimeEnv.PINTEREST_TAG_ID || "",
+};
 Astro.locals.isArmenia = isArmenia;
 
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -67,15 +75,43 @@ const schemas = [...baseSchema, ...pageSchema.filter((item) => Object.keys(item)
 ---
 
 <!doctype html>
-<html lang="en" data-country={country} data-currency={currency} data-amd-rate={amdRate}>
+<html
+  lang="en"
+  data-country={country}
+  data-currency={currency}
+  data-amd-rate={amdRate}
+  data-ga-measurement-id={analyticsIds.ga}
+  data-meta-pixel-id={analyticsIds.meta}
+  data-tiktok-pixel-id={analyticsIds.tiktok}
+  data-pinterest-tag-id={analyticsIds.pinterest}
+>
   <head>
-    <!-- Google tag (gtag.js) -->
-    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-B53YGNVTNF"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-B53YGNVTNF');
+      window.gtag = window.gtag || gtag;
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        analytics_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        functionality_storage: 'granted',
+        security_storage: 'granted',
+        wait_for_update: 500,
+      });
+      gtag('set', 'ads_data_redaction', true);
+      gtag('set', 'url_passthrough', true);
+      try {
+        const savedConsent = JSON.parse(localStorage.getItem('rh-consent-v1') || 'null');
+        if (savedConsent?.version === 1 && savedConsent?.decided === true) {
+          gtag('consent', 'update', {
+            analytics_storage: savedConsent.analytics ? 'granted' : 'denied',
+            ad_storage: savedConsent.marketing ? 'granted' : 'denied',
+            ad_user_data: savedConsent.marketing ? 'granted' : 'denied',
+            ad_personalization: savedConsent.marketing ? 'granted' : 'denied',
+          });
+        }
+      } catch {}
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -112,8 +148,11 @@ const schemas = [...baseSchema, ...pageSchema.filter((item) => Object.keys(item)
     </main>
     <Footer />
     <CartDrawer />
+    <ConsentBanner />
     <div class="toast" data-toast role="status" aria-live="polite"></div>
     <script is:inline src="/scripts/product-galleries.js" type="module"></script>
+    <script is:inline src="/scripts/consent-manager.js" type="module"></script>
+    <script is:inline src="/scripts/marketing-pixels.js" type="module"></script>
     <script is:inline src="/scripts/commerce-analytics.js" type="module"></script>
     <script is:inline src="/scripts/storefront.js" type="module"></script>
   </body>

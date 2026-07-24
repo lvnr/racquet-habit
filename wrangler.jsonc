@@ -8,7 +8,12 @@
     "directory": "./dist"
   },
   "vars": {
-    "AMD_PER_USD": "367"
+    "AMD_PER_USD": "367",
+    "GA_MEASUREMENT_ID": "G-B53YGNVTNF",
+    "META_PIXEL_ID": "3719611174858822",
+    "TIKTOK_PIXEL_ID": "D9HKESBC77U1LOVTV5E0",
+    "PINTEREST_TAG_ID": "2613520753193",
+    "PINTEREST_AD_ACCOUNT_ID": "549770622978"
   },
   "routes": [
     {

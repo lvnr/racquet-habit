@@ -1,4 +1,5 @@
 const analyticsEventName = "rh:commerce";
+const currentPageEvents = new Map();
 const attributionKey = "rh-attribution-v1";
 const attributionParameters = [
   "utm_source",
@@ -64,17 +65,29 @@ const compactItem = (item) => Object.fromEntries(
 );
 
 const track = (event, parameters = {}) => {
+  const event_id = crypto.randomUUID();
   const payload = {
     ...parameters,
     items: Array.isArray(parameters.items) ? parameters.items.map(compactItem) : parameters.items,
   };
-  if (typeof window.gtag === "function") {
+  if (window.RacquetHabitConsent?.canUse("analytics") && typeof window.gtag === "function") {
     window.gtag("event", event, payload);
+  } else if (event === "view_item" || event === "view_item_list") {
+    currentPageEvents.set(event, payload);
   }
   window.dispatchEvent(new CustomEvent(analyticsEventName, {
-    detail: { event, parameters: payload },
+    detail: { event, event_id, parameters: payload },
   }));
+  return event_id;
 };
+
+window.addEventListener("rh:consent-changed", ({ detail }) => {
+  if (!detail.consent.analytics || detail.previous.analytics) return;
+  currentPageEvents.forEach((payload, event) => {
+    window.gtag?.("event", event, payload);
+  });
+  currentPageEvents.clear();
+});
 
 const listFromElement = (list) => {
   const visibleItems = [...list.querySelectorAll("[data-commerce-item]")]

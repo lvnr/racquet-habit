@@ -3,8 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
   <title>The new set is in</title>
   <style>
+    :root { color-scheme: light; supported-color-schemes: light; }
+    @media (prefers-color-scheme: dark) {
+      .email-ink { color:#102f28 !important; -webkit-text-fill-color:#102f28 !important; }
+      .email-blue { color:#164b91 !important; -webkit-text-fill-color:#164b91 !important; }
+      .email-red { color:#aa3024 !important; -webkit-text-fill-color:#aa3024 !important; }
+    }
+    [data-ogsc] .email-ink, [data-ogsb] .email-ink { color:#102f28 !important; -webkit-text-fill-color:#102f28 !important; }
+    [data-ogsc] .email-blue, [data-ogsb] .email-blue { color:#164b91 !important; -webkit-text-fill-color:#164b91 !important; }
+    [data-ogsc] .email-red, [data-ogsb] .email-red { color:#aa3024 !important; -webkit-text-fill-color:#aa3024 !important; }
     @media only screen and (max-width: 480px) {
       .email-pad { padding-left: 24px !important; padding-right: 24px !important; }
       .email-title { font-size: 46px !important; letter-spacing: -1px !important; }
@@ -26,9 +37,9 @@
         </tr>
         <tr>
           <td class="email-pad" style="padding:48px 42px 14px;">
-            <p style="margin:0 0 16px;color:#1c58a2;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">Riviera Match Annual · Issue 01</p>
-            <h1 class="email-title" style="margin:0;color:#c63d2c;font-family:Georgia,'Times New Roman',serif;font-size:58px;line-height:.92;font-weight:400;letter-spacing:-2px;text-transform:uppercase;">The new set<br>is in.</h1>
-            <p style="margin:24px 0 0;max-width:475px;color:#143e32;font-size:18px;line-height:1.6;">A twelve-piece opening issue for repeat players: heavyweight tees, court accessories and one very complete excuse to remain out of office.</p>
+            <p class="email-blue" style="margin:0 0 16px;color:#164b91;-webkit-text-fill-color:#164b91;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">Riviera Match Annual · Issue 01</p>
+            <h1 class="email-title email-red" style="margin:0;color:#aa3024;-webkit-text-fill-color:#aa3024;font-family:Georgia,'Times New Roman',serif;font-size:58px;line-height:.92;font-weight:400;letter-spacing:-2px;text-transform:uppercase;">The new set<br>is in.</h1>
+            <p class="email-ink" style="margin:24px 0 0;max-width:475px;color:#102f28;-webkit-text-fill-color:#102f28;font-size:18px;line-height:1.6;">A twelve-piece opening issue for repeat players: heavyweight tees, court accessories and one very complete excuse to remain out of office.</p>
           </td>
         </tr>
         <tr>

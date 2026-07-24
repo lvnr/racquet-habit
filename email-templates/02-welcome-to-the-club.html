@@ -3,8 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
   <title>Welcome to the club</title>
   <style>
+    :root { color-scheme: light; supported-color-schemes: light; }
+    @media (prefers-color-scheme: dark) {
+      .email-ink { color:#102f28 !important; -webkit-text-fill-color:#102f28 !important; }
+      .email-blue { color:#164b91 !important; -webkit-text-fill-color:#164b91 !important; }
+      .email-red { color:#aa3024 !important; -webkit-text-fill-color:#aa3024 !important; }
+    }
+    [data-ogsc] .email-ink, [data-ogsb] .email-ink { color:#102f28 !important; -webkit-text-fill-color:#102f28 !important; }
+    [data-ogsc] .email-blue, [data-ogsb] .email-blue { color:#164b91 !important; -webkit-text-fill-color:#164b91 !important; }
+    [data-ogsc] .email-red, [data-ogsb] .email-red { color:#aa3024 !important; -webkit-text-fill-color:#aa3024 !important; }
     @media only screen and (max-width: 480px) {
       .email-pad { padding-left: 24px !important; padding-right: 24px !important; }
       .email-title { font-size: 46px !important; letter-spacing: -1px !important; }
@@ -25,25 +36,25 @@
         </tr>
         <tr>
           <td class="email-pad" style="padding:52px 42px 20px;">
-            <p style="margin:0 0 16px;color:#c63d2c;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">Court Notes · Welcome card</p>
-            <h1 class="email-title" style="margin:0;color:#143e32;font-family:Georgia,'Times New Roman',serif;font-size:56px;line-height:.96;font-weight:400;letter-spacing:-2px;text-transform:uppercase;">Good people<br>only.</h1>
-            <p style="margin:24px 0 0;max-width:475px;color:#143e32;font-size:18px;line-height:1.6;">You are on the list. Expect collection drops, clubhouse dispatches and compelling reasons to order one more set.</p>
+            <p class="email-red" style="margin:0 0 16px;color:#aa3024;-webkit-text-fill-color:#aa3024;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;">Court Notes · Welcome card</p>
+            <h1 class="email-title email-ink" style="margin:0;color:#102f28;-webkit-text-fill-color:#102f28;font-family:Georgia,'Times New Roman',serif;font-size:56px;line-height:.96;font-weight:400;letter-spacing:-2px;text-transform:uppercase;">Good people<br>only.</h1>
+            <p class="email-ink" style="margin:24px 0 0;max-width:475px;color:#102f28;-webkit-text-fill-color:#102f28;font-size:18px;line-height:1.6;">You are on the list. Expect collection drops, clubhouse dispatches and compelling reasons to order one more set.</p>
           </td>
         </tr>
         <tr>
           <td class="email-pad" style="padding:22px 42px 52px;">
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-top:1px solid rgba(20,62,50,.3);border-bottom:1px solid rgba(20,62,50,.3);">
               <tr>
-                <td style="padding:18px 0;color:#1c58a2;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">01 · Play</td>
-                <td class="rule-copy" align="right" style="padding:18px 0;color:#143e32;font-size:14px;">The right way to begin.</td>
+                <td class="email-blue" style="padding:18px 0;color:#164b91;-webkit-text-fill-color:#164b91;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">01 · Play</td>
+                <td class="rule-copy email-ink" align="right" style="padding:18px 0;color:#102f28;-webkit-text-fill-color:#102f28;font-size:14px;">The right way to begin.</td>
               </tr>
               <tr>
-                <td style="padding:18px 0;border-top:1px solid rgba(20,62,50,.2);color:#1c58a2;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">02 · Lunch</td>
-                <td class="rule-copy" align="right" style="padding:18px 0;border-top:1px solid rgba(20,62,50,.2);color:#143e32;font-size:14px;">Do not rush it.</td>
+                <td class="email-blue" style="padding:18px 0;border-top:1px solid rgba(20,62,50,.2);color:#164b91;-webkit-text-fill-color:#164b91;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">02 · Lunch</td>
+                <td class="rule-copy email-ink" align="right" style="padding:18px 0;border-top:1px solid rgba(20,62,50,.2);color:#102f28;-webkit-text-fill-color:#102f28;font-size:14px;">Do not rush it.</td>
               </tr>
               <tr>
-                <td style="padding:18px 0;border-top:1px solid rgba(20,62,50,.2);color:#1c58a2;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">03 · Repeat</td>
-                <td class="rule-copy" align="right" style="padding:18px 0;border-top:1px solid rgba(20,62,50,.2);color:#143e32;font-size:14px;">See you tomorrow.</td>
+                <td class="email-blue" style="padding:18px 0;border-top:1px solid rgba(20,62,50,.2);color:#164b91;-webkit-text-fill-color:#164b91;font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;">03 · Repeat</td>
+                <td class="rule-copy email-ink" align="right" style="padding:18px 0;border-top:1px solid rgba(20,62,50,.2);color:#102f28;-webkit-text-fill-color:#102f28;font-size:14px;">See you tomorrow.</td>
               </tr>
             </table>
             <p style="margin:28px 0 0;"><a class="email-button" href="https://racquethabit.com/shop?utm_source=brevo&amp;utm_medium=email&amp;utm_campaign=court_notes_welcome" style="display:inline-block;padding:18px 28px;border:2px solid #143e32;background:#143e32;color:#f6f0e3;font-size:12px;font-weight:700;letter-spacing:1.8px;text-decoration:none;text-transform:uppercase;">Browse Collection 01 →</a></p>

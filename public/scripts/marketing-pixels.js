@@ -60,7 +60,11 @@ const pinterestPayload = (parameters, id) => ({
 
 const initializeMeta = () => {
   const pixelId = root.dataset.metaPixelId;
-  if (!pixelId || loaded.meta) return;
+  if (!pixelId) return;
+  if (loaded.meta) {
+    window.fbq?.("consent", "grant");
+    return;
+  }
   loaded.meta = true;
   ((f, b, e, v, n, t, s) => {
     if (f.fbq) return;
@@ -76,14 +80,18 @@ const initializeMeta = () => {
     s = b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t, s);
   })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
-  window.fbq("consent", "grant");
   window.fbq("init", pixelId);
+  window.fbq("consent", "grant");
   window.fbq("track", "PageView", {}, { eventID: crypto.randomUUID() });
 };
 
 const initializeTikTok = () => {
   const pixelId = root.dataset.tiktokPixelId;
-  if (!pixelId || loaded.tiktok) return;
+  if (!pixelId) return;
+  if (loaded.tiktok) {
+    window.ttq?.grantConsent?.();
+    return;
+  }
   loaded.tiktok = true;
   ((w, d, t) => {
     w.TiktokAnalyticsObject = t;
@@ -126,7 +134,11 @@ const initializeTikTok = () => {
 
 const initializePinterest = () => {
   const tagId = root.dataset.pinterestTagId;
-  if (!tagId || loaded.pinterest) return;
+  if (!tagId) return;
+  if (loaded.pinterest) {
+    window.pintrk?.("setconsent", true);
+    return;
+  }
   loaded.pinterest = true;
   ((src) => {
     if (window.pintrk) return;

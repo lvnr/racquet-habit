@@ -69,6 +69,14 @@ const schemas = [...baseSchema, ...pageSchema.filter((item) => Object.keys(item)
 <!doctype html>
 <html lang="en" data-country={country} data-currency={currency} data-amd-rate={amdRate}>
   <head>
+    <!-- Google tag (gtag.js) -->
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-B53YGNVTNF"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-B53YGNVTNF');
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#eee6d3" />

@@ -17,7 +17,17 @@ const galleryImages = [...new Set([
 const isEditorial = (image: string) => product.editorialImages.includes(image);
 ---
 
-<article class="riviera-product">
+<article
+  class="riviera-product"
+  data-commerce-item
+  data-item-id={product.id}
+  data-item-name={product.name}
+  data-item-price={product.price}
+  data-item-category={product.category}
+  data-item-type={product.productType}
+  data-item-capsule={product.capsule}
+  data-item-variant={product.variants.find((variant) => variant.inStock)?.name || ""}
+>
   <div class="riviera-product__media" data-card-gallery data-gallery-count={galleryImages.length}>
     <a
       class="riviera-product__image"

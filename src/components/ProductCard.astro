@@ -18,6 +18,14 @@ const isEditorial = (image: string) => product.editorialImages.includes(image);
 <article
   class:list={["annual-product-card", `annual-product-card--${feature}`]}
   data-product-card
+  data-commerce-item
+  data-item-id={product.id}
+  data-item-name={product.name}
+  data-item-price={product.price}
+  data-item-category={product.category}
+  data-item-type={product.productType}
+  data-item-capsule={product.capsule}
+  data-item-variant={product.variants.find((variant) => variant.inStock)?.name || ""}
   data-category={product.category}
   data-capsule={product.capsule}
 >

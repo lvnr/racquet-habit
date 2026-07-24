@@ -88,7 +88,12 @@ const homeSchema = {
       </div>
 
       {products.length > 0 && (
-        <div class="riviera-product-grid">
+        <div
+          class="riviera-product-grid"
+          data-commerce-list
+          data-item-list-id="home_court_goods"
+          data-item-list-name="Home — Court goods"
+        >
           {products.map((product, index) => (
             <RivieraProductPlate product={product} localImage={localImages[index]} index={index} />
           ))}
@@ -109,7 +114,12 @@ const homeSchema = {
       <p>Signed Rally is the formal line in Issue 01: quiet at the chest, expressive across the back, made for the people who are always staying for another set.</p>
       <a class="paper-link paper-link--light" href="/shop?capsule=Signed%20Rally%20%E2%80%94%20Founding%20Issue">Shop the founding issue <span>↗</span></a>
     </div>
-    <div class="annual-chapter__products">
+    <div
+      class="annual-chapter__products"
+      data-commerce-list
+      data-item-list-id="home_signed_rally"
+      data-item-list-name="Home — Signed Rally"
+    >
       {signedRally.map((product, index) => <ProductCard product={product} index={index} feature="compact" />)}
     </div>
   </section>
@@ -143,7 +153,12 @@ const homeSchema = {
       <p>Love Cherries, emotional support racquets and recovery days spent suspiciously close to a court.</p>
       <a class="paper-link" href="/shop?capsule=Love%20Cherries">See the capsule <span>↗</span></a>
     </header>
-    <div class="annual-product-grid">
+    <div
+      class="annual-product-grid"
+      data-commerce-list
+      data-item-list-id="home_playful_capsule"
+      data-item-list-name="Home — Playful side draw"
+    >
       {playful.map((product, index) => <ProductCard product={product} index={index} />)}
     </div>
   </section>

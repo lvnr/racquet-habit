@@ -91,7 +91,18 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
   schema={[productSchema, breadcrumbSchema]}
   bodyClass="product-detail-page"
 >
-  <section class="annual-product-page" data-product-detail>
+  <section
+    class="annual-product-page"
+    data-product-detail
+    data-commerce-item
+    data-item-id={product.id}
+    data-item-name={product.name}
+    data-item-price={defaultVariant?.price ?? product.price}
+    data-item-category={product.category}
+    data-item-type={product.productType}
+    data-item-capsule={product.capsule}
+    data-item-variant={defaultVariant?.name || ""}
+  >
     <div class="annual-product-gallery-shell" data-pdp-gallery>
       <div class="annual-product-gallery" data-product-gallery>
         {productGallerySlots.map((image, index) => (
@@ -172,10 +183,14 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
         type="button"
         data-add-to-cart
         data-variant-id={defaultVariant?.id}
+        data-product-id={product.id}
         data-name={product.name}
         data-variant={defaultVariant?.name}
         data-price={defaultVariant?.price ?? product.price}
         data-image={initialImages[0] || product.image}
+        data-category={product.category}
+        data-product-type={product.productType}
+        data-capsule={product.capsule}
       >
         <span>Add to bag</span><span>↗</span>
       </button>
@@ -233,7 +248,12 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
         <h2>More from Issue 01</h2>
         <a class="paper-link" href="/shop">View all twelve pieces <span>↗</span></a>
       </header>
-      <div class="annual-product-grid">
+      <div
+        class="annual-product-grid"
+        data-commerce-list
+        data-item-list-id="related_products"
+        data-item-list-name={`Related to ${product.name}`}
+      >
         {related.map((item, index) => <ProductCard product={item} index={index} />)}
       </div>
     </section>
@@ -324,6 +344,11 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
         addButton.dataset.variant = variant.name;
         addButton.dataset.price = String(variant.price);
         addButton.dataset.image = images[0] || addButton.dataset.image;
+      }
+      const productDetail = document.querySelector<HTMLElement>("[data-product-detail]");
+      if (productDetail) {
+        productDetail.dataset.itemPrice = String(variant.price);
+        productDetail.dataset.itemVariant = variant.name;
       }
       if (gallery) {
         const figures = [...gallery.querySelectorAll<HTMLElement>("[data-gallery-slot]")];

@@ -3,6 +3,53 @@ const rate = Number(root.dataset.amdRate || 367);
 const country = root.dataset.country || "";
 const cartKey = "rh-cart-v1";
 const currencyKey = "rh-currency-v1";
+const checkoutOrigin = "https://racquethabit.com";
+
+const analyticsItem = (item, quantity = item.quantity) => ({
+  item_id: item.productId || item.variantId,
+  item_name: item.name,
+  affiliation: "Racquet Habit",
+  item_brand: "Racquet Habit",
+  item_category: item.category || "",
+  item_category2: item.productType || "",
+  item_category3: item.capsule || "",
+  item_variant: item.variant || "",
+  price: Number(item.price || 0),
+  quantity,
+});
+
+const trackCartEvent = (event, items) => {
+  const value = items.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0), 0);
+  window.RacquetHabitAnalytics?.track(event, {
+    currency: "USD",
+    value,
+    items: items.map((item) => analyticsItem(item)),
+  });
+};
+
+const readCookie = (name) => document.cookie
+  .split("; ")
+  .find((cookie) => cookie.startsWith(`${name}=`))
+  ?.split("=")
+  .slice(1)
+  .join("=");
+
+const buildCheckoutUrl = (cart) => {
+  const checkout = new URL("https://racquet-habit-shop.fourthwall.com/cart/checkout");
+  checkout.searchParams.set("products", cart.map((item) => `${item.variantId}:${item.quantity}`).join(","));
+  checkout.searchParams.set("currency", "USD");
+  checkout.searchParams.set("cart_origin", checkoutOrigin);
+
+  const attribution = window.RacquetHabitAnalytics?.getAttribution?.() || {};
+  ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "fbclid"].forEach((parameter) => {
+    if (attribution[parameter]) checkout.searchParams.set(parameter, attribution[parameter]);
+  });
+  ["_ga", "_fbp", "_fbc", "FPID"].forEach((cookieName) => {
+    const value = readCookie(cookieName);
+    if (value) checkout.searchParams.set(cookieName, value);
+  });
+  return checkout.toString();
+};
 
 const formatPrice = (value, currency = root.dataset.currency || "USD") => {
   if (currency === "AMD") {
@@ -59,7 +106,11 @@ const toast = (message) => {
 
 const openCart = () => {
   const dialog = document.querySelector("[data-cart-dialog]");
-  if (dialog && !dialog.open) dialog.showModal();
+  if (dialog && !dialog.open) {
+    dialog.showModal();
+    const cart = getCart();
+    if (cart.length) trackCartEvent("view_cart", cart);
+  }
 };
 
 document.querySelectorAll("[data-cart-open]").forEach((button) => button.addEventListener("click", openCart));
@@ -78,16 +129,37 @@ document.addEventListener("click", (event) => {
   }
   const cart = getCart();
   const existing = cart.find((item) => item.variantId === variantId);
-  if (existing) existing.quantity += 1;
+  if (existing) {
+    existing.quantity += 1;
+    existing.productId ||= button.dataset.productId || variantId;
+    existing.category ||= button.dataset.category || "";
+    existing.productType ||= button.dataset.productType || "";
+    existing.capsule ||= button.dataset.capsule || "";
+  }
   else cart.push({
     variantId,
+    productId: button.dataset.productId || variantId,
     name: button.dataset.name,
     variant: button.dataset.variant || "Standard",
     price: Number(button.dataset.price || 0),
     image: button.dataset.image,
+    category: button.dataset.category || "",
+    productType: button.dataset.productType || "",
+    capsule: button.dataset.capsule || "",
     quantity: 1,
   });
   setCart(cart);
+  trackCartEvent("add_to_cart", [{
+    variantId,
+    productId: button.dataset.productId || variantId,
+    name: button.dataset.name,
+    variant: button.dataset.variant || "Standard",
+    price: Number(button.dataset.price || 0),
+    category: button.dataset.category || "",
+    productType: button.dataset.productType || "",
+    capsule: button.dataset.capsule || "",
+    quantity: 1,
+  }]);
   toast(`${button.dataset.name} added to your bag.`);
   openCart();
 });
@@ -132,8 +204,7 @@ function renderCart() {
   if (totalNode) totalNode.textContent = formatPrice(total);
   const checkout = document.querySelector("[data-cart-checkout]");
   if (checkout) {
-    const products = cart.map((item) => `${item.variantId}:${item.quantity}`).join(",");
-    checkout.href = `https://racquet-habit-shop.fourthwall.com/cart/checkout?products=${encodeURIComponent(products)}&currency=USD`;
+    checkout.href = buildCheckoutUrl(cart);
   }
   const shipping = document.querySelector("[data-cart-shipping]");
   if (shipping) {
@@ -152,10 +223,20 @@ document.addEventListener("click", (event) => {
   const variantId = (remove || increase || decrease).dataset.cartRemove || (increase || decrease).dataset.cartIncrease || decrease?.dataset.cartDecrease;
   const cart = getCart();
   const item = cart.find((entry) => entry.variantId === variantId);
-  if (remove) return setCart(cart.filter((entry) => entry.variantId !== variantId));
+  if (remove && item) {
+    trackCartEvent("remove_from_cart", [{ ...item }]);
+    return setCart(cart.filter((entry) => entry.variantId !== variantId));
+  }
   if (!item) return;
+  if (increase) trackCartEvent("add_to_cart", [{ ...item, quantity: 1 }]);
+  if (decrease) trackCartEvent("remove_from_cart", [{ ...item, quantity: 1 }]);
   item.quantity += increase ? 1 : -1;
   setCart(cart.filter((entry) => entry.quantity > 0));
+});
+
+document.querySelector("[data-cart-checkout]")?.addEventListener("click", () => {
+  const cart = getCart();
+  if (cart.length) trackCartEvent("begin_checkout", cart);
 });
 
 document.querySelector("[data-cart-dialog]")?.addEventListener("click", (event) => {

@@ -1278,6 +1278,38 @@ body.riviera-page main {
 .riviera-footer__register h2 em { color: #ffd067; text-transform: none; }
 .riviera-footer__register-copy p { max-width: 32rem; margin-bottom: 1.5rem; color: var(--riviera-paper-light); font: 450 .95rem/1.65 var(--sans); }
 .riviera-footer__register-copy small { margin-top: .8rem; display: block; color: var(--riviera-paper-light); font: 600 .68rem/1.45 var(--utility); }
+.court-notes-form > label {
+  display: block;
+  margin-bottom: .65rem;
+  color: var(--riviera-paper-light);
+  font: 700 .68rem/1 var(--utility);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.court-notes-form > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  max-width: 39rem;
+}
+.court-notes-form input[type="email"] {
+  min-width: 0;
+  min-height: 3.65rem;
+  padding: .95rem 1rem;
+  border: 1px solid var(--riviera-ink);
+  border-right: 0;
+  border-radius: 0;
+  color: var(--riviera-ink);
+  background: var(--riviera-paper-light);
+  font: 520 1rem/1 var(--sans);
+}
+.court-notes-form input[type="email"]::placeholder { color: rgba(20,62,50,.58); }
+.court-notes-form input[type="email"]:focus-visible { outline: 3px solid #ffd067; outline-offset: 2px; }
+.court-notes-form .paper-button { min-height: 3.65rem; white-space: nowrap; }
+.court-notes-form .paper-button:disabled { cursor: wait; opacity: .66; }
+.court-notes-form__honeypot { position: absolute !important; width: 1px !important; height: 1px !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; }
+.court-notes-form__status { min-height: 1.35rem; margin: .65rem 0 0 !important; color: #ffd067 !important; font: 650 .78rem/1.45 var(--sans) !important; }
+.newsletter-confirmed { padding: clamp(5rem, 10vw, 9rem) var(--riviera-page-gutter); }
+.newsletter-confirmed p { max-width: 39rem; }
 
 .riviera-footer__scorecard {
   padding: clamp(3rem, 6vw, 6rem) var(--riviera-page-gutter);
@@ -1416,6 +1448,15 @@ body.riviera-page main {
 .consent-panel__form > label strong { font: 680 .9rem/1.2 var(--sans); }
 .consent-panel__form > label small { color: var(--riviera-muted); font: 460 .75rem/1.4 var(--sans); }
 .consent-panel__form input { width: 1.15rem; height: 1.15rem; accent-color: var(--riviera-green); }
+.consent-panel__form input:disabled { cursor: not-allowed; opacity: .45; }
+.consent-panel__gpc {
+  margin: -.2rem 0 .9rem !important;
+  padding: .7rem .8rem;
+  border-left: 3px solid var(--riviera-blue);
+  background: rgba(28, 88, 162, .08);
+  color: var(--riviera-green) !important;
+  font: 560 .75rem/1.45 var(--sans) !important;
+}
 
 .consent-panel__form-actions {
   position: relative;
@@ -1791,6 +1832,9 @@ body.riviera-page main {
   .journal-poster .annual-image { grid-row: 2; }
 
   .riviera-footer__register { padding: 4rem 1rem 4rem 1.75rem; grid-template-columns: 1fr; align-items: start; }
+  .court-notes-form > div { grid-template-columns: 1fr; gap: .75rem; }
+  .court-notes-form input[type="email"] { border-right: 1px solid var(--riviera-ink); }
+  .court-notes-form .paper-button { width: 100%; justify-content: center; }
   .riviera-footer__scorecard { padding: 3rem 1rem 3rem 1.75rem; grid-template-columns: repeat(2, 1fr); gap: 2.5rem 1.5rem; }
   .scorecard-brand { grid-column: 1 / -1; }
   .riviera-footer__bottom { padding: 1rem; flex-direction: column; gap: .45rem; }

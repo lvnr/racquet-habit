@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { env } from "cloudflare:workers";
 
-const checkoutDomain = "racquet-habit-shop.fourthwall.com";
+const checkoutDomain = "checkout.racquethabit.com";
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const allowedAttribution = [
   "utm_source",

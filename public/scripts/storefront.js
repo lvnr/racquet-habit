@@ -36,7 +36,7 @@ const readCookie = (name) => document.cookie
   .join("=");
 
 const buildCheckoutUrl = (cart) => {
-  const checkout = new URL("https://racquet-habit-shop.fourthwall.com/cart/checkout");
+  const checkout = new URL("https://checkout.racquethabit.com/cart/checkout");
   checkout.searchParams.set("products", cart.map((item) => `${item.variantId}:${item.quantity}`).join(","));
   checkout.searchParams.set("currency", "USD");
   checkout.searchParams.set("cart_origin", checkoutOrigin);

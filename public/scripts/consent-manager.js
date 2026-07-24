@@ -1,6 +1,7 @@
 const storageKey = "rh-consent-v1";
 const consentEvent = "rh:consent-changed";
 const root = document.documentElement;
+const globalPrivacyControl = navigator.globalPrivacyControl === true;
 
 const emptyConsent = Object.freeze({
   version: 1,
@@ -19,6 +20,7 @@ const read = () => {
 };
 
 let current = read();
+if (globalPrivacyControl) current.marketing = false;
 let googleLoaded = false;
 
 const loadScript = (src, id) => new Promise((resolve, reject) => {
@@ -59,7 +61,7 @@ const loadGoogleAnalytics = () => {
   window.gtag?.("config", measurementId, {
     allow_google_signals: current.marketing,
     linker: {
-      domains: ["racquethabit.com", "racquet-habit-shop.fourthwall.com"],
+      domains: ["racquethabit.com", "checkout.racquethabit.com"],
       accept_incoming: true,
     },
   });
@@ -73,7 +75,7 @@ const apply = (choice, { persist = true } = {}) => {
     version: 1,
     decided: true,
     analytics: Boolean(choice.analytics),
-    marketing: Boolean(choice.marketing),
+    marketing: globalPrivacyControl ? false : Boolean(choice.marketing),
     updatedAt: new Date().toISOString(),
   };
   if (persist) localStorage.setItem(storageKey, JSON.stringify(current));
@@ -89,6 +91,12 @@ const summary = panel?.querySelector("[data-consent-summary]");
 const form = panel?.querySelector("[data-consent-form]");
 const analyticsInput = panel?.querySelector("[data-consent-analytics]");
 const marketingInput = panel?.querySelector("[data-consent-marketing]");
+const gpcNotice = panel?.querySelector("[data-consent-gpc]");
+
+if (globalPrivacyControl) {
+  if (marketingInput) marketingInput.disabled = true;
+  if (gpcNotice) gpcNotice.hidden = false;
+}
 
 const showSummary = () => {
   if (!panel || !summary || !form) return;
@@ -112,7 +120,7 @@ const hide = () => {
 };
 
 panel?.querySelector("[data-consent-accept]")?.addEventListener("click", () => {
-  apply({ analytics: true, marketing: true });
+  apply({ analytics: true, marketing: !globalPrivacyControl });
   hide();
 });
 

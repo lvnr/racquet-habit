@@ -6,7 +6,7 @@ Last reviewed: 24 July 2026
 
 - GA4 web stream: `G-B53YGNVTNF`
 - Storefront domain: `racquethabit.com`
-- Hosted checkout domain: `racquet-habit-shop.fourthwall.com`
+- Branded hosted checkout domain: `checkout.racquethabit.com`
 - The same GA4 stream is installed on both domains.
 - GA4 cross-domain measurement is configured for both domains.
 - Fourthwall's cookie-policy banner is enabled.
@@ -45,6 +45,9 @@ the identifiers Fourthwall officially supports:
 `utm_*`, `gclid`, `fbclid`, `_ga`, `_fbp`, `_fbc`, `FPID`, and `cart_origin`.
 The shared GA4 tag and cross-domain configuration are the primary mechanism for
 keeping one user/session across the storefront and checkout.
+
+When a browser sends Global Privacy Control, the storefront forces marketing
+consent to `denied` even if a prior local preference granted it.
 
 The analytics helper also publishes a provider-neutral `rh:commerce` browser
 event. Meta, TikTok and Pinterest adapters listen for this event instead of

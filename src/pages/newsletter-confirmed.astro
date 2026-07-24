@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageMasthead from "../components/PageMasthead.astro";
+---
+
+<BaseLayout
+  title="Court Notes Confirmed | Racquet Habit"
+  description="Your place on the Racquet Habit Court Notes list is confirmed."
+  robots="noindex,follow"
+>
+  <PageMasthead
+    title="You’re on the court list"
+    intro="Court Notes, collection drops and the occasional excuse to remain out of office will now arrive from Racquet Habit."
+    issue="Subscription confirmed"
+    tone="red"
+  />
+  <section class="service-answer newsletter-confirmed">
+    <span class="site-kicker">Good people · one more set</span>
+    <h2>See you<br />after the first match.</h2>
+    <p>Add <strong>court@send.racquethabit.com</strong> to your contacts if you would like Court Notes to land neatly in your inbox.</p>
+    <a class="paper-button" href="/shop">Return to Collection 01 <span>↗</span></a>
+  </section>
+</BaseLayout>

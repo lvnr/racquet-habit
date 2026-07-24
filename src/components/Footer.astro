@@ -7,10 +7,26 @@
     </div>
     <div class="riviera-footer__register-copy">
       <p>New uniforms, court notes and the occasional excuse to remain out of office.</p>
-      <a class="paper-button paper-button--light" href="https://racquet-habit-shop.fourthwall.com" rel="external">
-        Join court notes <span>↗</span>
-      </a>
-      <small>Drops, stories and match-day notices. Served irregularly.</small>
+      <form class="court-notes-form" data-newsletter-form>
+        <label for="court-notes-email">Email address</label>
+        <div>
+          <input
+            id="court-notes-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            inputmode="email"
+            placeholder="you@example.com"
+            aria-describedby="court-notes-terms court-notes-status"
+            required
+          />
+          <button class="paper-button paper-button--light" type="submit">Join court notes</button>
+        </div>
+        <input class="court-notes-form__honeypot" name="company" type="text" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <input name="startedAt" type="hidden" />
+        <small id="court-notes-terms">By joining, you agree to receive marketing emails. Unsubscribe whenever the rally ends.</small>
+        <p id="court-notes-status" class="court-notes-form__status" data-newsletter-status role="status" aria-live="polite"></p>
+      </form>
     </div>
   </div>
   <div class="riviera-footer__tear riviera-footer__tear--red-paper" aria-hidden="true"></div>
@@ -47,3 +63,4 @@
     <span>Riviera Match Annual · Issue 01</span>
   </div>
 </footer>
+<script is:inline src="/scripts/newsletter.js" type="module"></script>

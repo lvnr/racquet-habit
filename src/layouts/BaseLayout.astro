@@ -104,11 +104,12 @@ const schemas = [...baseSchema, ...pageSchema.filter((item) => Object.keys(item)
       try {
         const savedConsent = JSON.parse(localStorage.getItem('rh-consent-v1') || 'null');
         if (savedConsent?.version === 1 && savedConsent?.decided === true) {
+          const marketingAllowed = Boolean(savedConsent.marketing) && navigator.globalPrivacyControl !== true;
           gtag('consent', 'update', {
             analytics_storage: savedConsent.analytics ? 'granted' : 'denied',
-            ad_storage: savedConsent.marketing ? 'granted' : 'denied',
-            ad_user_data: savedConsent.marketing ? 'granted' : 'denied',
-            ad_personalization: savedConsent.marketing ? 'granted' : 'denied',
+            ad_storage: marketingAllowed ? 'granted' : 'denied',
+            ad_user_data: marketingAllowed ? 'granted' : 'denied',
+            ad_personalization: marketingAllowed ? 'granted' : 'denied',
           });
         }
       } catch {}

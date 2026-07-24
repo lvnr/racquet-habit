@@ -13,8 +13,8 @@ const priceLabel = product.maxPrice > product.price ? `From $${product.price.toF
 const galleryImages = [...new Set([
   localImage,
   ...product.images,
-  product.editorialImage,
 ].filter((image): image is string => Boolean(image)))].slice(0, 4);
+const isEditorial = (image: string) => product.editorialImages.includes(image);
 ---
 
 <article class="riviera-product">
@@ -29,7 +29,7 @@ const galleryImages = [...new Set([
       <span class="riviera-product__track" data-gallery-track>
         {galleryImages.map((image, imageIndex) => (
           <span
-            class:list={["riviera-product__slide", { "is-editorial": image === product.editorialImage }]}
+            class:list={["riviera-product__slide", { "is-editorial": isEditorial(image) }]}
             aria-hidden={imageIndex === 0 ? "false" : "true"}
           >
             <img
@@ -38,8 +38,8 @@ const galleryImages = [...new Set([
               loading="lazy"
               decoding="async"
               fetchpriority="low"
-              width={image === product.editorialImage ? "1400" : "720"}
-              height={image === product.editorialImage ? "1400" : "960"}
+              width={isEditorial(image) ? "1400" : "720"}
+              height={isEditorial(image) ? "1400" : "960"}
             />
           </span>
         ))}

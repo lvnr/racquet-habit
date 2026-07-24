@@ -96,10 +96,23 @@ function mapProduct(product: FourthwallProduct): CatalogProduct {
     colorHex: variant.attributes?.color?.swatch,
     size: variant.attributes?.size?.name,
     inStock: variantInStock(variant),
-    images: (variant.images ?? []).map(imageUrl).filter((value): value is string => Boolean(value)).slice(0, 8),
+    // Fourthwall's first two views are the product-only front/back renders. Later
+    // images are generic model mockups whose art direction varies by product.
+    images: (variant.images ?? []).map(imageUrl).filter((value): value is string => Boolean(value)).slice(0, 2),
   }));
-  const images = (product.images ?? []).map(imageUrl).filter((value): value is string => Boolean(value));
-  const uniqueImages = [...new Set(images)];
+  variants.sort((a, b) => {
+    const preference = (variant: ProductVariant) =>
+      Number(Boolean(presentation.featuredColor) && variant.color === presentation.featuredColor) * 2 +
+      Number(Boolean(presentation.featuredSize) && variant.size === presentation.featuredSize);
+    return preference(b) - preference(a);
+  });
+  const fourthwallImages = (product.images ?? []).map(imageUrl).filter((value): value is string => Boolean(value));
+  const uniqueFourthwallImages = [...new Set(fourthwallImages)];
+  const catalogImages = presentation.catalogImages?.length
+    ? presentation.catalogImages
+    : uniqueFourthwallImages.slice(0, 2);
+  const editorialImages = presentation.editorialImages ?? (presentation.editorialImage ? [presentation.editorialImage] : []);
+  const galleryImages = [...new Set([...catalogImages, ...editorialImages])];
   const availablePrices = variants.filter((variant) => variant.inStock).map((variant) => variant.price);
   const price = Math.min(...(availablePrices.length ? availablePrices : variants.map((variant) => variant.price)));
   const maxPrice = Math.max(...(availablePrices.length ? availablePrices : variants.map((variant) => variant.price)));
@@ -116,9 +129,13 @@ function mapProduct(product: FourthwallProduct): CatalogProduct {
     story: presentation.story,
     price: Number.isFinite(price) ? price : 0,
     maxPrice: Number.isFinite(maxPrice) ? maxPrice : 0,
-    image: uniqueImages[0] || variants[0]?.images[0] || "/images/riviera/laundry-hero-desktop.webp",
-    images: uniqueImages.slice(0, 8),
-    editorialImage: presentation.editorialImage,
+    image: catalogImages[0] || variants[0]?.images[0] || "/images/riviera/laundry-hero-desktop.webp",
+    images: galleryImages.length ? galleryImages : uniqueFourthwallImages.slice(0, 4),
+    catalogImages,
+    editorialImages,
+    editorialImage: editorialImages[0],
+    featuredColor: presentation.featuredColor,
+    featuredSize: presentation.featuredSize,
     variants,
     information: informationFrom(product.additionalInformation),
     source: "fourthwall",

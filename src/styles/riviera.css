@@ -26,7 +26,6 @@
 .riviera-header__brand img { width: 100%; height: auto; }
 .riviera-header__nav { display: flex; align-items: center; gap: clamp(1.5rem, 3vw, 3.5rem); }
 .riviera-header__nav a,
-.riviera-header__currency,
 .riviera-header__bag {
   position: relative;
   min-height: 2.75rem;
@@ -54,7 +53,11 @@
 .riviera-header__nav a:hover::after,
 .riviera-header__nav a.active::after { transform: scaleX(1); transform-origin: left; }
 .riviera-header__actions { display: flex; align-items: center; justify-content: flex-end; gap: 1.35rem; }
-.riviera-header__currency { color: var(--muted); }
+.riviera-header__currency {
+  font-size: .82rem;
+  line-height: 1;
+  color: var(--muted);
+}
 .riviera-header__bag { min-width: 3.8rem; text-align: right; }
 .mobile-nav { display: none; }
 

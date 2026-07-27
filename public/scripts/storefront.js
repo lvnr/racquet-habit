@@ -1,8 +1,4 @@
-const root = document.documentElement;
-const rate = Number(root.dataset.amdRate || 367);
-const country = root.dataset.country || "";
 const cartKey = "rh-cart-v1";
-const currencyKey = "rh-currency-v1";
 const checkoutOrigin = "https://racquethabit.com";
 const sessionKey = "rh-session-id-v1";
 const cartImageMap = (() => {
@@ -91,39 +87,18 @@ const createCheckout = async (cart) => {
   return result.url;
 };
 
-const formatPrice = (value, currency = root.dataset.currency || "USD") => {
-  if (currency === "AMD") {
-    const rounded = Math.round((Number(value) * rate) / 100) * 100;
-    return new Intl.NumberFormat("hy-AM", { style: "currency", currency: "AMD", maximumFractionDigits: 0 }).format(rounded);
-  }
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(Number(value));
-};
+const formatPrice = (value) => new Intl.NumberFormat(
+  "en-US",
+  { style: "currency", currency: "USD" },
+).format(Number(value));
 
 const updatePrices = () => {
-  const currencyLabel = root.dataset.currency === "AMD" ? "AMD ֏" : "USD $";
   document.querySelectorAll("[data-price-usd]").forEach((node) => {
     node.textContent = formatPrice(node.dataset.priceUsd);
   });
-  document.querySelectorAll("[data-currency-label]").forEach((node) => {
-    node.textContent = currencyLabel;
-  });
-  document.querySelectorAll("[data-currency-toggle]").forEach((button) => {
-    button.setAttribute("aria-label", `Currency ${currencyLabel}. Toggle display currency`);
-  });
 };
 
-const savedCurrency = localStorage.getItem(currencyKey);
-if (savedCurrency === "AMD" || savedCurrency === "USD") root.dataset.currency = savedCurrency;
 updatePrices();
-
-document.querySelectorAll("[data-currency-toggle]").forEach((button) => {
-  button.addEventListener("click", () => {
-    root.dataset.currency = root.dataset.currency === "AMD" ? "USD" : "AMD";
-    localStorage.setItem(currencyKey, root.dataset.currency);
-    updatePrices();
-    renderCart();
-  });
-});
 
 const getCart = () => {
   try {

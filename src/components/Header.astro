@@ -1,6 +1,5 @@
 ---
 const path = Astro.url.pathname;
-const isArmenia = Astro.locals.isArmenia as boolean;
 const links = [
   { href: "/shop", label: "Shop", active: path.startsWith("/shop") || path.startsWith("/products") },
   { href: "/journal", label: "Journal", active: path.startsWith("/journal") },
@@ -18,14 +17,7 @@ const links = [
   </nav>
 
   <div class="riviera-header__actions">
-    <button
-      class="riviera-header__currency"
-      type="button"
-      data-currency-toggle
-      aria-label={`Currency ${isArmenia ? "AMD ֏" : "USD $"}. Toggle display currency`}
-    >
-      <span data-currency-label>{isArmenia ? "AMD ֏" : "USD $"}</span>
-    </button>
+    <span class="riviera-header__currency" aria-label="Prices in US dollars">USD $</span>
     <button class="riviera-header__bag" type="button" data-cart-open aria-label="Bag (0). Open shopping bag">
       Bag <span>(<span data-cart-count>0</span>)</span>
     </button>
@@ -40,13 +32,7 @@ const links = [
         </nav>
         <div class="riviera-mobile-nav__foot">
           <span>Worldwide delivery · Free standard shipping on orders of $150+</span>
-          <button
-            type="button"
-            data-currency-toggle
-            aria-label={`Currency ${isArmenia ? "AMD ֏" : "USD $"}. Toggle display currency`}
-          >
-            Currency · <span data-currency-label>{isArmenia ? "AMD ֏" : "USD $"}</span>
-          </button>
+          <span>Currency · USD $</span>
         </div>
       </div>
     </details>

@@ -32,12 +32,6 @@ const {
   schema = [],
 } = Astro.props;
 
-const requestCountry = (Astro.request as Request & { cf?: { country?: string } }).cf?.country;
-const testCountry = import.meta.env.DEV ? Astro.url.searchParams.get("country") : null;
-const country = testCountry || requestCountry || Astro.request.headers.get("cf-ipcountry") || "";
-const isArmenia = country === "AM";
-const currency = isArmenia ? "AMD" : "USD";
-const amdRate = Number(env.AMD_PER_USD || 367);
 const runtimeEnv = env as unknown as Record<string, string | undefined>;
 const analyticsIds = {
   ga: runtimeEnv.GA_MEASUREMENT_ID || "G-B53YGNVTNF",
@@ -45,8 +39,6 @@ const analyticsIds = {
   tiktok: runtimeEnv.TIKTOK_PIXEL_ID || "D9HKESBC77U1LOVTV5E0",
   pinterest: runtimeEnv.PINTEREST_TAG_ID || "",
 };
-Astro.locals.isArmenia = isArmenia;
-
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL(image, Astro.site);
 const baseSchema = [
@@ -84,9 +76,6 @@ const cartImageMapJson = JSON.stringify(cartImageMap).replace(/</g, "\\u003c");
 <!doctype html>
 <html
   lang="en"
-  data-country={country}
-  data-currency={currency}
-  data-amd-rate={amdRate}
   data-ga-measurement-id={analyticsIds.ga}
   data-meta-pixel-id={analyticsIds.meta}
   data-tiktok-pixel-id={analyticsIds.tiktok}

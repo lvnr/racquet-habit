@@ -12,7 +12,7 @@ cp .dev.vars.example .dev.vars
 npm run dev
 ```
 
-The storefront runs at `http://localhost:4321`. Add `?country=AM` locally to preview the Armenia experience and AMD display.
+The storefront runs at `http://localhost:4321`.
 
 ## Environment
 
@@ -42,8 +42,6 @@ npm run deploy      # build and deploy with Wrangler
 - Cloudflare custom domains: `racquethabit.com` and `www.racquethabit.com`
 - Fourthwall Storefront API for live products, images, variants, prices, and availability
 - Fourthwall direct-checkout URLs generated from the local bag
-- Armenia detected at the edge through Cloudflare country metadata
-- AMD prices shown as an approximate localized display; checkout settles in USD
 - `ARMENIA` is automatically applied for Armenia checkout and provides free shipping
 
 Fourthwall calculates shipping rates for print-on-demand products. It does not expose a fixed international shipping override for these products, so international delivery is calculated at checkout rather than forced to $25.

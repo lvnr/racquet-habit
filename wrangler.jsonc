@@ -8,7 +8,6 @@
     "directory": "./dist"
   },
   "vars": {
-    "AMD_PER_USD": "367",
     "GA_MEASUREMENT_ID": "G-B53YGNVTNF",
     "META_PIXEL_ID": "3719611174858822",
     "TIKTOK_PIXEL_ID": "D9HKESBC77U1LOVTV5E0",

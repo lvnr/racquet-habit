@@ -2,7 +2,6 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PageMasthead from "../components/PageMasthead.astro";
 import ProductCard from "../components/ProductCard.astro";
-import EditorialImage from "../components/EditorialImage.astro";
 import { getCatalog } from "../lib/catalog";
 
 const catalog = await getCatalog();
@@ -10,7 +9,7 @@ const categories = ["All", "Tees", "Accessories"];
 const collectionSchema = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  name: "Collection 01 — The Last Set",
+  name: "The Racquet Habit collection",
   url: "https://racquethabit.com/shop",
   description: "Tennis tees, caps, totes, towels and accessories for repeat players.",
   mainEntity: {
@@ -28,14 +27,14 @@ const collectionSchema = {
 
 <BaseLayout
   title="Tennis Apparel & Court Accessories | Racquet Habit"
-  description="Explore Collection 01: tennis tees, caps, totes, towels and court accessories for repeat players, with worldwide delivery and free standard shipping on orders of $150 or more."
+  description="Explore tennis tees, caps, totes, towels and court accessories for repeat players, with worldwide delivery and free standard shipping on orders of $150 or more."
   schema={collectionSchema}
 >
   <PageMasthead
-    title="Collection 01: The Last Set"
-    intro="A twelve-piece opening issue for repeat players: heavyweight tees, relaxed crops, court accessories and one very complete excuse to remain out of office."
+    title="Shop"
+    intro="The complete Racquet Habit collection: considered apparel and court goods for play, lunch and the walk home."
   >
-    <span class="page-masthead__count"><b data-visible-count>{catalog.length}</b> pieces available</span>
+    <span class="page-masthead__count"><b data-visible-count>{catalog.length}</b> products</span>
   </PageMasthead>
 
   <div class="annual-filter-bar">
@@ -44,72 +43,56 @@ const collectionSchema = {
         <button type="button" class={category === "All" ? "active" : ""} data-filter={category}>{category}</button>
       ))}
     </div>
-    <a href="#capsules">Browse by story ↓</a>
+    <span>Front view · Back view on hover</span>
   </div>
 
-  <section class="shop-annual" aria-label="Collection 01 products">
+  <section class="shop-annual" aria-label="All products">
     {catalog.length > 0 ? (
       <div
         class="annual-product-grid annual-product-grid--shop"
         data-shop-grid
         data-commerce-list
-        data-item-list-id="collection_01"
-        data-item-list-name="Collection 01 — The Last Set"
+        data-item-list-id="all_products"
+        data-item-list-name="All products"
       >
-        {catalog.map((product, index) => <ProductCard product={product} index={index} priority={index < 2} />)}
+        {catalog.map((product, index) => <ProductCard product={product} index={index} priority={index < 4} />)}
       </div>
     ) : (
       <div class="catalog-unavailable">
-        <span class="site-kicker">Between serves</span>
         <h2>The live collection is temporarily unavailable.</h2>
-        <p>No substitute or preview products are shown. Please return shortly and the live collection will reappear here automatically.</p>
-        <a class="paper-button" href="/contact">Contact the service desk <span>↗</span></a>
+        <p>No placeholders are shown. Please return shortly and the collection will reappear automatically.</p>
+        <a class="paper-button" href="/contact">Contact us <span aria-hidden="true">↗</span></a>
       </div>
     )}
   </section>
 
-  <section class="equipment-gatefold" id="capsules" aria-labelledby="equipment-title">
-    <EditorialImage
-      src="/images/editorial/court-tailor-campaign-v2.webp"
-      alt="A Racquet Habit court fitting with five shirts and three Out of Office caps beside a clay court"
-      caption="The court tailor"
-      plate="Collection fitting 01"
-      ratio="square"
+  <section class="shop-editorial" aria-label="Racquet Habit on court">
+    <img
+      src="/images/products/white-court/racquets-sunshine-something-cold-beach-towel/editorial-02.webp"
+      alt="A player courtside wrapped in the Racquets Sunshine Something Cold beach towel"
+      loading="lazy"
+      decoding="async"
+      width="1024"
+      height="1536"
     />
-    <div class="equipment-gatefold__copy">
-      <span class="site-kicker">Five stories · one collection</span>
-      <h2 id="equipment-title">Choose your<br /><em>draw.</em></h2>
-      <div class="capsule-index">
-        <button type="button" data-capsule-filter="The Daily Lineup"><b>01</b><span>The Daily Lineup</span><small>Tennis, lunch, tennis.</small></button>
-        <button type="button" data-capsule-filter="Court-Side Pleasures"><b>02</b><span>Court-Side Pleasures</span><small>Racquets, sunshine, something cold.</small></button>
-        <button type="button" data-capsule-filter="Love Cherries"><b>03</b><span>Love Cherries</span><small>A romantic interpretation of the score.</small></button>
-        <button type="button" data-capsule-filter="Repeat Players"><b>04</b><span>Repeat Players</span><small>Recovery remains theoretical.</small></button>
-        <button type="button" data-capsule-filter="Signed Rally — Founding Issue"><b>05</b><span>Signed Rally</span><small>The Society’s first uniform.</small></button>
-      </div>
-      <button class="paper-link capsule-reset" type="button" data-capsule-reset>Show the complete collection ↗</button>
+    <div>
+      <img src="/brand-white-court/monogram-thin.webp" alt="" aria-hidden="true" width="1200" height="1200" />
+      <p>Made to order.<br />Worldwide delivery.<br />Quality guaranteed.</p>
+      <a class="text-link" href="/shipping">Delivery & returns <span aria-hidden="true">↗</span></a>
     </div>
-  </section>
-
-  <section class="shop-service-note">
-    <div><span>Free shipping at $150+</span><p>Standard shipping is complimentary when the merchandise subtotal reaches $150. Other delivery costs and timing are calculated at checkout.</p></div>
-    <div><span>Made to order</span><p>Every current piece is produced after ordering. Please check the size and device selection carefully.</p></div>
-    <div><span>Quality guaranteed</span><p>Visible print errors and manufacturing issues are eligible for replacement or refund after review.</p></div>
   </section>
 
   <script>
     const filters = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
-    const capsuleFilters = document.querySelectorAll<HTMLButtonElement>("[data-capsule-filter]");
-    const reset = document.querySelector<HTMLButtonElement>("[data-capsule-reset]");
     const cards = document.querySelectorAll<HTMLElement>("[data-product-card]");
     const count = document.querySelector<HTMLElement>("[data-visible-count]");
     const params = new URLSearchParams(location.search);
 
-    const apply = (category: string, capsule = "") => {
+    const apply = (category: string) => {
       let visible = 0;
-      filters.forEach((button) => button.classList.toggle("active", button.dataset.filter === category && !capsule));
-      capsuleFilters.forEach((button) => button.classList.toggle("active", button.dataset.capsuleFilter === capsule));
+      filters.forEach((button) => button.classList.toggle("active", button.dataset.filter === category));
       cards.forEach((card) => {
-        const show = capsule ? card.dataset.capsule === capsule : category === "All" || card.dataset.category === category;
+        const show = category === "All" || card.dataset.category === category;
         card.hidden = !show;
         if (show) visible += 1;
       });
@@ -117,16 +100,12 @@ const collectionSchema = {
       const url = new URL(location.href);
       url.searchParams.delete("category");
       url.searchParams.delete("capsule");
-      if (capsule) url.searchParams.set("capsule", capsule);
-      else if (category !== "All") url.searchParams.set("category", category);
+      if (category !== "All") url.searchParams.set("category", category);
       history.replaceState({}, "", url);
       (window as any).RacquetHabitAnalytics?.trackVisibleLists(document.querySelector("[data-shop-grid]") || document);
-      if (capsule) document.querySelector("[data-shop-grid]")?.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
     filters.forEach((button) => button.addEventListener("click", () => apply(button.dataset.filter || "All")));
-    capsuleFilters.forEach((button) => button.addEventListener("click", () => apply("All", button.dataset.capsuleFilter || "")));
-    reset?.addEventListener("click", () => apply("All"));
-    apply(params.get("category") || "All", params.get("capsule") || "");
+    apply(params.get("category") || "All");
   </script>
 </BaseLayout>

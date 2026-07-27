@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ProductCard from "../../components/ProductCard.astro";
-import EditorialImage from "../../components/EditorialImage.astro";
 import { getCatalog, getProduct } from "../../lib/catalog";
 
 const product = await getProduct(Astro.params.slug || "");
@@ -9,7 +8,7 @@ if (!product) return Astro.rewrite("/404");
 const catalog = await getCatalog();
 const variants = product.variants.filter((variant) => variant.inStock);
 const defaultVariant = variants[0];
-const maxProductGalleryImages = 6;
+const maxProductGalleryImages = 5;
 const initialImages = product.images.slice(0, maxProductGalleryImages);
 const productGallerySlots = Array.from({ length: maxProductGalleryImages }, (_, index) => initialImages[index]);
 const colors = [...new Map(variants.filter((variant) => variant.color).map((variant) => [variant.color, variant.colorHex])).entries()];
@@ -25,7 +24,7 @@ const variantSchema = variants.map((variant) => ({
   sku: variant.id,
   color: variant.color,
   size: variant.size,
-  image: variant.images,
+  image: product.images,
   offers: {
     "@type": "Offer",
     url: canonical,
@@ -111,17 +110,26 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
             data-gallery-slot={index}
             hidden={!image}
           >
-            <img
-              src={image || product.image}
-              alt={index === 0 ? product.name : `${product.name}, view ${index + 1}`}
-              fetchpriority={index === 0 ? "high" : "low"}
-              loading={index === 0 ? "eager" : "lazy"}
-              decoding="async"
-              width="1536"
-              height="2048"
-            />
+            <button
+              class="annual-product-gallery__open"
+              type="button"
+              data-lightbox-open={index}
+              aria-label={`Open ${product.name}, view ${index + 1}`}
+            >
+              <img
+                src={image || product.image}
+                alt={index === 0 ? product.name : `${product.name}, view ${index + 1}`}
+                style={index === 0 ? `view-transition-name: product-${product.slug}` : undefined}
+                fetchpriority={index === 0 ? "high" : "low"}
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
+                width="1536"
+                height="2048"
+              />
+              <span class="annual-product-gallery__expand" aria-hidden="true">View</span>
+            </button>
             <figcaption>
-              <span data-gallery-kind>{image && product.editorialImages.includes(image) ? "From the annual" : product.productType}</span>
+              <span data-gallery-kind>{image && product.editorialImages.includes(image) ? "On court" : product.productType}</span>
               <span data-gallery-view>{image && product.editorialImages.includes(image) ? "Editorial" : `View ${String(index + 1).padStart(2, "0")}`}</span>
             </figcaption>
           </figure>
@@ -138,9 +146,9 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
 
     <div class="annual-product-info">
       <nav class="product-breadcrumb" aria-label="Breadcrumb">
-        <a href="/shop">Collection 01</a><span>/</span><a href={`/shop?category=${product.category}`}>{product.category}</a>
+        <a href="/shop">Shop</a><span>/</span><a href={`/shop?category=${product.category}`}>{product.category}</a>
       </nav>
-      <span class="site-kicker">{product.capsule} · {product.productType}</span>
+      <span class="site-kicker">{product.productType} · {product.capsule}</span>
       <div class="annual-product-info__title">
         <h1>{product.name}</h1>
         <strong data-product-price data-price-usd={defaultVariant?.price ?? product.price}>${(defaultVariant?.price ?? product.price).toFixed(2)}</strong>
@@ -179,7 +187,7 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
       </div>
 
       <button
-        class="paper-button paper-button--red paper-button--full"
+        class="paper-button paper-button--full"
         type="button"
         data-add-to-cart
         data-variant-id={defaultVariant?.id}
@@ -194,21 +202,21 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
       >
         <span>Add to bag</span><span>↗</span>
       </button>
-      <p class="product-note">Made to order. Local-currency display is approximate; secure checkout settles in USD.</p>
+      <p class="product-note">Made to order · Worldwide delivery · Secure checkout in USD</p>
 
       <div class="product-answer">
-        <h2>At a glance</h2>
+        <h2>Service</h2>
         <dl>
           <div><dt>Availability</dt><dd>Available now · made to order</dd></div>
           <div><dt>Options</dt><dd>{colors.length || 1} {colors.length === 1 ? "color" : "colors"} · {sizes.length || 1} {product.productType === "MagSafe case" ? "device options" : sizes.length === 1 ? "size" : "sizes"}</dd></div>
-          <div><dt>Delivery</dt><dd>Worldwide · live timing at checkout</dd></div>
+          <div><dt>Delivery</dt><dd>Worldwide · timing calculated at checkout</dd></div>
           <div><dt>Returns</dt><dd>Quality issues covered; general and sizing returns are not accepted</dd></div>
         </dl>
       </div>
 
       <div class="product-accordions">
         <details open>
-          <summary>The piece</summary>
+          <summary>Product story</summary>
           <p>{product.story}</p>
         </details>
         {product.information.map((item) => (
@@ -227,26 +235,61 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
     </div>
   </section>
 
-  <section class="product-context" aria-labelledby="annual-context-title">
-    <div>
-      <span class="site-kicker">From the annual · not an additional product view</span>
-      <h2 id="annual-context-title">Made for the<br /><em>hours around play.</em></h2>
-      <p>Issue 01 begins in the shade, travels through a late court booking and normally ends wherever lunch is still being served.</p>
+  <dialog class="product-lightbox" data-product-lightbox aria-labelledby="product-lightbox-title">
+    <div class="product-lightbox__shell">
+      <header class="product-lightbox__header">
+        <div>
+          <strong id="product-lightbox-title">{product.name}</strong>
+          <span data-lightbox-count aria-live="polite">01 / {String(initialImages.length).padStart(2, "0")}</span>
+        </div>
+        <div>
+          <button type="button" data-lightbox-zoom>
+            <span data-lightbox-zoom-label>Actual size</span>
+          </button>
+          <button type="button" data-lightbox-close aria-label="Close image viewer" autofocus>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m5 5 14 14M19 5 5 19" fill="none" stroke="currentColor" stroke-width="1.25"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="product-lightbox__stage" data-lightbox-stage>
+        <button type="button" data-lightbox-image-toggle aria-label="View image at actual size">
+          <img
+            src={initialImages[0] || product.image}
+            alt={product.name}
+            data-lightbox-image
+            width="1536"
+            height="2048"
+          />
+        </button>
+      </div>
+
+      <footer class="product-lightbox__footer">
+        <button type="button" data-lightbox-prev aria-label="Previous product image">←</button>
+        <nav aria-label="Product image thumbnails">
+          {initialImages.map((image, index) => (
+            <button
+              type="button"
+              data-lightbox-thumb={index}
+              aria-label={`Show ${product.name}, view ${index + 1}`}
+              aria-current={index === 0 ? "true" : "false"}
+            >
+              <img src={image} alt="" width="96" height="120" />
+            </button>
+          ))}
+        </nav>
+        <button type="button" data-lightbox-next aria-label="Next product image">→</button>
+      </footer>
     </div>
-    <EditorialImage
-      src={product.category === "Accessories" ? "/images/editorial/accessories-flat-lay.webp" : "/images/editorial/locker-campaign-v2.webp"}
-      alt={product.category === "Accessories" ? "Racquet Habit court accessories arranged beside tennis equipment" : "Four Racquet Habit players wearing pieces from Collection 01 in a locker contact sheet"}
-      caption={product.category === "Accessories" ? "Equipment for the hours after" : "Five pieces · one locker call"}
-      plate="Annual context"
-    />
-  </section>
+  </dialog>
 
   {related.length > 0 && (
     <section class="related-annual">
       <header>
-        <span class="site-kicker">Continue the draw</span>
-        <h2>More from Issue 01</h2>
-        <a class="paper-link" href="/shop">View all twelve pieces <span>↗</span></a>
+        <h2>You may also like</h2>
+        <a class="paper-link" href="/shop">Shop all products <span>↗</span></a>
       </header>
       <div
         class="annual-product-grid"
@@ -264,8 +307,6 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
     const dataNode = document.querySelector<HTMLScriptElement>("#product-options-data");
     const galleryData = JSON.parse(dataNode?.textContent || "{}");
     const variants = galleryData.variants || [];
-    const featuredColor = galleryData.featuredColor || "";
-    const featuredSize = galleryData.featuredSize || "";
     const featuredGallery = galleryData.featuredGallery || [];
     const editorialStartIndex = galleryData.editorialStartIndex || 2;
     const productType = galleryData.productType || "Product";
@@ -279,6 +320,15 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
     const galleryStatus = galleryShell?.querySelector<HTMLElement>("[data-pdp-gallery-status]");
     const galleryPrevious = galleryShell?.querySelector<HTMLButtonElement>("[data-pdp-gallery-prev]");
     const galleryNext = galleryShell?.querySelector<HTMLButtonElement>("[data-pdp-gallery-next]");
+    const lightbox = document.querySelector<HTMLDialogElement>("[data-product-lightbox]");
+    const lightboxImage = lightbox?.querySelector<HTMLImageElement>("[data-lightbox-image]");
+    const lightboxStage = lightbox?.querySelector<HTMLElement>("[data-lightbox-stage]");
+    const lightboxCount = lightbox?.querySelector<HTMLElement>("[data-lightbox-count]");
+    const lightboxZoomLabel = lightbox?.querySelector<HTMLElement>("[data-lightbox-zoom-label]");
+    const lightboxImageToggle = lightbox?.querySelector<HTMLButtonElement>("[data-lightbox-image-toggle]");
+    const lightboxZoom = lightbox?.querySelector<HTMLButtonElement>("[data-lightbox-zoom]");
+    const lightboxThumbs = [...(lightbox?.querySelectorAll<HTMLButtonElement>("[data-lightbox-thumb]") || [])];
+    let lightboxIndex = 0;
     let selectedColor = colorButtons.find((button) => button.classList.contains("active"))?.dataset.colorOption || variants[0]?.color;
 
     const availableSizes = (color: string) => variants.filter((variant: any) => !color || variant.color === color).map((variant: any) => variant.size);
@@ -303,7 +353,8 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
       const nextIndex = Math.max(0, Math.min(figures.length - 1, currentFigureIndex() + direction));
       const figure = figures[nextIndex];
       if (!gallery || !figure) return;
-      gallery.scrollTo({ left: figure.offsetLeft, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+      gallery.scrollLeft = figure.offsetLeft;
+      window.requestAnimationFrame(updateGalleryStatus);
     };
 
     galleryPrevious?.addEventListener("click", () => moveGallery(-1));
@@ -316,6 +367,84 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
         galleryFrame = 0;
       });
     }, { passive: true });
+
+    const setLightboxZoom = (zoomed: boolean) => {
+      lightboxStage?.classList.toggle("is-zoomed", zoomed);
+      if (lightboxZoomLabel) lightboxZoomLabel.textContent = zoomed ? "Fit image" : "Actual size";
+      if (lightboxImageToggle) {
+        lightboxImageToggle.setAttribute("aria-label", zoomed ? "Fit image to screen" : "View image at actual size");
+      }
+      if (lightboxStage) {
+        lightboxStage.scrollLeft = 0;
+        lightboxStage.scrollTop = 0;
+      }
+    };
+
+    const renderLightbox = (index: number) => {
+      if (!featuredGallery.length) return;
+      lightboxIndex = (index + featuredGallery.length) % featuredGallery.length;
+      const image = featuredGallery[lightboxIndex];
+      const editorial = lightboxIndex >= editorialStartIndex;
+      if (lightboxImage) {
+        lightboxImage.src = image;
+        lightboxImage.alt = editorial
+          ? `${addButton?.dataset.name || ""} photographed on court`
+          : lightboxIndex === 0
+            ? addButton?.dataset.name || ""
+            : `${addButton?.dataset.name || ""}, view ${lightboxIndex + 1}`;
+      }
+      if (lightboxCount) {
+        lightboxCount.textContent = `${String(lightboxIndex + 1).padStart(2, "0")} / ${String(featuredGallery.length).padStart(2, "0")}`;
+      }
+      lightboxThumbs.forEach((thumb, thumbIndex) => {
+        thumb.setAttribute("aria-current", String(thumbIndex === lightboxIndex));
+      });
+      setLightboxZoom(false);
+    };
+
+    const openLightbox = (index: number) => {
+      if (!lightbox) return;
+      renderLightbox(index);
+      document.documentElement.classList.add("lightbox-open");
+      lightbox.showModal();
+    };
+
+    document.querySelectorAll<HTMLButtonElement>("[data-lightbox-open]").forEach((button) => {
+      button.addEventListener("click", () => openLightbox(Number(button.dataset.lightboxOpen || 0)));
+    });
+    lightbox?.querySelector<HTMLButtonElement>("[data-lightbox-close]")?.addEventListener("click", () => lightbox.close());
+    lightbox?.querySelector<HTMLButtonElement>("[data-lightbox-prev]")?.addEventListener("click", () => renderLightbox(lightboxIndex - 1));
+    lightbox?.querySelector<HTMLButtonElement>("[data-lightbox-next]")?.addEventListener("click", () => renderLightbox(lightboxIndex + 1));
+    lightboxThumbs.forEach((thumb) => {
+      thumb.addEventListener("click", () => renderLightbox(Number(thumb.dataset.lightboxThumb || 0)));
+    });
+    lightboxZoom?.addEventListener("click", () => setLightboxZoom(!lightboxStage?.classList.contains("is-zoomed")));
+    lightboxImageToggle?.addEventListener("click", () => setLightboxZoom(!lightboxStage?.classList.contains("is-zoomed")));
+    lightbox?.addEventListener("click", (event) => {
+      if (event.target === lightbox) lightbox.close();
+    });
+    lightbox?.addEventListener("close", () => {
+      document.documentElement.classList.remove("lightbox-open");
+      setLightboxZoom(false);
+    });
+    lightbox?.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        renderLightbox(lightboxIndex - 1);
+      }
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        renderLightbox(lightboxIndex + 1);
+      }
+      if (event.key === "Home") {
+        event.preventDefault();
+        renderLightbox(0);
+      }
+      if (event.key === "End") {
+        event.preventDefault();
+        renderLightbox(featuredGallery.length - 1);
+      }
+    });
 
     const renderVariant = () => {
       if (sizeSelect && !availableSizes(selectedColor).includes(sizeSelect.value)) {
@@ -333,12 +462,7 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
         price.dataset.priceUsd = String(variant.price);
         price.textContent = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(variant.price);
       }
-      const showFeaturedGallery =
-        selectedColor === featuredColor &&
-        (!featuredSize || !sizeSelect?.value || sizeSelect.value === featuredSize);
-      const images = showFeaturedGallery && featuredGallery.length
-        ? featuredGallery
-        : (variant.images?.length ? variant.images : featuredGallery);
+      const images = featuredGallery;
       if (addButton) {
         addButton.dataset.variantId = variant.id;
         addButton.dataset.variant = variant.name;
@@ -355,7 +479,7 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
         figures.forEach((figure, index) => {
           figure.hidden = !images[index];
           const img = figure.querySelector<HTMLImageElement>("img");
-          const editorial = showFeaturedGallery && index >= editorialStartIndex;
+          const editorial = index >= editorialStartIndex;
           figure.classList.toggle("annual-product-gallery__editorial", editorial);
           if (img && images[index]) {
             img.src = images[index];
@@ -365,10 +489,10 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
           }
           const kind = figure.querySelector<HTMLElement>("[data-gallery-kind]");
           const view = figure.querySelector<HTMLElement>("[data-gallery-view]");
-          if (kind) kind.textContent = editorial ? "From the annual" : productType;
+          if (kind) kind.textContent = editorial ? "On court" : productType;
           if (view) view.textContent = editorial ? "Editorial" : `View ${String(index + 1).padStart(2, "0")}`;
         });
-        gallery.scrollTo({ left: 0, behavior: "auto" });
+        gallery.scrollLeft = 0;
         window.requestAnimationFrame(updateGalleryStatus);
       }
     };

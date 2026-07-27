@@ -4,13 +4,13 @@ const isArmenia = Astro.locals.isArmenia as boolean;
 const links = [
   { href: "/shop", label: "Shop", active: path.startsWith("/shop") || path.startsWith("/products") },
   { href: "/journal", label: "Journal", active: path.startsWith("/journal") },
-  { href: "/our-habit", label: "The Society", active: path === "/our-habit" },
+  { href: "/our-habit", label: "About", active: path === "/our-habit" },
 ];
 ---
 
 <header class="riviera-header" data-site-header>
   <a class="riviera-header__brand" href="/" aria-label="Racquet Habit home">
-    <img src="/images/riviera/racquet-habit-logo.webp" alt="" aria-hidden="true" width="600" height="150" />
+    <img src="/brand-white-court/wordmark-horizontal.webp" alt="" aria-hidden="true" width="2000" height="575" />
   </a>
 
   <nav class="riviera-header__nav" aria-label="Primary navigation">
@@ -18,7 +18,6 @@ const links = [
   </nav>
 
   <div class="riviera-header__actions">
-    <span class="riviera-header__issue">Issue 01</span>
     <button
       class="riviera-header__currency"
       type="button"
@@ -33,14 +32,14 @@ const links = [
     <details class="mobile-nav riviera-mobile-nav">
       <summary aria-label="Open navigation menu"><span></span><span></span></summary>
       <div class="riviera-mobile-nav__panel">
-        <p class="riviera-mobile-nav__issue">Riviera Match Annual · Issue 01</p>
+        <img class="riviera-mobile-nav__mark" src="/brand-white-court/monogram-thin.webp" alt="" width="1200" height="1200" />
         <nav aria-label="Mobile navigation">
           {links.map((link) => <a href={link.href}>{link.label}</a>)}
           <a href="/shipping">Delivery & returns</a>
           <a href="/contact">Contact</a>
         </nav>
         <div class="riviera-mobile-nav__foot">
-          <span>Free standard shipping on orders of $150+</span>
+          <span>Worldwide delivery · Free standard shipping on orders of $150+</span>
           <button
             type="button"
             data-currency-toggle

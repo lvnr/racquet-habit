@@ -5,6 +5,13 @@ const cartKey = "rh-cart-v1";
 const currencyKey = "rh-currency-v1";
 const checkoutOrigin = "https://racquethabit.com";
 const sessionKey = "rh-session-id-v1";
+const cartImageMap = (() => {
+  try {
+    return JSON.parse(document.querySelector("#cart-image-data")?.textContent || "{}");
+  } catch {
+    return {};
+  }
+})();
 
 const analyticsItem = (item, quantity = item.quantity) => ({
   item_id: item.productId || item.variantId,
@@ -119,7 +126,12 @@ document.querySelectorAll("[data-currency-toggle]").forEach((button) => {
 });
 
 const getCart = () => {
-  try { return JSON.parse(localStorage.getItem(cartKey) || "[]"); }
+  try {
+    return JSON.parse(localStorage.getItem(cartKey) || "[]").map((item) => ({
+      ...item,
+      image: cartImageMap[item.productId] || item.image,
+    }));
+  }
   catch { return []; }
 };
 

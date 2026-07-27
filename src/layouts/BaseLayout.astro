@@ -9,6 +9,7 @@ import Header from "../components/Header.astro";
 import CartDrawer from "../components/CartDrawer.astro";
 import Footer from "../components/Footer.astro";
 import ConsentBanner from "../components/ConsentBanner.astro";
+import { productPresentation } from "../data/catalog";
 import { env } from "cloudflare:workers";
 
 type Props = {
@@ -57,7 +58,7 @@ const baseSchema = [
     url: "https://racquethabit.com",
     logo: {
       "@type": "ImageObject",
-      url: "https://racquethabit.com/images/riviera/racquet-habit-logo.webp",
+      url: "https://racquethabit.com/brand-white-court/wordmark-horizontal.webp",
     },
     slogan: "A difficult habit to break.",
   },
@@ -72,6 +73,12 @@ const baseSchema = [
 ];
 const pageSchema = Array.isArray(schema) ? schema : [schema];
 const schemas = [...baseSchema, ...pageSchema.filter((item) => Object.keys(item).length > 0)];
+const cartImageMap = Object.fromEntries(
+  Object.entries(productPresentation)
+    .map(([id, presentation]) => [id, presentation.catalogImages?.[0]])
+    .filter((entry): entry is [string, string] => Boolean(entry[1])),
+);
+const cartImageMapJson = JSON.stringify(cartImageMap).replace(/</g, "\\u003c");
 ---
 
 <!doctype html>
@@ -116,7 +123,7 @@ const schemas = [...baseSchema, ...pageSchema.filter((item) => Object.keys(item)
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#eee6d3" />
+    <meta name="theme-color" content="#ffffff" />
     <meta name="description" content={description} />
     <meta name="robots" content={robots} />
     <link rel="canonical" href={canonical} />
@@ -141,7 +148,7 @@ const schemas = [...baseSchema, ...pageSchema.filter((item) => Object.keys(item)
     <slot name="head" />
     <title>{title}</title>
   </head>
-  <body class:list={["riviera-page", bodyClass]}>
+  <body class:list={["white-court", bodyClass]}>
     <a class="skip-link" href="#main">Skip to content</a>
     <Header />
     <main id="main">
@@ -151,7 +158,7 @@ const schemas = [...baseSchema, ...pageSchema.filter((item) => Object.keys(item)
     <CartDrawer />
     <ConsentBanner />
     <div class="toast" data-toast role="status" aria-live="polite"></div>
-    <script is:inline src="/scripts/product-galleries.js" type="module"></script>
+    <script is:inline id="cart-image-data" type="application/json" set:html={cartImageMapJson}></script>
     <script is:inline src="/scripts/consent-manager.js" type="module"></script>
     <script is:inline src="/scripts/marketing-pixels.js" type="module"></script>
     <script is:inline src="/scripts/commerce-analytics.js" type="module"></script>

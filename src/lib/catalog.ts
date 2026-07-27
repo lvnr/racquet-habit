@@ -72,10 +72,6 @@ function informationFrom(items?: FourthwallInformation[]): ProductInformation[] 
     .filter((item) => Boolean(item.body || item.link));
 }
 
-function imageUrl(image?: FourthwallImage) {
-  return image?.transformedUrl || image?.url;
-}
-
 function variantInStock(variant: FourthwallVariant) {
   if (!variant.stock) return true;
   if (typeof variant.stock.inStock === "boolean") return variant.stock.inStock;
@@ -96,9 +92,7 @@ function mapProduct(product: FourthwallProduct): CatalogProduct {
     colorHex: variant.attributes?.color?.swatch,
     size: variant.attributes?.size?.name,
     inStock: variantInStock(variant),
-    // Fourthwall's first two views are the product-only front/back renders. Later
-    // images are generic model mockups whose art direction varies by product.
-    images: (variant.images ?? []).map(imageUrl).filter((value): value is string => Boolean(value)).slice(0, 2),
+    images: [],
   }));
   variants.sort((a, b) => {
     const preference = (variant: ProductVariant) =>
@@ -106,13 +100,14 @@ function mapProduct(product: FourthwallProduct): CatalogProduct {
       Number(Boolean(presentation.featuredSize) && variant.size === presentation.featuredSize);
     return preference(b) - preference(a);
   });
-  const fourthwallImages = (product.images ?? []).map(imageUrl).filter((value): value is string => Boolean(value));
-  const uniqueFourthwallImages = [...new Set(fourthwallImages)];
   const catalogImages = presentation.catalogImages?.length
     ? presentation.catalogImages
-    : uniqueFourthwallImages.slice(0, 2);
+    : ["/brand-white-court/monogram-thin.webp"];
   const editorialImages = presentation.editorialImages ?? (presentation.editorialImage ? [presentation.editorialImage] : []);
   const galleryImages = [...new Set([...catalogImages, ...editorialImages])];
+  variants.forEach((variant) => {
+    variant.images = catalogImages;
+  });
   const availablePrices = variants.filter((variant) => variant.inStock).map((variant) => variant.price);
   const price = Math.min(...(availablePrices.length ? availablePrices : variants.map((variant) => variant.price)));
   const maxPrice = Math.max(...(availablePrices.length ? availablePrices : variants.map((variant) => variant.price)));
@@ -129,8 +124,8 @@ function mapProduct(product: FourthwallProduct): CatalogProduct {
     story: presentation.story,
     price: Number.isFinite(price) ? price : 0,
     maxPrice: Number.isFinite(maxPrice) ? maxPrice : 0,
-    image: catalogImages[0] || variants[0]?.images[0] || "/images/riviera/laundry-hero-desktop.webp",
-    images: galleryImages.length ? galleryImages : uniqueFourthwallImages.slice(0, 4),
+    image: catalogImages[0] || "/brand-white-court/monogram-thin.webp",
+    images: galleryImages,
     catalogImages,
     editorialImages,
     editorialImage: editorialImages[0],

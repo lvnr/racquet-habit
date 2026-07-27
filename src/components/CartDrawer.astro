@@ -1,24 +1,21 @@
 <dialog class="cart-drawer" data-cart-dialog aria-labelledby="bag-title">
   <form method="dialog" class="cart-drawer__head">
-    <div>
-      <span class="site-kicker">Match kit</span>
-      <h2 id="bag-title">Your bag <sup data-cart-count>0</sup></h2>
-    </div>
+    <h2 id="bag-title">Bag <sup data-cart-count>0</sup></h2>
     <button type="submit" class="icon-button" aria-label="Close shopping bag">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 5 14 14M19 5 5 19" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
     </button>
   </form>
   <div class="cart-drawer__body" data-cart-items></div>
   <div class="cart-empty" data-cart-empty>
-    <span class="cart-empty__ball" aria-hidden="true">01</span>
-    <h3>Nothing packed yet.</h3>
-    <p>Collection 01 is ready for the next court booking.</p>
-    <a class="paper-link" href="/shop">View the collection <span>↗</span></a>
+    <img src="/brand-white-court/monogram-thin.webp" alt="" aria-hidden="true" width="1200" height="1200" />
+    <h3>Your bag is empty.</h3>
+    <p>The full collection is ready for the next court booking.</p>
+    <a class="paper-link" href="/shop">Shop all products <span>↗</span></a>
   </div>
   <div class="cart-drawer__foot" data-cart-summary hidden>
     <div class="cart-total"><span>Estimated total</span><strong data-cart-total>$0.00</strong></div>
     <p data-cart-shipping>Worldwide delivery calculated at checkout</p>
-    <a class="paper-button paper-button--red paper-button--full" href="#" data-cart-checkout>Secure checkout <span>↗</span></a>
+    <a class="paper-button paper-button--full" href="#" data-cart-checkout>Secure checkout <span>↗</span></a>
     <small>Secure checkout opens in a new window. Local-currency display is approximate; checkout settles in USD.</small>
   </div>
 </dialog>

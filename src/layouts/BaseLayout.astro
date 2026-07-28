@@ -16,17 +16,26 @@ type Props = {
   title?: string;
   description?: string;
   image?: string;
+  imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  additionalImages?: string[];
   robots?: string;
-  pageType?: "website" | "article";
+  pageType?: "website" | "article" | "product" | "profile";
   bodyClass?: string;
   schema?: Record<string, unknown> | Record<string, unknown>[];
 };
 
+const defaultSocialImage = "/images/og/og-white-court-v3.jpg";
 const {
   title = "Tennis Apparel & Court Goods | Racquet Habit",
   description = "Shop Racquet Habit tennis apparel, court accessories and clubhouse goods for long lunches, late matches and repeat players, with worldwide delivery.",
-  image = "/images/og-riviera-v2.jpg",
-  robots = "index,follow,max-image-preview:large",
+  image = defaultSocialImage,
+  imageAlt = "A Racquet Habit player walking beside a clay tennis court",
+  imageWidth,
+  imageHeight,
+  additionalImages = [],
+  robots = "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1",
   pageType = "website",
   bodyClass = "",
   schema = [],
@@ -41,6 +50,17 @@ const analyticsIds = {
 };
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL(image, Astro.site);
+const socialImageType = socialImage.pathname.endsWith(".png")
+  ? "image/png"
+  : socialImage.pathname.endsWith(".webp")
+    ? "image/webp"
+    : "image/jpeg";
+const socialImageWidth = imageWidth ?? (image === defaultSocialImage ? 1200 : undefined);
+const socialImageHeight = imageHeight ?? (image === defaultSocialImage ? 630 : undefined);
+const socialImages = additionalImages
+  .filter((item) => item && item !== image)
+  .slice(0, 5)
+  .map((item) => new URL(item, Astro.site));
 const baseSchema = [
   {
     "@context": "https://schema.org",
@@ -51,8 +71,36 @@ const baseSchema = [
     logo: {
       "@type": "ImageObject",
       url: "https://racquethabit.com/brand-white-court/wordmark-horizontal.webp",
+      contentUrl: "https://racquethabit.com/brand-white-court/wordmark-horizontal.webp",
+      width: 2000,
+      height: 575,
     },
+    description: "An independent tennis society and label from Yerevan, Armenia, creating apparel and court goods for repeat players.",
     slogan: "A difficult habit to break.",
+    foundingDate: "2026",
+    foundingLocation: {
+      "@type": "Place",
+      name: "Yerevan, Armenia",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: "Yerevan",
+        addressCountry: "AM",
+      },
+    },
+    email: "mailto:levonarakelian@live.com",
+    contactPoint: {
+      "@type": "ContactPoint",
+      email: "levonarakelian@live.com",
+      contactType: "customer service",
+      availableLanguage: "English",
+      url: "https://racquethabit.com/contact",
+    },
+    sameAs: [
+      "https://www.instagram.com/racquethabit/",
+      "https://www.pinterest.com/racquethabit/",
+      "https://www.facebook.com/racquethabit/",
+      "https://www.tiktok.com/@racquethabit",
+    ],
   },
   {
     "@context": "https://schema.org",
@@ -60,6 +108,7 @@ const baseSchema = [
     "@id": "https://racquethabit.com/#website",
     name: "Racquet Habit",
     url: "https://racquethabit.com",
+    inLanguage: "en",
     publisher: { "@id": "https://racquethabit.com/#organization" },
   },
 ];
@@ -115,22 +164,29 @@ const cartImageMapJson = JSON.stringify(cartImageMap).replace(/</g, "\\u003c");
     <meta name="theme-color" content="#ffffff" />
     <meta name="description" content={description} />
     <meta name="robots" content={robots} />
+    <meta name="googlebot" content={robots} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta property="og:type" content={pageType} />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:site_name" content="Racquet Habit" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={socialImage} />
-    <meta property="og:image:alt" content="Racquet Habit court goods and tennis apparel" />
+    <meta property="og:image:secure_url" content={socialImage} />
+    <meta property="og:image:type" content={socialImageType} />
+    {socialImageWidth && <meta property="og:image:width" content={String(socialImageWidth)} />}
+    {socialImageHeight && <meta property="og:image:height" content={String(socialImageHeight)} />}
+    <meta property="og:image:alt" content={imageAlt} />
+    {socialImages.map((item) => <meta property="og:image" content={item} />)}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={socialImage} />
-    <meta name="twitter:image:alt" content="Racquet Habit court goods and tennis apparel" />
+    <meta name="twitter:image:alt" content={imageAlt} />
     {schemas.map((item) => (
       <script is:inline type="application/ld+json" set:html={JSON.stringify(item)}></script>
     ))}

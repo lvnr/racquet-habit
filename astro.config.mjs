@@ -12,7 +12,7 @@ export default defineConfig({
   }),
   integrations: [
     sitemap({
-      filter: (page) => !page.endsWith("/404"),
+      filter: (page) => !page.endsWith("/404") && !page.endsWith("/newsletter-confirmed"),
       customSitemaps: ["https://racquethabit.com/sitemap-products.xml"],
     }),
   ],

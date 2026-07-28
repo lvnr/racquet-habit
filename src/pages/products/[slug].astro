@@ -7,9 +7,11 @@ const product = await getProduct(Astro.params.slug || "");
 if (!product) return Astro.rewrite("/404");
 const catalog = await getCatalog();
 const variants = product.variants.filter((variant) => variant.inStock);
-const defaultVariant = variants[0];
+const requestedVariantId = Astro.url.searchParams.get("variant");
+const defaultVariant = variants.find((variant) => variant.id === requestedVariantId) || variants[0];
 const maxProductGalleryImages = 5;
-const initialImages = product.images.slice(0, maxProductGalleryImages);
+const initialImages = [...new Set([...(defaultVariant?.images || []), ...product.editorialImages])]
+  .slice(0, maxProductGalleryImages);
 const productGallerySlots = Array.from({ length: maxProductGalleryImages }, (_, index) => initialImages[index]);
 const colors = [...new Map(variants.filter((variant) => variant.color).map((variant) => [variant.color, variant.colorHex])).entries()];
 const sizes = [...new Set(variants.map((variant) => variant.size).filter((value): value is string => Boolean(value)))];
@@ -18,32 +20,45 @@ const related = catalog
   .sort((a, b) => Number(b.capsule === product.capsule) - Number(a.capsule === product.capsule))
   .slice(0, 3);
 const canonical = `https://racquethabit.com/products/${product.slug}`;
+const absoluteUrl = (value: string) => new URL(value, canonical).toString();
+const variantUrl = (variantId: string) => `${canonical}?variant=${encodeURIComponent(variantId)}`;
+const schemaImages = (images: string[]) => [...new Set(images.map(absoluteUrl))];
+const brandSchema = { "@type": "Brand", name: "Racquet Habit" };
+const groupId = `${canonical}#product`;
 const variantSchema = variants.map((variant) => ({
   "@type": "Product",
+  "@id": `${canonical}#variant-${encodeURIComponent(variant.id)}`,
   name: `${product.name} — ${variant.name}`,
   sku: variant.id,
+  description: product.description,
+  url: variantUrl(variant.id),
+  brand: brandSchema,
+  category: `${product.category} > ${product.productType}`,
   color: variant.color,
   size: variant.size,
-  image: variant.images,
+  image: schemaImages(variant.images),
+  isVariantOf: { "@id": groupId },
   offers: {
     "@type": "Offer",
-    url: canonical,
+    "@id": `${canonical}#offer-${encodeURIComponent(variant.id)}`,
+    url: variantUrl(variant.id),
     priceCurrency: "USD",
-    price: variant.price,
+    price: variant.price.toFixed(2),
     availability: "https://schema.org/InStock",
+    itemCondition: "https://schema.org/NewCondition",
     seller: { "@id": "https://racquethabit.com/#organization" },
   },
 }));
 const productSchema = variants.length > 1 ? {
   "@context": "https://schema.org",
   "@type": "ProductGroup",
-  "@id": `${canonical}#product`,
+  "@id": groupId,
   productGroupID: product.id,
   name: product.name,
   description: product.description,
   url: canonical,
-  image: product.images,
-  brand: { "@type": "Brand", name: "Racquet Habit" },
+  image: schemaImages(product.images),
+  brand: brandSchema,
   category: `${product.category} > ${product.productType}`,
   variesBy: [
     ...(colors.length > 1 ? ["https://schema.org/color"] : []),
@@ -53,13 +68,13 @@ const productSchema = variants.length > 1 ? {
 } : {
   "@context": "https://schema.org",
   "@type": "Product",
-  "@id": `${canonical}#product`,
+  "@id": groupId,
   name: product.name,
   sku: defaultVariant?.id || product.id,
   description: product.description,
   url: canonical,
-  image: product.images,
-  brand: { "@type": "Brand", name: "Racquet Habit" },
+  image: schemaImages(product.images),
+  brand: brandSchema,
   category: `${product.category} > ${product.productType}`,
   offers: variantSchema[0]?.offers,
 };
@@ -80,17 +95,39 @@ const optionsJson = JSON.stringify({
   editorialGallery: product.editorialImages,
   maxGalleryImages: maxProductGalleryImages,
   productType: product.productType,
+  initialVariantId: defaultVariant?.id,
 }).replace(/</g, "\\u003c");
-const productDescription = `${product.description} Shop ${product.name} by Racquet Habit with worldwide delivery.`;
+const productMetaText = `${product.story} Made to order with worldwide delivery.`;
+const productDescription = productMetaText.length <= 160
+  ? productMetaText
+  : `${productMetaText.slice(0, 157).replace(/\s+\S*$/, "")}…`;
+const socialTitle = requestedVariantId && defaultVariant
+  ? `${product.name} — ${defaultVariant.name}`
+  : product.name;
+const primaryImage = defaultVariant?.images[0] || product.image;
+const additionalImages = [...new Set([...initialImages, ...product.images])]
+  .filter((image) => image !== primaryImage)
+  .slice(0, 5);
+const productAvailable = Boolean(defaultVariant);
 ---
 
 <BaseLayout
-  title={`${product.name} | Racquet Habit`}
+  title={`${socialTitle} | Racquet Habit`}
   description={productDescription}
-  image={product.editorialImage || product.image}
+  image={primaryImage}
+  imageAlt={`${product.name}${defaultVariant?.color ? ` in ${defaultVariant.color}` : ""} by Racquet Habit`}
+  additionalImages={additionalImages}
+  pageType="product"
   schema={[productSchema, breadcrumbSchema]}
   bodyClass="product-detail-page"
 >
+  <Fragment slot="head">
+    <meta property="product:price:amount" content={(defaultVariant?.price ?? product.price).toFixed(2)} />
+    <meta property="product:price:currency" content="USD" />
+    <meta property="og:availability" content={productAvailable ? "instock" : "out of stock"} />
+    <meta property="og:availability:destinations" content="All" />
+    <meta property="og:brand" content="Racquet Habit" />
+  </Fragment>
   <section
     class="annual-product-page"
     data-product-detail
@@ -164,10 +201,10 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
               {colors.map(([color, hex], index) => (
                 <button
                   type="button"
-                  class:list={{ active: index === 0 }}
+                  class:list={{ active: color === defaultVariant?.color || (!defaultVariant?.color && index === 0) }}
                   data-color-option={color}
                   aria-label={color}
-                  aria-pressed={index === 0 ? "true" : "false"}
+                  aria-pressed={color === defaultVariant?.color || (!defaultVariant?.color && index === 0) ? "true" : "false"}
                   title={color}
                 >
                   <i style={`--swatch:${hex || "#eee6d3"}`}></i>
@@ -181,7 +218,7 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
           <label class="size-option" for="product-size">
             <span>{product.productType === "MagSafe case" ? "Device" : "Size"}</span>
             <select id="product-size" data-size-select>
-              {sizes.map((size) => <option value={size}>{size}</option>)}
+              {sizes.map((size) => <option value={size} selected={size === defaultVariant?.size}>{size}</option>)}
             </select>
           </label>
         )}
@@ -314,6 +351,7 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
     const editorialGallery = galleryData.editorialGallery || [];
     const maxGalleryImages = galleryData.maxGalleryImages || 5;
     const productType = galleryData.productType || "Product";
+    const initialVariantId = galleryData.initialVariantId || "";
     const colorButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-color-option]")];
     const sizeSelect = document.querySelector("[data-size-select]") as any;
     const colorLabel = document.querySelector<HTMLElement>("[data-selected-color]");
@@ -451,7 +489,7 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
       }
     });
 
-    const renderVariant = () => {
+    const renderVariant = (syncUrl = false) => {
       if (sizeSelect && !availableSizes(selectedColor).includes(sizeSelect.value)) {
         sizeSelect.value = availableSizes(selectedColor)[0] || sizeSelect.options[0]?.value;
       }
@@ -463,6 +501,11 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
         (!sizeSelect?.value || item.size === sizeSelect.value)
       ) || variants.find((item: any) => !selectedColor || item.color === selectedColor) || variants[0];
       if (!variant) return;
+      if (syncUrl) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("variant", variant.id);
+        window.history.replaceState({}, "", url);
+      }
       if (price) {
         price.dataset.priceUsd = String(variant.price);
         price.textContent = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(variant.price);
@@ -519,9 +562,14 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
         item.setAttribute("aria-pressed", String(active));
       });
       if (colorLabel) colorLabel.textContent = selectedColor;
-      renderVariant();
+      renderVariant(true);
     }));
-    sizeSelect?.addEventListener("change", renderVariant);
+    sizeSelect?.addEventListener("change", () => renderVariant(true));
+    if (initialVariantId) {
+      const initialVariant = variants.find((variant: any) => variant.id === initialVariantId);
+      if (initialVariant?.color) selectedColor = initialVariant.color;
+      if (sizeSelect && initialVariant?.size) sizeSelect.value = initialVariant.size;
+    }
     renderVariant();
     updateGalleryStatus();
   </script>

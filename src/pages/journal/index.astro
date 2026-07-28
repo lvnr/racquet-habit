@@ -6,9 +6,29 @@ import EditorialImage from "../../components/EditorialImage.astro";
 const journalSchema = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
+  "@id": "https://racquethabit.com/journal#collection",
   name: "Racquet Habit Journal",
   url: "https://racquethabit.com/journal",
   description: "Court notes on tennis rituals, what to carry and the hours around play.",
+  isPartOf: { "@id": "https://racquethabit.com/#website" },
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: 2,
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "A Difficult Habit to Break",
+        url: "https://racquethabit.com/journal/manifesto",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "What Belongs in a Tennis Court Bag?",
+        url: "https://racquethabit.com/journal/court-bag-guide",
+      },
+    ],
+  },
 };
 ---
 
@@ -16,6 +36,7 @@ const journalSchema = {
   title="Tennis Stories & Court Notes | Racquet Habit Journal"
   description="Read Racquet Habit court notes on tennis rituals, what to carry and the hours around play, filed from Yerevan for repeat players."
   image="/images/editorial/out-of-office-newspaper.webp"
+  imageAlt="A player reading a Racquet Habit newspaper beside a blue tennis court"
   schema={journalSchema}
 >
   <PageMasthead

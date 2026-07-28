@@ -5,15 +5,62 @@ import EditorialImage from "../../components/EditorialImage.astro";
 
 const articleSchema = {
   "@context": "https://schema.org",
-  "@type": "Article",
+  "@type": "BlogPosting",
+  "@id": "https://racquethabit.com/journal/court-bag-guide#article",
   headline: "What Belongs in a Tennis Court Bag?",
   description: "A practical court-bag checklist for an afternoon tennis match.",
-  image: "https://racquethabit.com/images/editorial/accessories-flat-lay.webp",
-  mainEntityOfPage: "https://racquethabit.com/journal/court-bag-guide",
-  author: { "@type": "Organization", name: "Racquet Habit" },
+  image: {
+    "@type": "ImageObject",
+    url: "https://racquethabit.com/images/editorial/accessories-flat-lay.webp",
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": "https://racquethabit.com/journal/court-bag-guide",
+  },
+  author: { "@id": "https://racquethabit.com/#organization" },
   publisher: { "@id": "https://racquethabit.com/#organization" },
   datePublished: "2026-07-23",
   dateModified: "2026-07-23",
+  inLanguage: "en",
+};
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://racquethabit.com/journal/court-bag-guide#faq",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How many racquets should a beginner carry?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "One racquet is enough to start. Carry a second only when you play often enough that a broken string would otherwise end a booked match.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Should tennis balls go in the bag?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes, unless your club or coach supplies them. Confirm before leaving; a sealed can is a useful default for a casual booking.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What changes for clay?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Use shoes permitted for the surface and expect more dust. A separate shoe bag, small towel and dry socks keep the rest of the bag cleaner.",
+      },
+    },
+  ],
+};
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Journal", item: "https://racquethabit.com/journal" },
+    { "@type": "ListItem", position: 2, name: "What Belongs in a Tennis Court Bag?", item: "https://racquethabit.com/journal/court-bag-guide" },
+  ],
 };
 ---
 
@@ -21,8 +68,9 @@ const articleSchema = {
   title="What to Pack in a Tennis Bag | Racquet Habit"
   description="Use this practical tennis court-bag checklist for an afternoon match: racquets, water, towel, sun protection, a dry layer and the small items players forget."
   image="/images/editorial/accessories-flat-lay.webp"
+  imageAlt="Tennis racquets, towel, tote and court accessories arranged on a clay court"
   pageType="article"
-  schema={articleSchema}
+  schema={[articleSchema, faqSchema, breadcrumbSchema]}
 >
   <PageMasthead
     title="What belongs in a court bag?"

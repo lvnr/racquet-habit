@@ -3,12 +3,54 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import PageMasthead from "../components/PageMasthead.astro";
 import EditorialImage from "../components/EditorialImage.astro";
 
-const shippingSchema = {
+const shippingPageSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
+  "@id": "https://racquethabit.com/shipping#webpage",
   name: "Delivery & Returns",
   url: "https://racquethabit.com/shipping",
   description: "Delivery, duties, order changes and quality-policy information for Racquet Habit orders.",
+  isPartOf: { "@id": "https://racquethabit.com/#website" },
+  about: { "@id": "https://racquethabit.com/#organization" },
+};
+const shippingFaqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://racquethabit.com/shipping#faq",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How long will my order take?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "The current production and transit estimate appears at checkout because timing depends on the product and destination. Confirmation and dispatch emails provide the order-specific timeline and tracking.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I change or cancel an order?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Use the order-management link in the confirmation email as soon as possible. Changes are available only before made-to-order production begins.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Who handles order support?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Fourthwall handles current order records. Use the support link in the confirmation email for address changes, tracking, damage or production issues.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Are duties and taxes included?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Applicable checkout taxes are shown before payment. Import duties or destination charges may still be assessed by local authorities and are not included in the product price.",
+      },
+    },
+  ],
 };
 ---
 
@@ -16,7 +58,8 @@ const shippingSchema = {
   title="Tennis Shop Delivery & Returns | Racquet Habit"
   description="Get Racquet Habit delivery, duties and returns information, including free standard shipping on orders of $150 or more and secure USD checkout."
   image="/images/editorial/equipment-room.webp"
-  schema={shippingSchema}
+  imageAlt="Racquet Habit court goods arranged inside a vintage equipment locker"
+  schema={[shippingPageSchema, shippingFaqSchema]}
 >
   <PageMasthead
     title="Court goods, delivered"

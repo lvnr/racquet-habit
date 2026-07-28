@@ -199,6 +199,12 @@
   background: var(--soft);
 }
 
+.annual-product-card__track {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
 .annual-product-card__image img {
   position: absolute;
   inset: 0;
@@ -210,8 +216,11 @@
 
 .annual-product-card__primary { view-transition-name: var(--product-transition); }
 .annual-product-card__secondary { opacity: 0; }
-.annual-product-card__image:hover .annual-product-card__primary { opacity: 0; }
-.annual-product-card__image:hover .annual-product-card__secondary { opacity: 1; transform: scale(1.012); }
+@media (hover: hover) and (pointer: fine) {
+  .annual-product-card__image:hover .annual-product-card__primary { opacity: 0; }
+  .annual-product-card__image:hover .annual-product-card__secondary { opacity: 1; transform: scale(1.012); }
+}
+.annual-product-card__pagination { display: none; }
 .annual-product-card__meta {
   padding-top: .85rem;
   display: grid;
@@ -223,7 +232,37 @@
 .annual-product-card__meta h2 { font-size: .83rem; font-weight: 510; line-height: 1.3; }
 .annual-product-card__meta h2 a:hover { text-decoration: underline; text-underline-offset: .22rem; }
 .annual-product-card__meta span { display: block; margin-top: .28rem; color: var(--muted); font-size: .7rem; }
+.annual-product-card__meta b { font-weight: inherit; }
 .annual-product-card__meta strong { font-size: .8rem; font-weight: 500; white-space: nowrap; }
+.annual-product-card__colors {
+  margin-top: .55rem;
+  display: flex;
+  gap: .15rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.annual-product-card__colors::-webkit-scrollbar { display: none; }
+.annual-product-card__colors button {
+  width: 1.35rem;
+  height: 1.35rem;
+  flex: 0 0 1.35rem;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+.annual-product-card__colors button.active { border-color: var(--ink); }
+.annual-product-card__colors i {
+  width: .75rem;
+  height: .75rem;
+  display: block;
+  border: 1px solid rgb(0 0 0 / .12);
+  border-radius: 50%;
+  background: var(--swatch);
+}
 
 .court-story {
   min-height: clamp(42rem, 83svh, 65rem);
@@ -299,8 +338,10 @@
   border-bottom: 1px solid var(--line);
   background: rgb(255 255 255 / .96);
   backdrop-filter: blur(12px);
+  transition: top .3s ease;
 }
 
+.site-header-hidden .annual-filter-bar { top: 0; }
 .annual-filter-list { display: flex; align-items: center; gap: 1.5rem; }
 .annual-filter-list button {
   position: relative;
@@ -966,7 +1007,51 @@ html.lightbox-open { overflow: hidden; }
   .annual-product-card__meta h2 { font-size: .76rem; }
   .annual-product-card__meta span,
   .annual-product-card__meta strong { font-size: .68rem; }
-  .annual-product-card__secondary { display: none; }
+  .annual-product-card__image {
+    overflow: hidden;
+  }
+  .annual-product-card__track {
+    display: flex;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .annual-product-card__track::-webkit-scrollbar { display: none; }
+  .annual-product-card__image img {
+    position: relative;
+    inset: auto;
+    min-width: 100%;
+    flex: 0 0 100%;
+    opacity: 1;
+    scroll-snap-align: start;
+    transform: none;
+    transition: none;
+  }
+  .annual-product-card__image--mobile-back-first .annual-product-card__secondary { order: -1; }
+  .annual-product-card__pagination {
+    position: absolute;
+    bottom: .6rem;
+    left: 50%;
+    z-index: 2;
+    display: flex;
+    gap: .3rem;
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+  .annual-product-card__pagination i {
+    width: .28rem;
+    height: .28rem;
+    flex: 0 0 .28rem;
+    border-radius: 50%;
+    background: rgb(17 17 17 / .25);
+    transition: background .2s ease, transform .2s ease;
+  }
+  .annual-product-card__pagination i.active {
+    background: var(--ink);
+    transform: scale(1.15);
+  }
+  .annual-product-card__colors { margin-top: .45rem; }
 
   .court-story { min-height: auto; grid-template-columns: 1fr; }
   .court-story__image--large { grid-row: auto; min-height: 75svh; }
@@ -1074,8 +1159,6 @@ html.lightbox-open { overflow: hidden; }
 }
 
 @media (hover: none) {
-  .annual-product-card__image:hover .annual-product-card__primary { opacity: 1; }
-  .annual-product-card__image:hover .annual-product-card__secondary { opacity: 0; }
   .annual-product-gallery__expand {
     opacity: 1;
     transform: none;

@@ -12,6 +12,15 @@ const { product, feature = "standard", priority = false } = Astro.props;
 const priceLabel = product.maxPrice > product.price ? `From $${product.price.toFixed(0)}` : `$${product.price.toFixed(0)}`;
 const primaryImage = product.catalogImages[0] || product.image;
 const secondaryImage = product.catalogImages[1] || primaryImage;
+const hasSecondaryImage = secondaryImage !== primaryImage;
+const mobileBackFirst = product.category === "Tees" && hasSecondaryImage;
+const cardColors = [
+  ...new Map(
+    product.variants
+      .filter((variant) => variant.inStock && variant.color)
+      .map((variant) => [variant.color, variant]),
+  ).values(),
+];
 ---
 
 <article
@@ -29,39 +38,74 @@ const secondaryImage = product.catalogImages[1] || primaryImage;
   data-capsule={product.capsule}
 >
   <a
-    class="annual-product-card__image"
+    class:list={[
+      "annual-product-card__image",
+      { "annual-product-card__image--mobile-back-first": mobileBackFirst },
+    ]}
     href={`/products/${product.slug}`}
     aria-label={`View ${product.name}`}
     style={`--product-transition: product-${product.slug}`}
   >
-    <img
-      class="annual-product-card__primary"
-      src={primaryImage}
-      alt={product.name}
-      loading={priority ? "eager" : "lazy"}
-      decoding="async"
-      fetchpriority={priority ? "high" : "low"}
-      width="1536"
-      height="2048"
-    />
-    {secondaryImage !== primaryImage && (
+    <span class="annual-product-card__track" data-card-gallery>
       <img
-        class="annual-product-card__secondary"
-        src={secondaryImage}
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
+        class="annual-product-card__primary"
+        data-card-front
+        data-card-slide
+        src={primaryImage}
+        alt={product.name}
+        loading={priority ? "eager" : "lazy"}
         decoding="async"
+        fetchpriority={priority ? "high" : "low"}
         width="1536"
         height="2048"
       />
+      {hasSecondaryImage && (
+        <img
+          class="annual-product-card__secondary"
+          data-card-back
+          data-card-slide
+          src={secondaryImage}
+          alt={`${product.name}, back view`}
+          loading="lazy"
+          decoding="async"
+          width="1536"
+          height="2048"
+        />
+      )}
+    </span>
+    {hasSecondaryImage && (
+      <span class="annual-product-card__pagination" data-card-pagination aria-hidden="true">
+        <i class="active"></i><i></i>
+      </span>
     )}
   </a>
   <div class="annual-product-card__meta">
     <div>
       <h2><a href={`/products/${product.slug}`}>{product.name}</a></h2>
-      <span>{product.productType}{product.featuredColor ? ` · ${product.featuredColor}` : ""}</span>
+      <span class="annual-product-card__descriptor">
+        {product.productType}
+        {product.featuredColor && <> · <b data-card-color-label>{product.featuredColor}</b></>}
+      </span>
     </div>
     <strong data-price-usd={product.price}>{priceLabel}</strong>
   </div>
+  {cardColors.length > 1 && (
+    <div class="annual-product-card__colors" aria-label={`Available colors for ${product.name}`}>
+      {cardColors.map((variant, index) => (
+        <button
+          type="button"
+          class:list={{ active: index === 0 }}
+          data-card-color-option
+          data-front={variant.images[0] || primaryImage}
+          data-back={variant.images[1] || variant.images[0] || secondaryImage}
+          data-color={variant.color}
+          aria-label={`Show ${product.name} in ${variant.color}`}
+          aria-pressed={index === 0 ? "true" : "false"}
+          title={variant.color}
+        >
+          <i style={`--swatch:${variant.colorHex || "#eee6d3"}`}></i>
+        </button>
+      ))}
+    </div>
+  )}
 </article>

@@ -24,7 +24,7 @@ const variantSchema = variants.map((variant) => ({
   sku: variant.id,
   color: variant.color,
   size: variant.size,
-  image: product.images,
+  image: variant.images,
   offers: {
     "@type": "Offer",
     url: canonical,
@@ -77,7 +77,8 @@ const optionsJson = JSON.stringify({
   featuredColor: product.featuredColor,
   featuredSize: product.featuredSize,
   featuredGallery: initialImages,
-  editorialStartIndex: product.catalogImages.length,
+  editorialGallery: product.editorialImages,
+  maxGalleryImages: maxProductGalleryImages,
   productType: product.productType,
 }).replace(/</g, "\\u003c");
 const productDescription = `${product.description} Shop ${product.name} by Racquet Habit with worldwide delivery.`;
@@ -269,14 +270,16 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
       <footer class="product-lightbox__footer">
         <button type="button" data-lightbox-prev aria-label="Previous product image">←</button>
         <nav aria-label="Product image thumbnails">
-          {initialImages.map((image, index) => (
+          {productGallerySlots.map((image, index) => (
             <button
               type="button"
               data-lightbox-thumb={index}
+              data-lightbox-thumb-slot
               aria-label={`Show ${product.name}, view ${index + 1}`}
               aria-current={index === 0 ? "true" : "false"}
+              hidden={!image}
             >
-              <img src={image} alt="" width="96" height="120" />
+              <img src={image || product.image} alt="" width="96" height="120" />
             </button>
           ))}
         </nav>
@@ -308,7 +311,8 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
     const galleryData = JSON.parse(dataNode?.textContent || "{}");
     const variants = galleryData.variants || [];
     const featuredGallery = galleryData.featuredGallery || [];
-    const editorialStartIndex = galleryData.editorialStartIndex || 2;
+    const editorialGallery = galleryData.editorialGallery || [];
+    const maxGalleryImages = galleryData.maxGalleryImages || 5;
     const productType = galleryData.productType || "Product";
     const colorButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-color-option]")];
     const sizeSelect = document.querySelector("[data-size-select]") as any;
@@ -329,6 +333,7 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
     const lightboxZoom = lightbox?.querySelector<HTMLButtonElement>("[data-lightbox-zoom]");
     const lightboxThumbs = [...(lightbox?.querySelectorAll<HTMLButtonElement>("[data-lightbox-thumb]") || [])];
     let lightboxIndex = 0;
+    let activeGallery = featuredGallery;
     let selectedColor = colorButtons.find((button) => button.classList.contains("active"))?.dataset.colorOption || variants[0]?.color;
 
     const availableSizes = (color: string) => variants.filter((variant: any) => !color || variant.color === color).map((variant: any) => variant.size);
@@ -381,10 +386,10 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
     };
 
     const renderLightbox = (index: number) => {
-      if (!featuredGallery.length) return;
-      lightboxIndex = (index + featuredGallery.length) % featuredGallery.length;
-      const image = featuredGallery[lightboxIndex];
-      const editorial = lightboxIndex >= editorialStartIndex;
+      if (!activeGallery.length) return;
+      lightboxIndex = (index + activeGallery.length) % activeGallery.length;
+      const image = activeGallery[lightboxIndex];
+      const editorial = editorialGallery.includes(image);
       if (lightboxImage) {
         lightboxImage.src = image;
         lightboxImage.alt = editorial
@@ -394,7 +399,7 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
             : `${addButton?.dataset.name || ""}, view ${lightboxIndex + 1}`;
       }
       if (lightboxCount) {
-        lightboxCount.textContent = `${String(lightboxIndex + 1).padStart(2, "0")} / ${String(featuredGallery.length).padStart(2, "0")}`;
+        lightboxCount.textContent = `${String(lightboxIndex + 1).padStart(2, "0")} / ${String(activeGallery.length).padStart(2, "0")}`;
       }
       lightboxThumbs.forEach((thumb, thumbIndex) => {
         thumb.setAttribute("aria-current", String(thumbIndex === lightboxIndex));
@@ -442,7 +447,7 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
       }
       if (event.key === "End") {
         event.preventDefault();
-        renderLightbox(featuredGallery.length - 1);
+        renderLightbox(activeGallery.length - 1);
       }
     });
 
@@ -462,7 +467,8 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
         price.dataset.priceUsd = String(variant.price);
         price.textContent = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(variant.price);
       }
-      const images = featuredGallery;
+      const images = [...new Set([...(variant.images || []), ...editorialGallery])].slice(0, maxGalleryImages);
+      activeGallery = images;
       if (addButton) {
         addButton.dataset.variantId = variant.id;
         addButton.dataset.variant = variant.name;
@@ -479,7 +485,7 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
         figures.forEach((figure, index) => {
           figure.hidden = !images[index];
           const img = figure.querySelector<HTMLImageElement>("img");
-          const editorial = index >= editorialStartIndex;
+          const editorial = editorialGallery.includes(images[index]);
           figure.classList.toggle("annual-product-gallery__editorial", editorial);
           if (img && images[index]) {
             img.src = images[index];
@@ -495,6 +501,14 @@ const productDescription = `${product.description} Shop ${product.name} by Racqu
         gallery.scrollLeft = 0;
         window.requestAnimationFrame(updateGalleryStatus);
       }
+      lightboxThumbs.forEach((thumb, index) => {
+        const image = images[index];
+        thumb.hidden = !image;
+        const img = thumb.querySelector<HTMLImageElement>("img");
+        if (img && image) img.src = image;
+        thumb.setAttribute("aria-current", String(index === 0));
+      });
+      if (lightbox?.open) renderLightbox(Math.min(lightboxIndex, images.length - 1));
     };
 
     colorButtons.forEach((button) => button.addEventListener("click", () => {

@@ -64,6 +64,7 @@ export type ProductPresentation = Pick<
   CatalogProduct,
   "category" | "productType" | "capsule" | "sortRank" | "story"
 > & {
+  hasColorCatalog?: boolean;
   legacySlugs?: string[];
   editorialImage?: string;
   editorialImages?: string[];
@@ -72,9 +73,30 @@ export type ProductPresentation = Pick<
   featuredSize?: string;
 };
 
+const colorCatalogSlugs = new Set([
+  "baseline-plaque-tee",
+  "love-cherries-crop-tee",
+  "love-cherries-oversized-tee",
+  "love-cherries-oversized-tee-2",
+  "minimal-green-monogram-crop-top",
+  "out-of-office-court-cap",
+  "racquet-habit-minimal-black-crop-top",
+  "racquet-habit-night-court-rh-monogram-tee",
+  "racquets-sunshine-something-bubbly-crop-tee",
+  "racquets-sunshine-something-bubbly-oversized-night-tee",
+  "racquets-sunshine-something-bubbly-oversized-tee",
+  "signed-rally-founding-issue-crop-tee",
+  "signed-rally-founding-issue-oversized-tee",
+  "society-monogram-founding-issue-crop-tee",
+  "society-monogram-founding-issue-hat",
+  "tennis-is-my-rest-day-tee-dtfx",
+  "tennis-lunch-tennis-tee",
+]);
+
 function curatedImages(slug: string) {
   const base = `/images/products/white-court/${slug}`;
   return {
+    hasColorCatalog: colorCatalogSlugs.has(slug),
     catalogImages: [
       `${base}/catalog-front.webp`,
       `${base}/catalog-back-or-secondary.webp`,

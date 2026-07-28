@@ -79,6 +79,21 @@ function variantInStock(variant: FourthwallVariant) {
   return variant.stock.type !== "OUT_OF_STOCK";
 }
 
+function assetSlug(value?: string) {
+  return (value ?? "")
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
+function fourthwallImages(images?: FourthwallImage[]) {
+  return (images ?? [])
+    .map((image) => image.transformedUrl || image.url)
+    .filter((url): url is string => Boolean(url));
+}
+
 function mapProduct(product: FourthwallProduct): CatalogProduct {
   const presentation = productPresentation[product.id] ?? unknownPresentation;
   if (!productPresentation[product.id]) {
@@ -92,7 +107,7 @@ function mapProduct(product: FourthwallProduct): CatalogProduct {
     colorHex: variant.attributes?.color?.swatch,
     size: variant.attributes?.size?.name,
     inStock: variantInStock(variant),
-    images: [],
+    images: fourthwallImages(variant.images),
   }));
   variants.sort((a, b) => {
     const preference = (variant: ProductVariant) =>
@@ -100,14 +115,30 @@ function mapProduct(product: FourthwallProduct): CatalogProduct {
       Number(Boolean(presentation.featuredSize) && variant.size === presentation.featuredSize);
     return preference(b) - preference(a);
   });
-  const catalogImages = presentation.catalogImages?.length
+  const fallbackCatalogImages = presentation.catalogImages?.length
     ? presentation.catalogImages
     : ["/brand-white-court/monogram-thin.webp"];
   const editorialImages = presentation.editorialImages ?? (presentation.editorialImage ? [presentation.editorialImage] : []);
-  const galleryImages = [...new Set([...catalogImages, ...editorialImages])];
   variants.forEach((variant) => {
-    variant.images = catalogImages;
+    const hostedImages = variant.images;
+    if (
+      presentation.productType === "MagSafe case" &&
+      variant.size !== "iPhone 17 Pro Max" &&
+      hostedImages.length
+    ) {
+      variant.images = hostedImages;
+      return;
+    }
+    const color = assetSlug(variant.color);
+    variant.images = presentation.hasColorCatalog && color
+      ? [
+          `/images/products/white-court/${product.slug}/colors/${color}/catalog-front.webp`,
+          `/images/products/white-court/${product.slug}/colors/${color}/catalog-back-or-secondary.webp`,
+        ]
+      : fallbackCatalogImages;
   });
+  const catalogImages = variants[0]?.images?.length ? variants[0].images : fallbackCatalogImages;
+  const galleryImages = [...new Set([...catalogImages, ...editorialImages])];
   const availablePrices = variants.filter((variant) => variant.inStock).map((variant) => variant.price);
   const price = Math.min(...(availablePrices.length ? availablePrices : variants.map((variant) => variant.price)));
   const maxPrice = Math.max(...(availablePrices.length ? availablePrices : variants.map((variant) => variant.price)));

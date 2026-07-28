@@ -277,6 +277,68 @@ document.querySelector("[data-cart-dialog]")?.addEventListener("click", (event) 
 
 document.querySelectorAll(".mobile-nav a").forEach((link) => link.addEventListener("click", () => link.closest("details")?.removeAttribute("open")));
 
+const updateCardPagination = (gallery) => {
+  const card = gallery.closest("[data-product-card]");
+  const pagination = card?.querySelector("[data-card-pagination]");
+  if (!pagination) return;
+  const slides = [...gallery.querySelectorAll("[data-card-slide]")]
+    .sort((a, b) => a.offsetLeft - b.offsetLeft);
+  const current = slides.reduce((nearest, slide, index) => {
+    const distance = Math.abs(slide.offsetLeft - gallery.scrollLeft);
+    return distance < nearest.distance ? { index, distance } : nearest;
+  }, { index: 0, distance: Number.POSITIVE_INFINITY }).index;
+  [...pagination.children].forEach((dot, index) => dot.classList.toggle("active", index === current));
+};
+
+document.querySelectorAll("[data-card-gallery]").forEach((gallery) => {
+  let galleryFrame = 0;
+  let pointerStart = 0;
+  let pointerMoved = false;
+  gallery.addEventListener("scroll", () => {
+    if (galleryFrame) return;
+    galleryFrame = window.requestAnimationFrame(() => {
+      updateCardPagination(gallery);
+      galleryFrame = 0;
+    });
+  }, { passive: true });
+  gallery.addEventListener("pointerdown", (event) => {
+    pointerStart = event.clientX;
+    pointerMoved = false;
+  }, { passive: true });
+  gallery.addEventListener("pointermove", (event) => {
+    if (Math.abs(event.clientX - pointerStart) > 8) pointerMoved = true;
+  }, { passive: true });
+  gallery.closest("a")?.addEventListener("click", (event) => {
+    if (pointerMoved) {
+      event.preventDefault();
+      pointerMoved = false;
+    }
+  });
+  updateCardPagination(gallery);
+});
+
+document.querySelectorAll("[data-card-color-option]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const card = button.closest("[data-product-card]");
+    const gallery = card?.querySelector("[data-card-gallery]");
+    const front = card?.querySelector("[data-card-front]");
+    const back = card?.querySelector("[data-card-back]");
+    const colorLabel = card?.querySelector("[data-card-color-label]");
+    card?.querySelectorAll("[data-card-color-option]").forEach((option) => {
+      const active = option === button;
+      option.classList.toggle("active", active);
+      option.setAttribute("aria-pressed", String(active));
+    });
+    if (front && button.dataset.front) front.src = button.dataset.front;
+    if (back && button.dataset.back) back.src = button.dataset.back;
+    if (colorLabel && button.dataset.color) colorLabel.textContent = button.dataset.color;
+    if (gallery) {
+      gallery.scrollLeft = 0;
+      window.requestAnimationFrame(() => updateCardPagination(gallery));
+    }
+  });
+});
+
 const header = document.querySelector("[data-site-header]");
 let previousY = window.scrollY;
 let headerFrame = 0;
@@ -284,8 +346,10 @@ window.addEventListener("scroll", () => {
   if (!header || headerFrame) return;
   headerFrame = window.requestAnimationFrame(() => {
     const currentY = window.scrollY;
+    const headerHidden = currentY > previousY && currentY > 180;
     header.classList.toggle("site-header--compact", currentY > 28);
-    header.classList.toggle("site-header--hidden", currentY > previousY && currentY > 180);
+    header.classList.toggle("site-header--hidden", headerHidden);
+    document.documentElement.classList.toggle("site-header-hidden", headerHidden);
     previousY = currentY;
     headerFrame = 0;
   });

@@ -169,6 +169,7 @@ const productJobs = [];
 for (const slug of productSlugs) {
   const productDir = path.join(productionDir, slug);
   const catalogDir = path.join(productDir, "catalog");
+  const colorCatalogDir = path.join(catalogDir, "colors");
   const editorialDir = path.join(productDir, "editorial-court-archive");
   const catalogPngs = await listPngs(catalogDir);
   const editorialPngs = await listPngs(editorialDir);
@@ -236,6 +237,45 @@ for (const slug of productSlugs) {
       width: EDITORIAL_WIDTH,
     })),
   );
+
+  let colorEntries = [];
+  try {
+    colorEntries = (await fs.readdir(colorCatalogDir, { withFileTypes: true }))
+      .filter((entry) => entry.isDirectory())
+      .sort((a, b) => a.name.localeCompare(b.name));
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+
+  for (const colorEntry of colorEntries) {
+    const colorDir = path.join(colorCatalogDir, colorEntry.name);
+    const colorPngs = await listPngs(colorDir);
+    if (!colorPngs.includes("catalog-front.png")) {
+      throw new Error(`${slug}/${colorEntry.name}: missing catalog-front.png.`);
+    }
+    const colorAlternates = colorPngs.filter(
+      (name) => name === "catalog-back.png" || name === "catalog-secondary.png",
+    );
+    if (colorAlternates.length !== 1) {
+      throw new Error(
+        `${slug}/${colorEntry.name}: expected one catalog-back.png or catalog-secondary.png.`,
+      );
+    }
+    const colorOutputDir = path.join(outputDir, "colors", colorEntry.name);
+    await fs.mkdir(colorOutputDir, { recursive: true });
+    productJobs.push(
+      {
+        source: path.join(colorDir, "catalog-front.png"),
+        output: path.join(colorOutputDir, "catalog-front.webp"),
+        width: CATALOG_WIDTH,
+      },
+      {
+        source: path.join(colorDir, colorAlternates[0]),
+        output: path.join(colorOutputDir, "catalog-back-or-secondary.webp"),
+        width: CATALOG_WIDTH,
+      },
+    );
+  }
 }
 
 await fs.mkdir(identityOutputRoot, { recursive: true });

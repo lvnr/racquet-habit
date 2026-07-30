@@ -173,21 +173,27 @@ const revoke = () => {
 const mappings = {
   view_item: { meta: "ViewContent", tiktok: "ViewContent", pinterest: "pagevisit" },
   add_to_cart: { meta: "AddToCart", tiktok: "AddToCart", pinterest: "addtocart" },
-  begin_checkout: { meta: "InitiateCheckout", tiktok: "InitiateCheckout", pinterest: "initiatecheckout" },
+  // The storefront owns GA4/TikTok checkout handoff; Meta stays with
+  // Fourthwall so its Pixel/CAPI deduplication remains authoritative.
+  begin_checkout: { tiktok: "InitiateCheckout", pinterest: "initiatecheckout" },
 };
 
 const sendCommerceEvent = (detail) => {
   const names = mappings[detail.event];
   if (!names) return;
   const id = eventId(detail);
-  if (loaded.meta) window.fbq?.("track", names.meta, metaPayload(detail.parameters), { eventID: id });
-  if (loaded.tiktok) {
+  if (loaded.meta && names.meta) {
+    window.fbq?.("track", names.meta, metaPayload(detail.parameters), { eventID: id });
+  }
+  if (loaded.tiktok && names.tiktok) {
     window.ttq?.track?.(names.tiktok, {
       ...tiktokPayload(detail.parameters),
       event_id: id,
     });
   }
-  if (loaded.pinterest) window.pintrk?.("track", names.pinterest, pinterestPayload(detail.parameters, id));
+  if (loaded.pinterest && names.pinterest) {
+    window.pintrk?.("track", names.pinterest, pinterestPayload(detail.parameters, id));
+  }
   if (detail.event === "view_item") sentProductViewId = id;
 };
 

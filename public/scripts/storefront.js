@@ -1,6 +1,8 @@
 const cartKey = "rh-cart-v1";
 const checkoutOrigin = "https://racquethabit.com";
 const sessionKey = "rh-session-id-v1";
+const gaClientKey = "rh-ga-client-id-v1";
+const gaSessionKey = "rh-ga-session-id-v1";
 const cartImageMap = (() => {
   try {
     return JSON.parse(document.querySelector("#cart-image-data")?.textContent || "{}");
@@ -22,13 +24,13 @@ const analyticsItem = (item, quantity = item.quantity) => ({
   quantity,
 });
 
-const trackCartEvent = (event, items) => {
+const trackCartEvent = (event, items, options) => {
   const value = items.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0), 0);
   window.RacquetHabitAnalytics?.track(event, {
     currency: "USD",
     value,
     items: items.map((item) => analyticsItem(item)),
-  });
+  }, options);
 };
 
 const readCookie = (name) => document.cookie
@@ -38,14 +40,82 @@ const readCookie = (name) => document.cookie
   .slice(1)
   .join("=");
 
-const buildCheckoutUrl = (cart) => {
-  const checkout = new URL("https://checkout.racquethabit.com/cart/checkout");
-  checkout.searchParams.set("products", cart.map((item) => `${item.variantId}:${item.quantity}`).join(","));
+const decodedCookie = (name) => {
+  const value = readCookie(name);
+  if (!value) return "";
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+};
+
+const storedGaClientId = () => {
+  const gaCookie = decodedCookie("_ga");
+  const cookieParts = gaCookie.split(".");
+  const cookieClientId = cookieParts.length >= 4 ? cookieParts.slice(-2).join(".") : "";
+  if (cookieClientId) {
+    localStorage.setItem(gaClientKey, cookieClientId);
+    return cookieClientId;
+  }
+  const saved = localStorage.getItem(gaClientKey);
+  if (saved) return saved;
+  const random = crypto.getRandomValues(new Uint32Array(1))[0];
+  const created = `${random}.${Math.floor(Date.now() / 1000)}`;
+  localStorage.setItem(gaClientKey, created);
+  return created;
+};
+
+const storedGaSessionId = () => {
+  const saved = sessionStorage.getItem(gaSessionKey);
+  if (saved) return saved;
+  const created = String(Math.floor(Date.now() / 1000));
+  sessionStorage.setItem(gaSessionKey, created);
+  return created;
+};
+
+const getGoogleIdentifier = (field) => new Promise((resolve) => {
+  const measurementId = document.documentElement.dataset.gaMeasurementId;
+  if (!measurementId || typeof window.gtag !== "function") return resolve("");
+  let settled = false;
+  const timer = window.setTimeout(() => {
+    settled = true;
+    resolve("");
+  }, 400);
+  window.gtag("get", measurementId, field, (value) => {
+    if (settled) return;
+    settled = true;
+    window.clearTimeout(timer);
+    resolve(String(value || ""));
+  });
+});
+
+const checkoutIdentifiers = async () => {
+  const [googleClientId, googleSessionId] = await Promise.all([
+    getGoogleIdentifier("client_id"),
+    getGoogleIdentifier("session_id"),
+  ]);
+  const gaClientId = googleClientId || storedGaClientId();
+  const gaSessionId = googleSessionId || storedGaSessionId();
+  localStorage.setItem(gaClientKey, gaClientId);
+  sessionStorage.setItem(gaSessionKey, gaSessionId);
+  return Object.fromEntries(Object.entries({
+    _ga: decodedCookie("_ga"),
+    _fbp: decodedCookie("_fbp"),
+    _fbc: decodedCookie("_fbc"),
+    FPID: decodedCookie("FPID"),
+    ga_client_id: gaClientId.slice(0, 256),
+    ga_session_id: gaSessionId.slice(0, 256),
+    ttp: decodedCookie("_ttp").slice(0, 256),
+  }).filter(([, value]) => Boolean(value)));
+};
+
+const decorateCheckoutUrl = (checkout) => {
   checkout.searchParams.set("currency", "USD");
   checkout.searchParams.set("cart_origin", checkoutOrigin);
 
   const attribution = window.RacquetHabitAnalytics?.getAttribution?.() || {};
-  ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "fbclid"].forEach((parameter) => {
+  ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "fbclid", "ttclid", "epik"].forEach((parameter) => {
     if (attribution[parameter]) checkout.searchParams.set(parameter, attribution[parameter]);
   });
   ["_ga", "_fbp", "_fbc", "FPID"].forEach((cookieName) => {
@@ -53,6 +123,12 @@ const buildCheckoutUrl = (cart) => {
     if (value) checkout.searchParams.set(cookieName, value);
   });
   return checkout.toString();
+};
+
+const buildCheckoutUrl = (cart) => {
+  const checkout = new URL("https://checkout.racquethabit.com/cart/checkout");
+  checkout.searchParams.set("products", cart.map((item) => `${item.variantId}:${item.quantity}`).join(","));
+  return decorateCheckoutUrl(checkout);
 };
 
 const sessionId = (() => {
@@ -63,21 +139,18 @@ const sessionId = (() => {
   return created;
 })();
 
-const checkoutIdentifiers = () => Object.fromEntries(
-  ["_ga", "_fbp", "_fbc", "FPID"]
-    .map((cookieName) => [cookieName, readCookie(cookieName)])
-    .filter(([, value]) => Boolean(value)),
-);
-
 const createCheckout = async (cart) => {
+  const consent = window.RacquetHabitConsent?.get?.() || {};
+  const attribution = window.RacquetHabitAnalytics?.getAttribution?.() || {};
+  const identifiers = await checkoutIdentifiers();
   const response = await fetch("/api/checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       items: cart.map((item) => ({ variantId: item.variantId, quantity: item.quantity })),
-      consent: window.RacquetHabitConsent?.get?.() || {},
-      attribution: window.RacquetHabitAnalytics?.getAttribution?.() || {},
-      identifiers: checkoutIdentifiers(),
+      consent,
+      attribution,
+      identifiers,
       sessionId,
     }),
   });
@@ -262,6 +335,8 @@ document.querySelector("[data-cart-checkout]")?.addEventListener("click", async 
   if (checkout.dataset.loading === "true") return;
   checkout.dataset.loading = "true";
   checkout.setAttribute("aria-busy", "true");
+  // GA4 and TikTok are owned by the storefront plus the signed paid-order
+  // webhook. Meta remains owned by Fourthwall once checkout begins.
   trackCartEvent("begin_checkout", cart);
   try {
     window.location.assign(await createCheckout(cart));

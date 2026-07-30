@@ -9,20 +9,20 @@ Three concepts × two formats (video / static-or-carousel) × two hooks:
 | Concept | Angle | Video | Static/Carousel | Hook A | Hook B |
 |---|---|---|---|---|---|
 | **A. Emotional Support Racquet** (humor/identity) | The joke IS the product | V26 selfie testimonial | Design close-up on ivory + small print | "My racquet is fine. It's emotional support." | "Certified for daily court use. Do not separate from player." |
-| **B. The Clubhouse Capsule** (drop/novelty) | New label energy | V3 drop film 15s | Carousel: 5 best pieces, palette-ordered | "A new tennis society just opened its doors." | "Court. Lunch. Court. The full rotation." |
+| **B. Five-capsule collection** (range/novelty) | New label energy | V3 collection-open film 15s | Carousel: one hero from each capsule | "A new tennis society just opened its doors." | "Twenty-four pieces. The full rotation." |
 | **C. The Long Lunch** (aesthetic/lifestyle) | Tenniscore-adjacent world | V5 day arc 30s cut | P1 hero 4:5 | "Tennis, lunch, tennis. A complete schedule." | "Considered goods for the hours around play." |
 
-Cycle 2 (swap in after ~2 weeks or on fatigue signals): D. Rest Day (humor) · E. Gifts under $60 (caps/drinkware price-point angle) · F. Founder story V2 (trust; often the sleeper winner).
+Cycle 2 (swap in after ~2 weeks or on fatigue signals): D. Rest Day (humor) · E. Accessories and drinkware (gift angle, live prices) · F. Founder story V2 only after authentic cofounder footage exists.
 
 ## §2 Primary text bank (Meta)
 
 1. "Racquet Habit — the unofficial society for people who always have time for one more set. Tees, caps and court goods with championship manners and questionable priorities. Made to order, shipped worldwide."
-2. "The care label has jokes. The cotton is serious. Collection 01 + The Clubhouse Capsule, now serving."
+2. "The details have jokes. The product references are serious. Twenty-four current pieces, now serving."
 3. "For tennis. For lunch. For the tennis after lunch. Considered court goods, est. 2026."
 4. "Your racquet already provides emotional support. Now there's a shirt that admits it."
-5. (Gift angle) "For the person who answers 'how was your weekend' with a set score. Caps and bottles from $28."
+5. (Gift angle) "For the person who answers 'how was your weekend' with a set score. Cap, tote, towel, drinkware, and a case." Add live price copy only at publish time.
 
-**Headlines (≤40 chars):** "One more set. Always." · "Tennis Addicts Society" · "The Clubhouse Capsule" · "Court. Lunch. Court." · "Join the Society" · "Made to order, worn on repeat."
+**Headlines (≤40 chars):** "One more set. Always." · "Tennis Addicts Society" · "24 pieces. Five capsules." · "Court. Lunch. Court." · "Join the Society" · "Made to order, worn on repeat."
 **Descriptions:** "Free shipping over $X" (when set) · "Made-to-order, worldwide delivery" · "Est. 2026."
 **CTA button:** Shop Now (default); Learn More for the founder-story ad.
 
@@ -30,7 +30,7 @@ Cycle 2 (swap in after ~2 weeks or on fatigue signals): D. Rest Day (humor) · E
 
 - **S1 Design-on-field:** garment design centered on a flat brand-color field (green/ivory/red), one line of small print below, tiny RH monogram. Clean, native-feeling on feed. 4:5 (1440×1800).
 - **S2 Editorial still:** P1/P4/P6 frame + single type line ("Long lunch. Late match.") kept inside safe zones. 4:5 + 9:16 Story variant.
-- **S3 Small-print macro:** extreme close-up of a label/underbrim joke + "Read the fine print." — a curiosity-gap static that reliably drives clicks.
+- **S3 Small-print macro:** extreme close-up of verified embroidery or print texture + "Read the fine print." — a curiosity-gap static that reliably drives clicks.
 - **S4 Catalog carousel:** product cutouts on rotating clubhouse panel colors (yellow-soft, sky, red, green) with numbered cards 01–05, like the site's shop. (Also becomes the Advantage+ catalog template style.)
 - **S5 Scoreboard:** classic scoreboard graphic reading "SLEEP 0 — TENNIS 6" / "RACQUET HABIT: A DIFFICULT HABIT TO BREAK." Pure share-bait; run as engagement ad in warm-up phase.
 
@@ -47,7 +47,7 @@ Cycle 2 (swap in after ~2 weeks or on fatigue signals): D. Rest Day (humor) · E
 ## §5 Campaign structures
 
 **Meta (weeks 3–8):** 1 campaign, CBO, broad (US first; add UK/CA/AU/DE week 5+ if CPMs allow) → Ad set 1 "Testing" (the 12-ad 3:2:2 cycle) + Ad set 2 "Winners" (promoted top 2–3). Attribution 7-day click/1-day view. Exclude purchasers 30d. Interest "seeds" only if broad stalls: tennis, pickleball, padel, country club, Wimbledon-watchers, athleisure brands.
-**Meta retargeting (always-on, ~10–15% of budget):** engagers 90d + site visitors 30d + ATC 7d → social-proof creative (V7 unboxing, member roundup, founder note), DPA catalog for ATC.
+**Meta retargeting (always-on, ~10–15% of budget):** engagers 90d + site visitors 30d + ATC 7d → social-proof creative (member roundup, real sample unboxing when available, authentic founder note when filmed), DPA catalog for ATC.
 **Advantage+ Shopping (from ~50 purchases/week):** move winners in; existing-customer cap 10–25%; feed the full catalog.
 **Pinterest (week 4+):** Performance+ consideration→conversion, automatic bidding; keyword targets: tennis gifts, tennis outfit, tenniscore, pickleball gifts, preppy style, country club aesthetic; shopping ads from catalog run parallel at $5–10/day.
 **TikTok (weeks 5–6+):** Spark Ads only, boosting the top 2–3 organic posts (whitelisted creator posts count), Website Conversions objective, $20–50/day single ad group, broad 18–44.

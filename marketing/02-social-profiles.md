@@ -8,7 +8,7 @@ Primary: **@racquethabit** on all four platforms (+ TikTok, YouTube, X reserved 
 Fallbacks in order: `@racquet.habit` → `@racquethabitclub` → `@theracquethabit` → `@racquethabit.club`.
 Same avatar everywhere: **RH monogram (green on ivory)** — survives at 110px. Same handle + same avatar = instantly "real" brand.
 
-Link strategy: use one link-in-bio page (Fourthwall page or Linktree) with UTM-tagged links: Shop / New: The Clubhouse Capsule / The Society (email) / Delivery. Per-platform UTMs (`utm_source=instagram&utm_medium=social&utm_campaign=bio`).
+Link strategy: use one link-in-bio page (Fourthwall page or Linktree) with UTM-tagged links: Shop / The Five Capsules / The Society (email) / Delivery. Per-platform UTMs (`utm_source=instagram&utm_medium=social&utm_campaign=bio`).
 
 ---
 
@@ -19,10 +19,10 @@ Link strategy: use one link-in-bio page (Fourthwall page or Linktree) with UTM-t
   > Tennis Addicts Society — Est. 2026
   > Considered goods for the hours around play.
   > Long lunch. Late match. 🎾
-  > ↓ Collection 01 + The Clubhouse Capsule
+  > ↓ The current collection — 24 pieces
 - **Category:** Clothing (Brand) · **Contact:** email · **Link:** link-in-bio
-- **Pinned posts (first 3):** brand manifesto carousel · capsule drop hero · best-performing meme (rotate monthly).
-- **Story highlights (covers: ivory ground, green line icons):** `The Society` (manifesto/about) · `Collection 01` · `The Capsule` · `On Court` (UGC/community) · `Small Print` (design details) · `Delivery` (FAQ, POD timing, returns).
+- **Pinned posts (first 3):** brand manifesto carousel · five-capsule collection hero · best-performing meme (rotate monthly).
+- **Story highlights (covers: ivory ground, green line icons):** `The Society` (manifesto/about) · `The Collection` · `On Court` (UGC/community) · `Small Print` (design details) · `Delivery` (FAQ, POD timing, returns).
 - **Alt text habit:** describe product + "tennis lifestyle brand" keyword in every image's alt text.
 
 ## TikTok
@@ -32,7 +32,7 @@ Link strategy: use one link-in-bio page (Fourthwall page or Linktree) with UTM-t
   > Tennis Addicts Society 🎾 est. 2026
   > A difficult habit to break. One more set ↓
 - **Link:** link-in-bio (unlocks at 1K followers — until then, "shop: racquethabit.com" as the bio's last line and in pinned comment).
-- **Pinned videos:** brand-intro film · best meme · capsule unboxing.
+- **Pinned videos:** brand-intro film · best meme · strongest product/detail video. Use a real unboxing only after a physical sample arrives.
 
 ## Pinterest
 
@@ -52,7 +52,7 @@ Link strategy: use one link-in-bio page (Fourthwall page or Linktree) with UTM-t
   9. `Tennis Party & Watch Party Ideas`
   10. `Clubhouse Interiors & Still Life`
   11. `Racquet Habit — Collection 01` (product board)
-  12. `The Clubhouse Capsule` (product board)
+  12. `Racquet Habit — The Five Capsules` (product board)
 
 ## Facebook
 
@@ -84,5 +84,5 @@ Link strategy: use one link-in-bio page (Fourthwall page or Linktree) with UTM-t
 - Newsletter → **The Society Bulletin** (CTA: "Stay for one more set.")
 - Drops → **Issues** ("Founding Issue," "Issue 002")
 - Collections keep their shop names: The Daily Lineup · Court-Side Pleasures · Love Cherries · Repeat Players · Signed Rally
-- New capsule public name: **The Clubhouse Capsule** ("Court. Lunch. Court.")
+- Current collection structure: **Signed Rally — Founding Issue · The Daily Lineup · Court-Side Pleasures · Love Cherries · Repeat Players**
 - Content series (see calendar): *Small Print Sunday · The Lineup · Rest Day Diaries · Court Notes · Serving Looks · Member Behavior*

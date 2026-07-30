@@ -24,8 +24,8 @@ Voice rules: dry, warm, precise. Understatement over exclamation. The joke lands
 > The schedule writes itself, really.
 
 **C03 — Signed Rally carousel**
-> Signed Rally — Founding Issue. Quiet at the chest, expressive across the back.
-> Issue 001 will not be reprinted. The Society keeps records.
+> Signed Rally — Founding Issue. Crop or oversized; front, back, and the details that make the record.
+> The Society keeps records.
 
 **C04 — Emotional Support Racquet**
 > It doesn't need to be restrung. It needs to be *there*.
@@ -49,25 +49,25 @@ Voice rules: dry, warm, precise. Understatement over exclamation. The joke lands
 
 **C09 — Small Print carousel**
 > Read the fine print. We mean it affectionately.
-> Every piece carries the Society's small print — certificates, disclaimers, and the occasional confession.
+> Verified print and embroidery details from the current production pieces. Nothing invented for the close-up.
 
 **C10 — Tennis Lunch Tennis**
 > 12:00 — lunch. 1:30 — tennis. A balanced schedule.
-> Tennis Lunch Tennis, in Service Red.
+> Tennis Lunch Tennis: Midnight tee, Brown crop.
 
 **C11 — POV Reel**
 > "Last one," we said. Three sets ago.
 
-**C12 — Capsule teaser**
-> Something's arriving at the clubhouse.
-> Court. Lunch. Court. Tomorrow.
+**C12 — Collection announcement**
+> Five capsules. Twenty-four pieces. One recurring scheduling problem.
+> The collection is open.
 
 **C13 — Tease carousel**
 > Detail views only. Patience is a club rule (the only one we enforce).
 
-**C14 — DROP: The Clubhouse Capsule**
-> The Clubhouse Capsule — 14 new pieces for the full rotation: tees, caps, and drinkware with opinions.
-> Serve Chilled · Emotional Support Racquet · One More Racquet Should Fix It · Rest Day · Tennis Lunch Tennis · The Ball Has Plans.
+**C14 — THE COLLECTION IS OPEN**
+> Twenty-four pieces across Signed Rally — Founding Issue, The Daily Lineup, Court-Side Pleasures, Love Cherries, and Repeat Players.
+> Tees, crops, a cap, tote, towel, drinkware, and a case for the phone you'll ignore during sets.
 > Made to order. Worn on repeat. Link in bio.
 
 **C15 — 1 tee, 3 ways**
@@ -75,8 +75,8 @@ Voice rules: dry, warm, precise. Understatement over exclamation. The joke lands
 > Styling notes from the Society, slide by slide.
 
 **C16 — Drinkware still**
-> Hydration schedule: warm-up, first set, second set, one more set, questionable territory, refill.
-> The bottle keeps score so you don't have to.
+> Hydration schedule: warm-up, first set, second set, one more set, refill.
+> Court-Side Hydration or Serve Chilled. Both understand the assignment.
 
 **C17 — Day-arc Reel**
 > Tennis. Lunch. Tennis. A documentary.
@@ -85,8 +85,8 @@ Voice rules: dry, warm, precise. Understatement over exclamation. The joke lands
 > Member behavior, catalogued. Tag your doubles partner — they know which slide they are.
 
 **C19 — Small Print Sunday #1**
-> Small Print Sunday: the underbrim says what we're all thinking.
-> "Previous attempts: inconclusive."
+> Small Print Sunday: Society Monogram, inspected stitch by stitch.
+> The details are the membership card.
 
 **C20 — Rest Day editorial**
 > Tennis is my rest day.
@@ -94,15 +94,15 @@ Voice rules: dry, warm, precise. Understatement over exclamation. The joke lands
 
 **C21 — The Lineup #1**
 > The Lineup: one piece, properly introduced.
-> Today — the One More Racquet Should Fix It tee. It won't. Buy the shirt anyway.
+> Today — the Baseline Plaque Tee. Official-looking evidence of an unofficial society.
 
 **C22 — ASMR Reel**
 > Sounds of the clubhouse, vol. 1. Headphones recommended. Restraint not required.
 
-**C23 — Founder note**
-> Racquet Habit started in Yerevan, on courts with more sun than shade and a lunch culture that refuses to be rushed.
-> We wanted things worth wearing between sets — made carefully, written honestly, shipped anywhere the habit lives.
-> Thanks for being early. The Society remembers its founding members. — Lev
+**C23 — Meet the recurring cast**
+> Ani is Racquet Habit's co-founder and an actual repeat player. Marc is our recurring AI member.
+> Different origins, same schedule: court, lunch, one more set.
+> AI-made appearances stay labeled. Real founder stories stay real.
 
 **C24 — Night Court**
 > Night court. The reverse fixture.
@@ -113,8 +113,8 @@ Voice rules: dry, warm, precise. Understatement over exclamation. The joke lands
 > Verdict: not taking it off.
 
 **C26 — Small Print Sunday #2**
-> This week's exhibit: "Do not separate from player."
-> Care labels should be honest.
+> This week's exhibit: the Signed Rally back print, close enough to see the cotton.
+> Product details should survive inspection.
 
 **C27 — Tablescape carousel**
 > The long lunch, set properly. Racquets down, something cold up.
@@ -125,10 +125,11 @@ Voice rules: dry, warm, precise. Understatement over exclamation. The joke lands
 
 **C29 — Gifts carousel**
 > For the person who answers "how was your weekend" with a set score.
-> Caps and drinkware, $28–55. Gift-ready, grudge-free.
+> Cap, tote, towel, drinkware, and a Love Cherries case. Gift-ready, grudge-free.
 
-**C30 — Ball Has Plans editorial**
-> The ball has plans. Pack accordingly.
+**C30 — Something Cold departure editorial**
+> Something cold. One racquet. No fixed return time.
+> Pack accordingly.
 
 **C31 — UGC roundup**
 > Members, photographed in the wild. Keep tagging @racquethabit — the Society archive is open.
@@ -138,7 +139,7 @@ Voice rules: dry, warm, precise. Understatement over exclamation. The joke lands
 > No qualifying rounds. Just taste.
 
 **C33 — The Lineup #2**
-> The Lineup: Serve Chilled bottle. Contents: cold. Attitude: colder.
+> The Lineup: Serve Chilled tumbler. Contents: cold. Attitude: colder.
 
 **C34 — Watch-party Reel**
 > Couch-side is still court-side if you dress for it. The watch-party kit, assembled.
@@ -155,7 +156,7 @@ Voice rules: dry, warm, precise. Understatement over exclamation. The joke lands
 
 ## Evergreen topic bank (beyond the calendar)
 
-**Product/brand:** design-process BTS (sketch → print → garment) · "why our tees cost what they cost" transparency post · colorway votes ("Serve Chilled in sky or ivory?") · fabric/weight close-ups · packaging reveal · restock/Issue 002 teasers · "the archive" (designs that didn't make it).
+**Product/brand:** design-process BTS (sketch → print → garment) · pricing/made-to-order transparency post · verified fabric/print close-ups · real sample-arrival and fulfillment-packaging reveal · optional custom-insert design process · restock/Issue 002 teasers · "the archive" (designs that didn't make it).
 
 **Culture/humor:** racquet-sport zodiac ("which member are you") · honest match recaps · club rules series ("Rule 7: the loser buys lunch") · "emotional support racquet" check-ins · pickleball/padel crossover memes · terrible tennis advice, confidently given · scoreboard graphics for life events ("Sleep 0 — 6 Tennis").
 

@@ -64,15 +64,15 @@ const compactItem = (item) => Object.fromEntries(
   Object.entries(item).filter(([, value]) => value !== "" && value !== undefined && value !== null),
 );
 
-const track = (event, parameters = {}) => {
+const track = (event, parameters = {}, options = {}) => {
   const event_id = crypto.randomUUID();
   const payload = {
     ...parameters,
     items: Array.isArray(parameters.items) ? parameters.items.map(compactItem) : parameters.items,
   };
-  if (window.RacquetHabitConsent?.canUse("analytics") && typeof window.gtag === "function") {
+  if (!options.skipAnalytics && window.RacquetHabitConsent?.canUse("analytics") && typeof window.gtag === "function") {
     window.gtag("event", event, payload);
-  } else if (event === "view_item" || event === "view_item_list") {
+  } else if (!options.skipAnalytics && (event === "view_item" || event === "view_item_list")) {
     currentPageEvents.set(event, payload);
   }
   window.dispatchEvent(new CustomEvent(analyticsEventName, {

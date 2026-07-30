@@ -15,6 +15,8 @@ const allowedAttribution = [
   "_fbp",
   "_fbc",
   "FPID",
+  "ttclid",
+  "epik",
 ] as const;
 
 type CheckoutItem = { variantId?: unknown; quantity?: unknown };
@@ -66,9 +68,11 @@ export const POST: APIRoute = async ({ request }) => {
     rh_marketing_consent: input.consent?.marketing === true ? "granted" : "denied",
     rh_analytics_consent: input.consent?.analytics === true ? "granted" : "denied",
     rh_session_id: String(input.sessionId || "").slice(0, 128),
-    landing_page: String(attribution.landing_page || "").slice(0, 500),
     epik: String(attribution.epik || "").slice(0, 256),
     ttclid: String(attribution.ttclid || "").slice(0, 256),
+    ga_client_id: String(input.identifiers?.ga_client_id || "").slice(0, 256),
+    ga_session_id: String(input.identifiers?.ga_session_id || "").slice(0, 256),
+    ttp: String(input.identifiers?.ttp || "").slice(0, 256),
   };
 
   const cartResponse = await fetch(

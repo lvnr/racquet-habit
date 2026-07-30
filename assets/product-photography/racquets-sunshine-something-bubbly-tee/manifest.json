@@ -1,0 +1,28 @@
+{
+  "product": "Racquets, Sunshine and Something Bubbly Tee",
+  "slug": "racquets-sunshine-something-bubbly-tee",
+  "generatedAt": "2026-07-25",
+  "approach": "identity-preserving product compositing",
+  "references": {
+    "front": "references/product-front.webp",
+    "back": "references/product-back.webp",
+    "editorialRooftop": "../../../design/brand-fixed/assets/mockup-assets/hf_20260723_105623_bf6ebce9-bf5d-4925-9e14-6c6025f4f445.png",
+    "editorialWalk": "../../../design/brand-fixed/assets/mockup-assets/hf_20260723_110817_82c1118c-ee8d-4110-b50b-5efe776f013e.png",
+    "editorialCourtTailor": "../../../design/brand-fixed/assets/mockup-assets/hf_20260723_105718_0be1a533-0d63-4898-836e-c6dc64b5e29d.png"
+  },
+  "masters": {
+    "catalogFront": "masters/catalog-front.png",
+    "catalogBack": "masters/catalog-back.png",
+    "editorialRooftop": "masters/editorial-rooftop.png",
+    "editorialWalk": "masters/editorial-walk.png",
+    "editorialCourtTailor": "masters/editorial-court-tailor.png"
+  },
+  "web": {
+    "catalogFront": "../../../public/images/products/curated/racquets-sunshine-something-bubbly-tee/catalog-01.webp",
+    "catalogBack": "../../../public/images/products/curated/racquets-sunshine-something-bubbly-tee/catalog-02.webp",
+    "editorialRooftop": "../../../public/images/products/curated/racquets-sunshine-something-bubbly-tee/editorial-01.webp",
+    "editorialWalk": "../../../public/images/products/curated/racquets-sunshine-something-bubbly-tee/editorial-02.webp",
+    "editorialCourtTailor": "../../../public/images/products/curated/racquets-sunshine-something-bubbly-tee/editorial-03.webp"
+  },
+  "promptLibrary": "../../../docs/product-photography-prompts.md"
+}

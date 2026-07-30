@@ -183,6 +183,12 @@
 }
 
 .white-collection { padding: clamp(5rem, 9vw, 10rem) var(--page-pad); }
+.white-collection__cta {
+  margin-top: clamp(3rem, 5vw, 5rem);
+  display: flex;
+  justify-content: center;
+}
+.white-collection__cta .paper-button { width: min(100%, 22rem); }
 
 .annual-product-grid {
   display: grid;

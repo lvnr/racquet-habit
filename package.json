@@ -12,6 +12,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "typegen": "wrangler types",
+    "validate:commerce": "node --experimental-strip-types scripts/validate-fourthwall-conversions.ts",
     "seo:pinterest-images": "node scripts/generate-pinterest-catalog-images.mjs",
     "assets": "node scripts/generate-assets.mjs",
     "assets:v3": "node scripts/generate-v3-vector-prototypes.mjs",

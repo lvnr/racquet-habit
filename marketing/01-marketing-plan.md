@@ -2,20 +2,22 @@
 
 **Version 1.0 · July 23, 2026 · Prepared for the social launch of racquethabit.com**
 
+> **V1 superseded July 28, 2026.** Do not execute its culture-first position, launch-grid cadence, or week-three paid ramp. The approved working direction is performance-first: seed six storefront posts and begin Sales/Purchase advertising immediately, as specified in `12-strategy-reset-plan.md`.
+
 Decisions this plan is built on: **global / US-first targeting**, **$1,500–5,000/mo paid budget**, **blended voice** (editorial polish as the base layer; playful clubhouse energy for short-form video and memes).
 
 ---
 
 ## 1. Where we are
 
-Racquet Habit is live at racquethabit.com with 12 products across five collections (The Daily Lineup, Court-Side Pleasures, Love Cherries, Repeat Players, Signed Rally — Founding Issue), with the 14-piece playful capsule (Serve Chilled, Emotional Support Racquet, One More Racquet Should Fix It, Rest Day, Tennis Lunch Tennis, The Ball Has Plans + caps + drinkware) arriving now. Fourthwall handles print-on-demand fulfillment and international shipping; checkout settles in USD; Armenia gets free shipping and AMD display pricing.
+Racquet Habit is live at racquethabit.com with **24 products across five capsules**: Signed Rally — Founding Issue (8), The Daily Lineup (3), Court-Side Pleasures (7), Love Cherries (4), and Repeat Players (2). The current assortment spans tees/crops, one cap, a tote, towel, two drinkware pieces, and a MagSafe case. Fourthwall handles print-on-demand fulfillment and international shipping; checkout settles in USD; Armenia gets free shipping and AMD display pricing. The authoritative production and generation map is `09-current-catalog-production-map.md`.
 
 The brand has something most launch-stage merch brands don't: a **complete, disciplined identity** (New Court Classic system + playful clubhouse direction), a distinctive voice ("the unofficial society for people who always have time for one more set"), and a library of editorial-grade product imagery. Marketing's job is not to invent a brand — it's to put the one that exists in front of the right people, repeatedly, in the formats each platform rewards in 2026.
 
 ### The market moment (why now is good)
 
 - **Tenniscore matured from trend to durable aesthetic.** Tennis-skirt search demand cooled (−21% YoY) but the adjacent lifestyle signals — retro trainers +42%, optic white, court-to-café dressing — keep growing. The winning position in 2026 is exactly Racquet Habit's: sell the *culture and humor of racquet life*, not the costume.
-- **Pickleball (24.3M US players, +23% YoY) and padel (1M+ US players)** widen the addressable audience for racquet-lifestyle humor. Most of our designs ("Emotional Support Racquet," "Out of Office," "One More Racquet Should Fix It") read cross-sport with zero changes.
+- **Pickleball (24.3M US players, +23% YoY) and padel (1M+ US players)** widen the addressable audience for racquet-lifestyle humor. Current designs such as "Emotional Support Racquet," "Out of Office," and "Tennis Is My Rest Day" read cross-sport with little or no copy change.
 - **A documented whitespace:** established racquet brands under-serve 18–34s and under-exploit TikTok. A meme-literate, design-led newcomer can own that gap.
 - **US Open runway:** Fan Week Aug 23–28, main draw Aug 30–Sep 13. Launching accounts now gives ~4 weeks to seed content and warm ad accounts before the single biggest US tennis-culture moment of the year — then roll straight into Q4 gifting (Pinterest searches start ~45 days before holidays).
 
@@ -82,7 +84,7 @@ Your instinct (IG/FB/TikTok/Pinterest) matches the research. Recommended weighti
 - **Cadence: ~1/day for the first 60–90 days** (data: 11+/week = +34% views/post; new accounts need volume for the algorithm to find the audience). Batch-produce weekly; Higgsfield makes this cadence feasible.
 - **Voice: full playful clubhouse.** Dry humor delivered deadpan. The account bio sets it: "Tennis Addicts Society. Est. 2026. A difficult habit to break."
 - **TikTok SEO:** target long-tail searches — "tennis gifts for her," "what to wear to tennis practice," "pickleball outfit ideas," "tennis aesthetic." Keyword in caption + spoken audio + on-screen text (all indexed).
-- **Formats:** POV humor, photo carousels (cheap, high-engagement pattern interrupt), day-in-the-life, before/after, list videos ("5 signs you have a racquet habit"), unboxings, design-process BTS.
+- **Formats:** POV humor, photo carousels (cheap, high-engagement pattern interrupt), day-in-the-life, before/after, list videos ("5 signs you have a racquet habit"), real sample unboxings, design-process BTS.
 - **First 1–3 seconds decide everything.** Hook bank lives in `06-video-ugc-concepts.md`.
 - Native tools (CapCut, trending audio ≤ current, Stitch/Duet on tennis moments) boost distribution.
 
@@ -115,8 +117,8 @@ Your instinct (IG/FB/TikTok/Pinterest) matches the research. Recommended weighti
 
 - Full cadence: TikTok daily, IG 4–5/wk + 3–5 trial reels/wk, Pinterest 5–7 pins/wk, FB crossposts.
 - Meta ad account warm-up: $10–20/day engagement/traffic objectives on best organic content (this builds pixel signal AND page social proof cheaply).
-- Recruit 5–10 micro-creators (1–20K followers; tennis players, "tennis girl aesthetic" accounts, pickleball creators). Offer: free capsule pieces + small fee for 1 collab post + content rights (whitelisting for Spark Ads later). Their content becomes both organic collabs and the UGC ad pool.
-- Capsule drop moment ("The Clubhouse Capsule") gets a 3-day content arc: tease (silhouettes/details) → drop day (hero film + carousel + live product pins) → styling day (how members wear it).
+- Recruit 5–10 micro-creators (1–20K followers; tennis players, "tennis girl aesthetic" accounts, pickleball creators). Offer: 1–2 current-catalog pieces + small fee for 1 collab post + content rights (whitelisting for Spark Ads later). Their content becomes both organic collabs and the UGC ad pool.
+- Collection-open moment gets a 3-day content arc: tease (silhouettes/details) → launch day (hero film + five-capsule carousel + live product pins) → styling day (how members wear it).
 - Weekly ritual content begins (series named in `04-content-topics-and-captions.md`): *Small Print Sunday, The Lineup, Rest Day Diaries, Court Notes.*
 
 ### Phase 2 — Paid ramp (weeks 3–8)
@@ -160,7 +162,7 @@ Pinterest gifting content + catalog ads scale first (45-day search lead time), t
 
 ### Creative doctrine (this decides success more than budgets)
 
-1. **Creative is the targeting.** Meta's Andromeda matches ads to people by reading the creative itself. Go broad; differentiate with 8–12 *conceptually distinct* ads (a meme ad, a UGC try-on, an editorial still, an ASMR unboxing are four concepts; four color variants of one still are one concept).
+1. **Creative is the targeting.** Meta's Andromeda matches ads to people by reading the creative itself. Go broad; differentiate with 8–12 *conceptually distinct* ads (a meme ad, a UGC try-on, an editorial still, and real object-level ASMR are four concepts; four color variants of one still are one concept).
 2. **60/40 UGC-to-polished for prospecting; invert for retargeting.** UGC-style creative runs +27% CTR / +19% CVR for DTC.
 3. **Hook in <2s, brand/product in <3s, 15–30s total** for direct-response video; 4:5 for feed statics (it has replaced 1:1), 9:16 for everything vertical; respect the unified Meta safe zones (top 14%, bottom 20–35%, sides 6%).
 4. **AI disclosure:** Meta requires self-certification for photorealistic AI people; TikTok requires the AIGC toggle; Pinterest auto-labels. Use the toggles — labeled content suffers minimal penalty, unlabeled content gets throttled or the account penalized. Full details + which creatives need it flagged in `07-ads-creative-pack.md`.
@@ -187,12 +189,12 @@ Pinterest gifting content + catalog ads scale first (45-day search lead time), t
 
 ## 7. Risks & honest notes
 
-- **Premium POD pricing ($60–75 tees) vs. impulse-buy merch:** the content must sell *brand and belonging*, not commodity tees — that's why the Society framing leads everywhere. Watch AOV; drinkware/caps ($28–55) are the ad-friendly entry price points. Consider a capsule intro price or free-shipping threshold if CPA stalls above $40.
+- **Premium POD pricing vs. impulse-buy merch:** the content must sell *brand and belonging*, not commodity tees — that's why the Society framing leads everywhere. Watch AOV; accessories and drinkware are the ad-friendly entry points. Use live storefront prices in creative rather than fixed price claims in this plan.
 - **AI-generated content at scale:** the editorial assets are excellent, but platforms and users increasingly detect and discount obvious AI. Mitigation: blend in real-world content ASAP (creator UGC from Phase 1, real product photos of actual Fourthwall samples, Yerevan court photos), use AI disclosure toggles, and never let generated imagery promise a physical detail the product doesn't have (already a brand rule — it matters double in ads).
-- **Fourthwall production/shipping times** on POD: set expectations in FAQ highlights and ad comments ("made to order — allow X days") to protect review scores.
+- **Fourthwall production/shipping times and packaging** on POD: set expectations in FAQ highlights and ad comments ("made to order — allow X days") to protect review scores. Default outer packaging varies by fulfillment partner and cannot be treated as a branded prop. Do not publish an unboxing concept until a real sample order is photographed; a supported 6×4 or 4×6 custom insert is the only standard POD branding layer available.
 - **One-person content operation:** the cadence above is aggressive. The Higgsfield prompt pack is engineered for batching (one session = a week of content). If it still overloads, cut FB to pure crossposting and drop TikTok to 5×/week before touching IG/Pinterest.
 - **Trademark/IP:** avoid tournament names/marks in paid creative ("US Open" as cultural commentary in organic is normal; in ad copy it invites trouble — use "the Open," "tennis's biggest fortnight").
 
 ---
 
-*Companion files: `02-social-profiles.md` (identity pack) · `03-launch-content-calendar.md` (30-day calendar) · `04-content-topics-and-captions.md` (copy) · `05-photoshoot-concepts.md` (image concepts) · `06-video-ugc-concepts.md` (video/UGC) · `07-ads-creative-pack.md` (ad concepts + specs) · `08-higgsfield-prompt-pack.md` (generation prompts).*
+*Companion files: `02-social-profiles.md` (identity pack) · `03-launch-content-calendar.md` (30-day calendar) · `04-content-topics-and-captions.md` (copy) · `05-photoshoot-concepts.md` (image concepts) · `06-video-ugc-concepts.md` (video/UGC) · `07-ads-creative-pack.md` (ad concepts + specs) · `08-higgsfield-prompt-pack.md` (generation prompts) · `09-current-catalog-production-map.md` (catalog/readiness source of truth).*

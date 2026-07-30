@@ -1,5 +1,11 @@
 import type { APIRoute } from "astro";
 import { env } from "cloudflare:workers";
+import {
+  buildGa4Payload,
+  buildPinterestPayload,
+  buildTikTokPayload,
+  type FourthwallEvent,
+} from "../../../lib/fourthwall-conversions";
 
 const encoder = new TextEncoder();
 
@@ -30,87 +36,12 @@ const verifySignature = async (body: ArrayBuffer, signature: string, secret: str
   return safeEqual(toBase64(digest), signature);
 };
 
-const sha256 = async (value: string) => {
-  const digest = await crypto.subtle.digest("SHA-256", encoder.encode(value.trim().toLowerCase()));
-  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
-};
-
-type Money = { value?: number; currency?: string };
-type FourthwallOrder = {
-  id?: string;
-  friendlyId?: string;
-  email?: string;
-  createdAt?: string;
-  amounts?: { subtotal?: Money };
-  metadata?: Record<string, unknown>;
-  offers?: Array<{
-    id?: string;
-    name?: string;
-    variant?: {
-      id?: string;
-      name?: string;
-      quantity?: number;
-      unitPrice?: Money;
-    };
-  }>;
-};
-
-type FourthwallEvent = {
-  id?: string;
-  type?: string;
-  testMode?: boolean;
-  createdAt?: string;
-  data?: FourthwallOrder;
-};
-
 const sendPinterestCheckout = async (
   event: FourthwallEvent,
   accessToken: string,
   adAccountId: string,
 ) => {
-  const order = event.data || {};
-  const metadata = order.metadata || {};
-  if (metadata.rh_marketing_consent !== "granted") return { skipped: "marketing_consent" };
-  if (!order.email) return { skipped: "missing_user_data" };
-
-  const subtotal = order.amounts?.subtotal;
-  const contents = (order.offers || []).map((offer) => ({
-    id: offer.variant?.id || offer.id || "",
-    item_name: offer.name || offer.variant?.name || "",
-    item_price: String(offer.variant?.unitPrice?.value || 0),
-    quantity: Number(offer.variant?.quantity || 1),
-  }));
-  const numItems = contents.reduce((sum, item) => sum + item.quantity, 0);
-  const createdAt = order.createdAt || event.createdAt;
-  const eventTime = createdAt ? Math.floor(new Date(createdAt).getTime() / 1000) : Math.floor(Date.now() / 1000);
-  const eventSource = new URL("https://racquethabit.com/order-confirmed");
-  const epik = String(metadata.epik || "");
-  if (epik) eventSource.searchParams.set("epik", epik);
-
-  const userData: { em: string[]; click_id?: string } = {
-    em: [await sha256(order.email)],
-  };
-  if (epik) userData.click_id = epik;
-
-  const payload = {
-    data: [{
-      event_name: "checkout",
-      action_source: "web",
-      event_time: eventTime,
-      event_id: `fourthwall:${order.id || event.id || order.friendlyId}`,
-      event_source_url: eventSource.toString(),
-      opt_out: false,
-      user_data: userData,
-      custom_data: {
-        currency: subtotal?.currency || "USD",
-        value: String(subtotal?.value || 0),
-        order_id: order.id || order.friendlyId || "",
-        num_items: numItems,
-        contents,
-      },
-    }],
-  };
-
+  const payload = await buildPinterestPayload(event);
   const endpoint = new URL(`https://api.pinterest.com/v5/ad_accounts/${encodeURIComponent(adAccountId)}/events`);
   if (event.testMode) endpoint.searchParams.set("test", "true");
   const response = await fetch(endpoint, {
@@ -123,10 +54,79 @@ const sendPinterestCheckout = async (
   });
   if (!response.ok) {
     const error = await response.text();
-    console.error("[fourthwall-webhook] Pinterest rejected checkout", response.status, error.slice(0, 500));
+    console.error(JSON.stringify({
+      message: "Pinterest rejected Fourthwall purchase",
+      status: response.status,
+      error: error.slice(0, 500),
+      eventId: event.id,
+    }));
     throw new Error(`Pinterest conversion failed: ${response.status}`);
   }
   return { sent: true };
+};
+
+const sendGa4Purchase = async (
+  event: FourthwallEvent,
+  measurementId: string,
+  apiSecret: string,
+) => {
+  const payload = await buildGa4Payload(event);
+  const endpoint = new URL(event.testMode
+    ? "https://www.google-analytics.com/debug/mp/collect"
+    : "https://www.google-analytics.com/mp/collect");
+  endpoint.searchParams.set("measurement_id", measurementId);
+  endpoint.searchParams.set("api_secret", apiSecret);
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(event.testMode
+      ? { ...payload, validation_behavior: "ENFORCE_RECOMMENDATIONS" }
+      : payload),
+  });
+  const validation = event.testMode
+    ? await response.json() as { validationMessages?: Array<{ description?: string }> }
+    : null;
+  if (!response.ok || validation?.validationMessages?.length) {
+    console.error(JSON.stringify({
+      message: "GA4 rejected Fourthwall purchase",
+      status: response.status,
+      validationMessages: validation?.validationMessages || [],
+      eventId: event.id,
+    }));
+    throw new Error(`GA4 conversion failed: ${response.status}`);
+  }
+  return { sent: !event.testMode, validated: Boolean(event.testMode) };
+};
+
+const sendTikTokPurchase = async (
+  event: FourthwallEvent,
+  pixelCode: string,
+  accessToken: string,
+  testEventCode?: string,
+) => {
+  if (event.testMode && !testEventCode) return { skipped: "missing_test_event_code" };
+  const payload = await buildTikTokPayload(event, pixelCode, event.testMode ? testEventCode : undefined);
+  const response = await fetch("https://business-api.tiktok.com/open_api/v1.3/event/track/", {
+    method: "POST",
+    headers: {
+      "Access-Token": accessToken,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  const result = await response.json() as { code?: number; message?: string; request_id?: string };
+  if (!response.ok || result.code !== 0) {
+    console.error(JSON.stringify({
+      message: "TikTok rejected Fourthwall purchase",
+      status: response.status,
+      code: result.code,
+      error: result.message,
+      requestId: result.request_id,
+      eventId: event.id,
+    }));
+    throw new Error(`TikTok conversion failed: ${response.status}/${result.code ?? "unknown"}`);
+  }
+  return { sent: !event.testMode, tested: Boolean(event.testMode), requestId: result.request_id };
 };
 
 export const POST: APIRoute = async ({ request }) => {
@@ -134,7 +134,12 @@ export const POST: APIRoute = async ({ request }) => {
   const webhookSecret = runtimeEnv.FOURTHWALL_WEBHOOK_SECRET;
   const pinterestToken = runtimeEnv.PINTEREST_ACCESS_TOKEN;
   const pinterestAdAccountId = runtimeEnv.PINTEREST_AD_ACCOUNT_ID || "549770622978";
-  if (!webhookSecret || !pinterestToken) {
+  const gaMeasurementId = runtimeEnv.GA_MEASUREMENT_ID || "G-B53YGNVTNF";
+  const gaApiSecret = runtimeEnv.GA4_API_SECRET;
+  const tiktokPixelId = runtimeEnv.TIKTOK_PIXEL_ID || "D9HKESBC77U1LOVTV5E0";
+  const tiktokAccessToken = runtimeEnv.TIKTOK_EVENTS_API_ACCESS_TOKEN;
+  const tiktokTestEventCode = runtimeEnv.TIKTOK_TEST_EVENT_CODE;
+  if (!webhookSecret || !pinterestToken || !gaApiSecret || !tiktokAccessToken) {
     return Response.json({ error: "Webhook integration is not configured." }, { status: 503 });
   }
 
@@ -155,10 +160,24 @@ export const POST: APIRoute = async ({ request }) => {
     return Response.json({ received: true, ignored: event.type || "unknown" });
   }
 
-  try {
-    const pinterest = await sendPinterestCheckout(event, pinterestToken, pinterestAdAccountId);
-    return Response.json({ received: true, pinterest });
-  } catch {
+  const providers = await Promise.allSettled([
+    sendPinterestCheckout(event, pinterestToken, pinterestAdAccountId),
+    sendGa4Purchase(event, gaMeasurementId, gaApiSecret),
+    sendTikTokPurchase(event, tiktokPixelId, tiktokAccessToken, tiktokTestEventCode),
+  ]);
+  const [pinterest, ga4, tiktok] = providers.map((result) => result.status === "fulfilled"
+    ? result.value
+    : { error: result.reason instanceof Error ? result.reason.message : "delivery_failed" });
+  const failed = providers.some((result) => result.status === "rejected");
+  if (failed) {
     return Response.json({ error: "Conversion delivery failed." }, { status: 502 });
   }
+  console.log(JSON.stringify({
+    message: "Fourthwall purchase delivered",
+    eventId: event.id,
+    orderId: event.data?.id,
+    testMode: Boolean(event.testMode),
+    providers: { pinterest, ga4, tiktok },
+  }));
+  return Response.json({ received: true, pinterest, ga4, tiktok });
 };

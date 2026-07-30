@@ -1,6 +1,6 @@
 # Commerce analytics
 
-Last reviewed: 24 July 2026
+Last reviewed: 29 July 2026
 
 ## Current production setup
 
@@ -19,9 +19,10 @@ Last reviewed: 24 July 2026
 - Fourthwall `ORDER_PLACED` webhook: `wcon_YqYZfKCQTvSVIMGvjzc_Hw`
 
 The storefront emits Google's recommended ecommerce event names and hands
-campaign/click identifiers to Fourthwall's checkout endpoint. Fourthwall owns
-the hosted checkout and confirmation pages, where it emits the remaining
-checkout and purchase events.
+campaign, click, browser and session identifiers to Fourthwall's checkout
+endpoint. Fourthwall's paid-order webhook is the authoritative GA4 and TikTok
+purchase source. Fourthwall remains the authoritative Meta checkout/purchase
+source through its native Pixel and Conversions API integration.
 
 | Journey stage | Owner | GA4 event |
 | --- | --- | --- |
@@ -31,27 +32,45 @@ checkout and purchase events.
 | Add to bag | Racquet Habit | `add_to_cart` |
 | Remove from bag | Racquet Habit | `remove_from_cart` |
 | Open bag | Racquet Habit | `view_cart` |
-| Leave for checkout | Racquet Habit | `begin_checkout` |
-| Shipping/payment/confirmation | Fourthwall | Fourthwall's checkout events, including `purchase` |
+| Leave for checkout | Racquet Habit | GA4 `begin_checkout`, TikTok `InitiateCheckout`, and Pinterest `InitiateCheckout` |
+| Paid order | Signed Fourthwall webhook | GA4 `purchase`, TikTok `Purchase`, and Pinterest `checkout` |
+| Meta checkout/payment/purchase | Fourthwall | Native Meta Pixel and Conversions API events |
 
 Every storefront ecommerce event includes an `items` array with stable
 Fourthwall product IDs. Monetary events also include `currency` and `value`.
 Do not add email addresses, names, addresses, or other personally identifying
 information to analytics events.
 
-The checkout handoff creates a Fourthwall Storefront API cart so privacy and
-attribution metadata survive through the paid-order webhook. It also preserves
-the identifiers Fourthwall officially supports:
+The checkout handoff creates a Fourthwall Storefront API cart so attribution
+metadata survives through the paid-order webhook. It preserves the identifiers
+Fourthwall officially supports:
 `utm_*`, `gclid`, `fbclid`, `_ga`, `_fbp`, `_fbc`, `FPID`, and `cart_origin`.
-The shared GA4 tag and cross-domain configuration are the primary mechanism for
-keeping one user/session across the storefront and checkout.
+Cart metadata additionally preserves GA4's `client_id` and `session_id`,
+TikTok's `_ttp` cookie, `ttclid`, `epik`, Racquet Habit's session ID, and the
+recorded consent choices. The eight metadata keys remain below Fourthwall's
+ten-key and 2KB limits.
 
 When a browser sends Global Privacy Control, the storefront forces marketing
 consent to `denied` even if a prior local preference granted it.
 
 The analytics helper also publishes a provider-neutral `rh:commerce` browser
 event. Meta, TikTok and Pinterest adapters listen for this event instead of
-duplicating commerce logic in UI components.
+duplicating commerce logic in UI components. The storefront's `begin_checkout`
+handoff sends GA4, TikTok and Pinterest events before redirect. It intentionally
+omits Meta because Fourthwall's native Pixel/CAPI path owns Meta once checkout
+begins.
+
+The browser creates the Fourthwall cart through the Storefront API before
+redirecting to hosted checkout. This is Fourthwall's supported custom-frontend
+flow and preserves GA/TikTok identifiers, session, `epik`, and `ttclid`
+metadata on the cart for webhook attribution. Landing-page and UTM attribution
+also travel as hosted checkout URL parameters.
+
+Fourthwall's built-in GA4 and TikTok tracking fields are disabled. A production
+order on 29 July 2026 showed that their hosted checkout emitted a valid Meta
+CAPI Purchase but no GA4 purchase and no TikTok purchase after ten hours.
+Explicit event ownership avoids relying on that failed browser confirmation
+handoff or risking a future duplicate purchase.
 
 ## Release verification
 
@@ -61,10 +80,15 @@ After changing analytics or checkout:
 2. Confirm one each of `view_item_list`, `select_item`, `view_item`,
    `add_to_cart`, `view_cart`, and `begin_checkout`.
 3. Confirm the checkout URL retains the expected campaign and click
-   identifiers.
+   identifiers, and the Fourthwall cart preserves `ga_client_id`,
+   `ga_session_id`, and `ttp` metadata.
 4. Complete a real low-value order and confirm exactly one `purchase`, with a
-   unique transaction ID, matching value, currency, and line items.
-5. Refund the test order if appropriate. Do not manufacture a production
+   unique transaction ID, matching subtotal value, currency, shipping, tax and
+   line items.
+5. Confirm GA4 identifies the source as Measurement Protocol, TikTok identifies
+   the source as Server, Meta identifies the source as Fourthwall CAPI, and
+   Pinterest receives one checkout.
+6. Refund the test order if appropriate. Do not manufacture a production
    `purchase` event in the browser.
 
 Google marks `purchase` as a key event by default. Confirm it remains enabled
@@ -92,12 +116,16 @@ Meta, TikTok and Pinterest load only after marketing consent.
 
 ### TikTok
 
-1. Use Pixel `D9HKESBC77U1LOVTV5E0` on Racquet Habit and Fourthwall.
+1. Use Pixel `D9HKESBC77U1LOVTV5E0` on Racquet Habit.
 2. The storefront adapter sends `ViewContent`, `AddToCart` and
    `InitiateCheckout` after marketing consent.
-3. Fourthwall owns hosted-checkout and purchase events.
-4. Do not also import GA4 purchase into this pixel unless TikTok documents a
-   shared event ID/deduplication path; parallel purchase sources can double count.
+3. The signed Fourthwall webhook sends the standard TikTok `Purchase` event
+   through Events API v1.3 for every paid order, using the Fourthwall order UUID
+   as `event_id`.
+4. The payload includes subtotal value, currency, product/variant IDs,
+   quantities, hashed email and phone, plus `_ttp` and `ttclid` when available.
+5. Do not enable Fourthwall's TikTok tracking field while this server purchase
+   is authoritative unless Fourthwall can guarantee the same `event_id`.
 
 ### Pinterest
 
@@ -105,10 +133,26 @@ Fourthwall does not expose a native Pinterest field beside its GA4, Meta and
 TikTok settings. Tag `2613520753193` sends consented base page views, product
 `PageVisit`, `AddToCart` and an audience-only `InitiateCheckout` event. The
 signed `ORDER_PLACED` webhook sends
-Pinterest's authoritative `checkout` event only when the Fourthwall cart
-contains `rh_marketing_consent=granted`. Its deterministic `event_id` makes
-retries idempotent. A normalized SHA-256 email hash and `epik` click ID, when
-available, improve match quality without logging raw customer data.
+Pinterest's authoritative `checkout` event for every paid order. Its
+deterministic `event_id` makes retries idempotent. A normalized SHA-256 email
+hash and `epik` click ID, when available, improve match quality without logging
+raw customer data.
+
+### GA4 server purchase
+
+The signed Fourthwall webhook sends GA4's recommended `purchase` event through
+Measurement Protocol for every paid order. `transaction_id` is the Fourthwall
+order UUID; `value` is item subtotal and excludes shipping and tax, which are
+sent separately. If UTM values are present, a `campaign_details` event precedes
+the purchase by one microsecond so manual campaign attribution remains
+available when the original GA session cannot be joined. The real GA
+client/session IDs are used when available; a deterministic server client ID
+keeps otherwise unidentified purchases valid.
+
+The payload builder is checked against GA4's validation endpoint with
+`ENFORCE_RECOMMENDATIONS` before production deployment. Production requests use
+`/mp/collect`; Fourthwall test-mode webhooks use `/debug/mp/collect` and do not
+create production analytics events.
 
 ## Runtime configuration
 
@@ -125,6 +169,12 @@ Encrypted Cloudflare secrets:
 - `FOURTHWALL_STOREFRONT_TOKEN`
 - `FOURTHWALL_WEBHOOK_SECRET`
 - `PINTEREST_ACCESS_TOKEN`
+- `GA4_API_SECRET`
+- `TIKTOK_EVENTS_API_ACCESS_TOKEN`
+
+Optional temporary test secret:
+
+- `TIKTOK_TEST_EVENT_CODE` — remove after TikTok Test Events validation.
 
 Never put access tokens, webhook secrets, API credentials or customer data in
 git, public Astro environment variables or browser JavaScript.
@@ -132,10 +182,16 @@ git, public Astro environment variables or browser JavaScript.
 ## Official references
 
 - [Google Analytics ecommerce events](https://developers.google.com/analytics/devguides/collection/ga4/ecommerce)
+- [Google Analytics Measurement Protocol](https://developers.google.com/analytics/devguides/collection/protocol/ga4)
+- [Google Analytics Measurement Protocol validation](https://developers.google.com/analytics/devguides/collection/protocol/ga4/validating-events)
+- [Google Analytics campaign details event](https://developers.google.com/analytics/devguides/collection/protocol/ga4/reference/events#campaign_details)
 - [Google Analytics cross-domain measurement](https://support.google.com/analytics/answer/10071811)
 - [Google Analytics default key events](https://support.google.com/analytics/answer/13128484)
 - [Fourthwall cart checkout parameters](https://docs.fourthwall.com/shop-apis/cart-checkout-endpoint.md)
 - [Fourthwall Meta Conversions API](https://help.fourthwall.com/hc/en-us/articles/37430330256539-Tracking-Sales-with-Facebook-s-Conversions-API-on-Fourthwall)
 - [Fourthwall paid-order webhook](https://docs.fourthwall.com/api-reference/order-events/order-placed.md)
-- [TikTok Google Analytics integration](https://ads.us.tiktok.com/help/article/how-to-connect-google-analytics-with-tiktok-events-manager?lang=en)
+- [TikTok Events API](https://ads.tiktok.com/help/article/events-api?lang=en)
+- [TikTok standard events and parameters](https://ads.tiktok.com/help/article/standard-events-parameters?lang=en)
+- [TikTok Events API verification](https://business-api.tiktok.com/portal/docs?id=1771100984456193)
+- [TikTok event deduplication](https://ads.tiktok.com/help/article/event-deduplication?lang=en)
 - [Pinterest third-party tracking integrations](https://developer.pinterest.com/docs/track-conversions/integrate-third-party-tracking-tools/)

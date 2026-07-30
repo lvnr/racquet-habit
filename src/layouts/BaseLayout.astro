@@ -44,6 +44,7 @@ const {
 const runtimeEnv = env as unknown as Record<string, string | undefined>;
 const analyticsIds = {
   ga: runtimeEnv.GA_MEASUREMENT_ID || "G-B53YGNVTNF",
+  clarity: runtimeEnv.CLARITY_PROJECT_ID || "xupnrsmq35",
   meta: runtimeEnv.META_PIXEL_ID || "",
   tiktok: runtimeEnv.TIKTOK_PIXEL_ID || "D9HKESBC77U1LOVTV5E0",
   pinterest: runtimeEnv.PINTEREST_TAG_ID || "",
@@ -126,6 +127,7 @@ const cartImageMapJson = JSON.stringify(cartImageMap).replace(/</g, "\\u003c");
 <html
   lang="en"
   data-ga-measurement-id={analyticsIds.ga}
+  data-clarity-project-id={analyticsIds.clarity}
   data-meta-pixel-id={analyticsIds.meta}
   data-tiktok-pixel-id={analyticsIds.tiktok}
   data-pinterest-tag-id={analyticsIds.pinterest}
@@ -158,6 +160,25 @@ const cartImageMapJson = JSON.stringify(cartImageMap).replace(/</g, "\\u003c");
           });
         }
       } catch {}
+    </script>
+    <script is:inline>
+      (function(c,l,a,r,i,t,y){
+        if (!i) return;
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        let analyticsStorage = 'denied';
+        try {
+          const savedConsent = JSON.parse(localStorage.getItem('rh-consent-v1') || 'null');
+          if (savedConsent?.version === 1 && savedConsent?.decided === true && savedConsent.analytics === true) {
+            analyticsStorage = 'granted';
+          }
+        } catch {}
+        c[a]('consentv2', {
+          ad_Storage: 'denied',
+          analytics_Storage: analyticsStorage,
+        });
+        t=l.createElement(r);t.async=1;t.src='https://www.clarity.ms/tag/'+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, 'clarity', 'script', document.documentElement.dataset.clarityProjectId);
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -206,6 +227,7 @@ const cartImageMapJson = JSON.stringify(cartImageMap).replace(/</g, "\\u003c");
     <script is:inline id="cart-image-data" type="application/json" set:html={cartImageMapJson}></script>
     <script is:inline src="/scripts/consent-manager.js" type="module"></script>
     <script is:inline src="/scripts/marketing-pixels.js" type="module"></script>
+    <script is:inline src="/scripts/clarity-analytics.js" type="module"></script>
     <script is:inline src="/scripts/commerce-analytics.js" type="module"></script>
     <script is:inline src="/scripts/storefront.js" type="module"></script>
   </body>

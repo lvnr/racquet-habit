@@ -39,6 +39,8 @@ window.addEventListener(commerceEvent, ({ detail }) => {
 
   if (event.startsWith("checkout_")) {
     callClarity("set", "checkout_stage", event);
+    const checkoutAttemptId = String(detail?.parameters?.checkout_attempt_id || "");
+    if (checkoutAttemptId) callClarity("set", "checkout_attempt_id", checkoutAttemptId);
   }
 
   if (event === "checkout_click" || event === "begin_checkout") {

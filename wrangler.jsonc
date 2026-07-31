@@ -7,6 +7,14 @@
   "assets": {
     "directory": "./dist"
   },
+  "d1_databases": [
+    {
+      "binding": "RH_OBSERVABILITY_DB",
+      "database_name": "racquet-habit-observability",
+      "database_id": "e353b397-a658-4705-b1cf-5a5584b931e3",
+      "migrations_dir": "migrations"
+    }
+  ],
   "vars": {
     "GA_MEASUREMENT_ID": "G-B53YGNVTNF",
     "CLARITY_PROJECT_ID": "xupnrsmq35",
@@ -29,6 +37,14 @@
   ],
   "observability": {
     "enabled": true,
-    "head_sampling_rate": 1
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.25
+    }
   }
 }

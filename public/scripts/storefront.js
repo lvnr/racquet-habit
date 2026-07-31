@@ -32,7 +32,24 @@ const trackCartEvent = (event, items, options) => {
     currency: "USD",
     value,
     items: items.map((item) => analyticsItem(item)),
+    ...(options?.checkoutAttemptId ? { checkout_attempt_id: options.checkoutAttemptId } : {}),
   }, options);
+};
+
+const sendCheckoutTelemetry = (event, attemptId, details = {}) => {
+  const payload = JSON.stringify({ event, attemptId, ...details });
+  try {
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon("/api/checkout/telemetry", new Blob([payload], { type: "application/json" }));
+      return;
+    }
+    fetch("/api/checkout/telemetry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: payload,
+      keepalive: true,
+    }).catch(() => {});
+  } catch {}
 };
 
 const readCookie = (name) => document.cookie
@@ -141,7 +158,7 @@ const sessionId = (() => {
   return created;
 })();
 
-const createCheckout = async (cart) => {
+const createCheckout = async (cart, checkoutAttemptId) => {
   const consent = window.RacquetHabitConsent?.get?.() || {};
   const attribution = window.RacquetHabitAnalytics?.getAttribution?.() || {};
   const identifiers = await checkoutIdentifiers();
@@ -159,6 +176,8 @@ const createCheckout = async (cart) => {
         attribution,
         identifiers,
         sessionId,
+        checkoutAttemptId,
+        cartValue: cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0), 0),
       }),
     });
   } finally {
@@ -167,7 +186,7 @@ const createCheckout = async (cart) => {
   if (!response.ok) throw new Error(`Checkout request failed: ${response.status}`);
   const result = await response.json();
   if (!result.url) throw new Error("Checkout URL missing");
-  return result.url;
+  return result;
 };
 
 const formatPrice = (value) => new Intl.NumberFormat(
@@ -346,17 +365,31 @@ document.querySelector("[data-cart-checkout]")?.addEventListener("click", async 
   checkout.dataset.loading = "true";
   checkout.setAttribute("aria-busy", "true");
   checkout.textContent = "Opening secure checkout…";
-  trackCartEvent("checkout_click", cart);
-  trackCartEvent("begin_checkout", cart);
+  const checkoutAttemptId = createId();
+  const startedAt = performance.now();
+  window.RacquetHabitObservability?.setCheckoutAttempt(checkoutAttemptId);
+  trackCartEvent("checkout_click", cart, { checkoutAttemptId });
+  trackCartEvent("begin_checkout", cart, { checkoutAttemptId });
+  sendCheckoutTelemetry("checkout_click", checkoutAttemptId);
   try {
-    const checkoutUrl = await createCheckout(cart);
-    trackCartEvent("checkout_api_success", cart);
-    trackCartEvent("checkout_redirect", cart);
-    window.location.assign(checkoutUrl);
+    const result = await createCheckout(cart, checkoutAttemptId);
+    const durationMs = Math.round(performance.now() - startedAt);
+    trackCartEvent("checkout_api_success", cart, { checkoutAttemptId });
+    trackCartEvent("checkout_redirect", cart, { checkoutAttemptId });
+    sendCheckoutTelemetry("checkout_redirect", checkoutAttemptId, { durationMs, statusCode: 200 });
+    window.location.assign(result.url);
   } catch (error) {
     console.error("[checkout] Falling back to direct checkout", error);
-    trackCartEvent("checkout_api_error", cart);
-    trackCartEvent("checkout_fallback", cart);
+    const durationMs = Math.round(performance.now() - startedAt);
+    window.RacquetHabitObservability?.captureCheckoutError(error, {
+      stage: "checkout_api",
+      attemptId: checkoutAttemptId,
+      durationMs,
+    });
+    trackCartEvent("checkout_api_error", cart, { checkoutAttemptId });
+    trackCartEvent("checkout_fallback", cart, { checkoutAttemptId });
+    sendCheckoutTelemetry("checkout_api_error", checkoutAttemptId, { durationMs, detail: error instanceof Error ? error.message : "unknown" });
+    sendCheckoutTelemetry("checkout_fallback", checkoutAttemptId, { durationMs });
     window.location.assign(buildCheckoutUrl(cart));
   }
 });

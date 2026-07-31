@@ -1,11 +1,17 @@
 import type { APIRoute } from "astro";
 import { env } from "cloudflare:workers";
+import * as Sentry from "@sentry/astro";
 import {
   buildGa4Payload,
   buildPinterestPayload,
   buildTikTokPayload,
   type FourthwallEvent,
 } from "../../../lib/fourthwall-conversions";
+import {
+  logCheckout,
+  observabilityDb,
+  recordOrder,
+} from "../../../lib/commerce-observability";
 
 const encoder = new TextEncoder();
 
@@ -130,15 +136,15 @@ const sendTikTokPurchase = async (
 };
 
 export const POST: APIRoute = async ({ request }) => {
-  const runtimeEnv = env as unknown as Record<string, string | undefined>;
-  const webhookSecret = runtimeEnv.FOURTHWALL_WEBHOOK_SECRET;
-  const pinterestToken = runtimeEnv.PINTEREST_ACCESS_TOKEN;
-  const pinterestAdAccountId = runtimeEnv.PINTEREST_AD_ACCOUNT_ID || "549770622978";
-  const gaMeasurementId = runtimeEnv.GA_MEASUREMENT_ID || "G-B53YGNVTNF";
-  const gaApiSecret = runtimeEnv.GA4_API_SECRET;
-  const tiktokPixelId = runtimeEnv.TIKTOK_PIXEL_ID || "D9HKESBC77U1LOVTV5E0";
-  const tiktokAccessToken = runtimeEnv.TIKTOK_EVENTS_API_ACCESS_TOKEN;
-  const tiktokTestEventCode = runtimeEnv.TIKTOK_TEST_EVENT_CODE;
+  const runtimeEnv = env as unknown as Record<string, unknown>;
+  const webhookSecret = runtimeEnv.FOURTHWALL_WEBHOOK_SECRET as string | undefined;
+  const pinterestToken = runtimeEnv.PINTEREST_ACCESS_TOKEN as string | undefined;
+  const pinterestAdAccountId = runtimeEnv.PINTEREST_AD_ACCOUNT_ID as string || "549770622978";
+  const gaMeasurementId = runtimeEnv.GA_MEASUREMENT_ID as string || "G-B53YGNVTNF";
+  const gaApiSecret = runtimeEnv.GA4_API_SECRET as string | undefined;
+  const tiktokPixelId = runtimeEnv.TIKTOK_PIXEL_ID as string || "D9HKESBC77U1LOVTV5E0";
+  const tiktokAccessToken = runtimeEnv.TIKTOK_EVENTS_API_ACCESS_TOKEN as string | undefined;
+  const tiktokTestEventCode = runtimeEnv.TIKTOK_TEST_EVENT_CODE as string | undefined;
   if (!webhookSecret || !pinterestToken || !gaApiSecret || !tiktokAccessToken) {
     return Response.json({ error: "Webhook integration is not configured." }, { status: 503 });
   }
@@ -169,7 +175,37 @@ export const POST: APIRoute = async ({ request }) => {
     ? result.value
     : { error: result.reason instanceof Error ? result.reason.message : "delivery_failed" });
   const failed = providers.some((result) => result.status === "rejected");
+  const order = event.data || {};
+  const metadata = order.metadata || {};
+  const checkoutAttemptId = typeof metadata.rh_checkout_attempt_id === "string"
+    ? metadata.rh_checkout_attempt_id
+    : undefined;
+  const subtotal = Number(order.amounts?.subtotal?.value || 0);
+  const total = Number(order.amounts?.total?.value || subtotal);
+  const itemCount = (order.offers || []).reduce((sum, offer) => sum + Math.max(1, Number(offer.variant?.quantity || 1)), 0);
+  try {
+    await recordOrder(observabilityDb(runtimeEnv), {
+      orderId: String(order.id || order.friendlyId || event.id || "unknown"),
+      eventId: event.id,
+      checkoutAttemptId,
+      placedAt: String(order.createdAt || event.createdAt || new Date().toISOString()),
+      currency: String(order.amounts?.subtotal?.currency || order.amounts?.total?.currency || "USD"),
+      subtotal,
+      total,
+      itemCount,
+      testMode: Boolean(event.testMode),
+      providersOk: !failed,
+    });
+  } catch (error) {
+    logCheckout("error", { message: "Revenue ledger write failed", eventId: event.id, orderId: order.id, error: error instanceof Error ? error.message : "unknown" });
+    Sentry.captureException(error, { tags: { integration: "revenue_ledger" } });
+  }
   if (failed) {
+    Sentry.captureMessage("Fourthwall purchase conversion delivery failed", {
+      level: "error",
+      tags: { integration: "fourthwall_webhook", checkout_attempt_id: checkoutAttemptId || "missing" },
+      extra: { eventId: event.id, orderId: order.id, pinterest, ga4, tiktok },
+    });
     return Response.json({ error: "Conversion delivery failed." }, { status: 502 });
   }
   console.log(JSON.stringify({

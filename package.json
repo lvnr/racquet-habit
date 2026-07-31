@@ -13,6 +13,8 @@
     "check": "astro check",
     "typegen": "wrangler types",
     "validate:commerce": "node --experimental-strip-types scripts/validate-fourthwall-conversions.ts",
+    "ops:deploy": "wrangler deploy -c wrangler.ops.jsonc",
+    "ops:canary": "wrangler dev -c wrangler.ops.jsonc --test-scheduled",
     "seo:pinterest-images": "node scripts/generate-pinterest-catalog-images.mjs",
     "assets": "node scripts/generate-assets.mjs",
     "assets:v3": "node scripts/generate-v3-vector-prototypes.mjs",
@@ -44,6 +46,8 @@
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/instrument-serif": "^5.2.8",
     "@fontsource/yellowtail": "^5.2.8",
+    "@sentry/astro": "^10.69.0",
+    "@sentry/cloudflare": "^10.69.0",
     "astro": "^7.0.9"
   },
   "devDependencies": {

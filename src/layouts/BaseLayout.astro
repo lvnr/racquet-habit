@@ -42,6 +42,8 @@ const {
 } = Astro.props;
 
 const runtimeEnv = env as unknown as Record<string, string | undefined>;
+const visitorCountry = Astro.request.headers.get("CF-IPCountry")?.toUpperCase() || "";
+const regionalAnalyticsDefault = visitorCountry === "US";
 const analyticsIds = {
   ga: runtimeEnv.GA_MEASUREMENT_ID || "G-B53YGNVTNF",
   clarity: runtimeEnv.CLARITY_PROJECT_ID || "xupnrsmq35",
@@ -122,12 +124,45 @@ const cartImageMapJson = JSON.stringify(cartImageMap).replace(/</g, "\\u003c");
   data-meta-pixel-id={analyticsIds.meta}
   data-tiktok-pixel-id={analyticsIds.tiktok}
   data-pinterest-tag-id={analyticsIds.pinterest}
+  data-analytics-default={regionalAnalyticsDefault ? "granted" : "denied"}
 >
   <head>
     <script is:inline>
+      // Canonicalize the live Meta launch campaign before analytics reads the
+      // page URL. This keeps legacy and current ad URL templates in one GA4
+      // campaign without changing active creatives or restarting ad review.
+      try {
+        const url = new URL(window.location.href);
+        const campaignId = url.searchParams.get('utm_id');
+        const campaign = url.searchParams.get('utm_campaign') || '';
+        const isLaunchCampaign = campaignId === '120250173591630263'
+          || campaign === 'launch_first_issue'
+          || campaign.startsWith('RH | Sales | US Launch Creative Test');
+        if (isLaunchCampaign) {
+          const source = (url.searchParams.get('utm_source') || '').toLowerCase();
+          if (source === 'ig') url.searchParams.set('utm_source', 'instagram');
+          if (source === 'fb') url.searchParams.set('utm_source', 'facebook');
+          url.searchParams.set('utm_campaign', 'rh_us_launch_2026_07');
+          history.replaceState(history.state, '', `${url.pathname}${url.search}${url.hash}`);
+        }
+      } catch {}
+
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       window.gtag = window.gtag || gtag;
+      // In the US, first-party analytics is opt-out while advertising storage
+      // remains opt-in. Everywhere else starts denied. Explicit choices and
+      // Global Privacy Control override these regional defaults.
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        analytics_storage: 'granted',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        functionality_storage: 'granted',
+        security_storage: 'granted',
+        region: ['US'],
+        wait_for_update: 500,
+      });
       gtag('consent', 'default', {
         ad_storage: 'denied',
         analytics_storage: 'denied',
@@ -141,7 +176,14 @@ const cartImageMapJson = JSON.stringify(cartImageMap).replace(/</g, "\\u003c");
       gtag('set', 'url_passthrough', true);
       try {
         const savedConsent = JSON.parse(localStorage.getItem('rh-consent-v1') || 'null');
-        if (savedConsent?.version === 1 && savedConsent?.decided === true) {
+        if (navigator.globalPrivacyControl === true) {
+          gtag('consent', 'update', {
+            analytics_storage: 'denied',
+            ad_storage: 'denied',
+            ad_user_data: 'denied',
+            ad_personalization: 'denied',
+          });
+        } else if (savedConsent?.version === 1 && savedConsent?.decided === true) {
           const marketingAllowed = Boolean(savedConsent.marketing) && navigator.globalPrivacyControl !== true;
           gtag('consent', 'update', {
             analytics_storage: savedConsent.analytics ? 'granted' : 'denied',
@@ -160,6 +202,10 @@ const cartImageMapJson = JSON.stringify(cartImageMap).replace(/</g, "\\u003c");
         try {
           const savedConsent = JSON.parse(localStorage.getItem('rh-consent-v1') || 'null');
           if (savedConsent?.version === 1 && savedConsent?.decided === true && savedConsent.analytics === true) {
+            analyticsStorage = 'granted';
+          } else if (savedConsent?.decided !== true
+            && document.documentElement.dataset.analyticsDefault === 'granted'
+            && navigator.globalPrivacyControl !== true) {
             analyticsStorage = 'granted';
           }
         } catch {}

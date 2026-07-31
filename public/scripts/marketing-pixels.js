@@ -1,3 +1,5 @@
+import { createId } from "/scripts/runtime-utils.js";
+
 const root = document.documentElement;
 const commerceEvent = "rh:commerce";
 const loaded = { meta: false, tiktok: false, pinterest: false };
@@ -5,7 +7,7 @@ let currentProductView = null;
 let sentProductViewId = "";
 
 const items = (parameters) => Array.isArray(parameters?.items) ? parameters.items : [];
-const eventId = (detail) => detail.event_id || detail.eventId || crypto.randomUUID();
+const eventId = (detail) => detail.event_id || detail.eventId || createId();
 const totalQuantity = (parameters) => items(parameters)
   .reduce((sum, item) => sum + Number(item.quantity || 1), 0);
 
@@ -82,7 +84,7 @@ const initializeMeta = () => {
   })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
   window.fbq("init", pixelId);
   window.fbq("consent", "grant");
-  window.fbq("track", "PageView", {}, { eventID: crypto.randomUUID() });
+  window.fbq("track", "PageView", {}, { eventID: createId() });
 };
 
 const initializeTikTok = () => {
@@ -173,9 +175,9 @@ const revoke = () => {
 const mappings = {
   view_item: { meta: "ViewContent", tiktok: "ViewContent", pinterest: "pagevisit" },
   add_to_cart: { meta: "AddToCart", tiktok: "AddToCart", pinterest: "addtocart" },
-  // The storefront owns GA4/TikTok checkout handoff; Meta stays with
-  // Fourthwall so its Pixel/CAPI deduplication remains authoritative.
-  begin_checkout: { tiktok: "InitiateCheckout", pinterest: "initiatecheckout" },
+  // Fire InitiateCheckout at the site handoff. Fourthwall did not emit this
+  // event during the launch audit, leaving Meta with a false zero-step funnel.
+  begin_checkout: { meta: "InitiateCheckout", tiktok: "InitiateCheckout", pinterest: "initiatecheckout" },
 };
 
 const sendCommerceEvent = (detail) => {

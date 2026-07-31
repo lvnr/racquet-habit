@@ -7,6 +7,7 @@ const allowedAttribution = [
   "utm_source",
   "utm_medium",
   "utm_campaign",
+  "utm_id",
   "utm_content",
   "utm_term",
   "gclid",

@@ -20,7 +20,13 @@ const read = () => {
 };
 
 let current = read();
-if (globalPrivacyControl) current.marketing = false;
+if (!current.decided && root.dataset.analyticsDefault === "granted" && !globalPrivacyControl) {
+  current.analytics = true;
+}
+if (globalPrivacyControl) {
+  current.analytics = false;
+  current.marketing = false;
+}
 let googleLoaded = false;
 
 const loadScript = (src, id) => new Promise((resolve, reject) => {
@@ -53,7 +59,7 @@ const updateGoogleConsent = (choice) => {
 };
 
 const loadGoogleAnalytics = () => {
-  if (!current.analytics || googleLoaded) return;
+  if (googleLoaded) return;
   const measurementId = root.dataset.gaMeasurementId;
   if (!measurementId) return;
   googleLoaded = true;
@@ -156,7 +162,7 @@ window.RacquetHabitConsent = {
   apply,
 };
 
-updateGoogleConsent(current);
+if (current.decided || globalPrivacyControl || current.analytics) updateGoogleConsent(current);
 loadGoogleAnalytics();
 if (!current.decided) showSummary();
 window.dispatchEvent(new CustomEvent("rh:consent-ready", { detail: { consent: { ...current } } }));

@@ -37,7 +37,11 @@ window.addEventListener(commerceEvent, ({ detail }) => {
   callClarity("event", event);
   callClarity("set", "commerce_event", event);
 
-  if (event === "begin_checkout") {
+  if (event.startsWith("checkout_")) {
+    callClarity("set", "checkout_stage", event);
+  }
+
+  if (event === "checkout_click" || event === "begin_checkout") {
     callClarity("upgrade", "begin_checkout");
   }
 });

@@ -1,10 +1,12 @@
+import { createId } from "/scripts/runtime-utils.js";
+
 const analyticsEventName = "rh:commerce";
-const currentPageEvents = new Map();
 const attributionKey = "rh-attribution-v1";
 const attributionParameters = [
   "utm_source",
   "utm_medium",
   "utm_campaign",
+  "utm_id",
   "utm_content",
   "utm_term",
   "gclid",
@@ -65,29 +67,21 @@ const compactItem = (item) => Object.fromEntries(
 );
 
 const track = (event, parameters = {}, options = {}) => {
-  const event_id = crypto.randomUUID();
+  const event_id = createId();
   const payload = {
     ...parameters,
     items: Array.isArray(parameters.items) ? parameters.items.map(compactItem) : parameters.items,
   };
-  if (!options.skipAnalytics && window.RacquetHabitConsent?.canUse("analytics") && typeof window.gtag === "function") {
+  // Advanced Consent Mode keeps the Google tag loaded. When analytics storage
+  // is denied, Google receives consent-aware, cookieless measurement pings.
+  if (!options.skipAnalytics && typeof window.gtag === "function") {
     window.gtag("event", event, payload);
-  } else if (!options.skipAnalytics && (event === "view_item" || event === "view_item_list")) {
-    currentPageEvents.set(event, payload);
   }
   window.dispatchEvent(new CustomEvent(analyticsEventName, {
     detail: { event, event_id, parameters: payload },
   }));
   return event_id;
 };
-
-window.addEventListener("rh:consent-changed", ({ detail }) => {
-  if (!detail.consent.analytics || detail.previous.analytics) return;
-  currentPageEvents.forEach((payload, event) => {
-    window.gtag?.("event", event, payload);
-  });
-  currentPageEvents.clear();
-});
 
 const listFromElement = (list) => {
   const visibleItems = [...list.querySelectorAll("[data-commerce-item]")]

@@ -1,3 +1,5 @@
+import { createId } from "/scripts/runtime-utils.js";
+
 const cartKey = "rh-cart-v1";
 const checkoutOrigin = "https://racquethabit.com";
 const sessionKey = "rh-session-id-v1";
@@ -115,7 +117,7 @@ const decorateCheckoutUrl = (checkout) => {
   checkout.searchParams.set("cart_origin", checkoutOrigin);
 
   const attribution = window.RacquetHabitAnalytics?.getAttribution?.() || {};
-  ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "gclid", "fbclid", "ttclid", "epik"].forEach((parameter) => {
+  ["utm_source", "utm_medium", "utm_campaign", "utm_id", "utm_content", "utm_term", "gclid", "fbclid", "ttclid", "epik"].forEach((parameter) => {
     if (attribution[parameter]) checkout.searchParams.set(parameter, attribution[parameter]);
   });
   ["_ga", "_fbp", "_fbc", "FPID"].forEach((cookieName) => {
@@ -134,7 +136,7 @@ const buildCheckoutUrl = (cart) => {
 const sessionId = (() => {
   const saved = localStorage.getItem(sessionKey);
   if (saved) return saved;
-  const created = crypto.randomUUID();
+  const created = createId();
   localStorage.setItem(sessionKey, created);
   return created;
 })();
@@ -143,17 +145,25 @@ const createCheckout = async (cart) => {
   const consent = window.RacquetHabitConsent?.get?.() || {};
   const attribution = window.RacquetHabitAnalytics?.getAttribution?.() || {};
   const identifiers = await checkoutIdentifiers();
-  const response = await fetch("/api/checkout", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      items: cart.map((item) => ({ variantId: item.variantId, quantity: item.quantity })),
-      consent,
-      attribution,
-      identifiers,
-      sessionId,
-    }),
-  });
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), 6000);
+  let response;
+  try {
+    response = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      signal: controller.signal,
+      body: JSON.stringify({
+        items: cart.map((item) => ({ variantId: item.variantId, quantity: item.quantity })),
+        consent,
+        attribution,
+        identifiers,
+        sessionId,
+      }),
+    });
+  } finally {
+    window.clearTimeout(timeout);
+  }
   if (!response.ok) throw new Error(`Checkout request failed: ${response.status}`);
   const result = await response.json();
   if (!result.url) throw new Error("Checkout URL missing");
@@ -335,13 +345,18 @@ document.querySelector("[data-cart-checkout]")?.addEventListener("click", async 
   if (checkout.dataset.loading === "true") return;
   checkout.dataset.loading = "true";
   checkout.setAttribute("aria-busy", "true");
-  // GA4 and TikTok are owned by the storefront plus the signed paid-order
-  // webhook. Meta remains owned by Fourthwall once checkout begins.
+  checkout.textContent = "Opening secure checkout…";
+  trackCartEvent("checkout_click", cart);
   trackCartEvent("begin_checkout", cart);
   try {
-    window.location.assign(await createCheckout(cart));
+    const checkoutUrl = await createCheckout(cart);
+    trackCartEvent("checkout_api_success", cart);
+    trackCartEvent("checkout_redirect", cart);
+    window.location.assign(checkoutUrl);
   } catch (error) {
     console.error("[checkout] Falling back to direct checkout", error);
+    trackCartEvent("checkout_api_error", cart);
+    trackCartEvent("checkout_fallback", cart);
     window.location.assign(buildCheckoutUrl(cart));
   }
 });

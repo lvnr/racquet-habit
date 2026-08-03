@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/astro";
+import { isKnownBrowserNoise } from "./src/lib/sentry-client-noise";
 
 declare const __SENTRY_RELEASE__: string;
 
@@ -24,7 +25,10 @@ Sentry.init({
   sendDefaultPii: false,
   sampleRate: 1,
   tracesSampler: ({ name }) => name.includes("checkout") ? 1 : 0.1,
-  beforeSend: scrubEvent,
+  beforeSend(event) {
+    if (isKnownBrowserNoise(event)) return null;
+    return scrubEvent(event);
+  },
   beforeSendTransaction: scrubEvent,
 });
 

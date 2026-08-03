@@ -13,6 +13,8 @@
     "check": "astro check",
     "typegen": "wrangler types",
     "validate:commerce": "node --experimental-strip-types scripts/validate-fourthwall-conversions.ts",
+    "validate:sentry": "node --experimental-strip-types scripts/validate-sentry-noise.ts",
+    "validate:ops": "node --experimental-strip-types scripts/validate-transient-fetch.ts",
     "ops:deploy": "wrangler deploy -c wrangler.ops.jsonc",
     "ops:canary": "wrangler dev -c wrangler.ops.jsonc --test-scheduled",
     "seo:pinterest-images": "node scripts/generate-pinterest-catalog-images.mjs",

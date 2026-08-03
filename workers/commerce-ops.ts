@@ -1,4 +1,5 @@
 import * as Sentry from "@sentry/cloudflare";
+import { fetchWithTransientRetry } from "../src/lib/transient-fetch";
 
 type Statement = {
   bind: (...values: unknown[]) => Statement;
@@ -52,9 +53,9 @@ const runCanary = async (env: Env) => Sentry.withMonitor(
     let checkoutPageStatus: number | undefined;
     try {
       const productUrl = new URL(env.CANARY_PRODUCT_PATH, env.STOREFRONT_URL);
-      const productResponse = await fetch(productUrl, {
+      const productResponse = await fetchWithTransientRetry(productUrl, {
         headers: { "User-Agent": "RacquetHabit-Checkout-Canary/1.0" },
-      });
+      }, "product_page");
       productStatus = productResponse.status;
       if (!productResponse.ok) throw new Error(`Product page returned ${productResponse.status}`);
       const productHtml = await productResponse.text();
@@ -88,10 +89,10 @@ const runCanary = async (env: Env) => Sentry.withMonitor(
       if (checkoutUrl.hostname !== "checkout.racquethabit.com") {
         throw new Error(`Checkout API returned unexpected host ${checkoutUrl.hostname}`);
       }
-      const checkoutPage = await fetch(checkoutUrl, {
+      const checkoutPage = await fetchWithTransientRetry(checkoutUrl, {
         redirect: "follow",
         headers: { "User-Agent": "RacquetHabit-Checkout-Canary/1.0" },
-      });
+      }, "checkout_page");
       checkoutPageStatus = checkoutPage.status;
       const checkoutHtml = (await checkoutPage.text()).slice(0, 250_000).toLowerCase();
       if (!checkoutPage.ok) throw new Error(`Checkout page returned ${checkoutPage.status}`);
@@ -220,7 +221,7 @@ export default Sentry.withSentry(
   (env: Env) => ({
     dsn: env.SENTRY_DSN,
     environment: "production",
-    release: "racquet-habit-commerce-ops@1",
+    release: "racquet-habit-commerce-ops@2",
     sendDefaultPii: false,
     tracesSampleRate: 1,
     enableLogs: true,
